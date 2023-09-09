@@ -1,0 +1,14 @@
+site_name: Docs - Sua Grade UnB
+
+nav:
+  - Home: index.md
+
+theme:
+  name: material
+  features:
+  - navigation.tabs
+  - navigation.tabs.sticky
+
+  palette:
+    primary: "indigo"
+
