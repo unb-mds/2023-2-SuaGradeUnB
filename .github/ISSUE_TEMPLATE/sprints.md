@@ -1,4 +1,13 @@
-# Sprint N
+---
+name: Sprint
+about: Define and describe a sprint
+title: 'Sprint N'
+labels: sprint
+assignees: ''
+
+---
+
+## Sprint N
 
 Período: 04/09/2023 a 11/09/2023
 
