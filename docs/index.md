@@ -5,9 +5,9 @@ hide:
 
 # Sua Grade UnB
 
-## O que é?
+## Sobre
 
-O Sua Grade UnB é um projeto em desenvolvimento da matéria **Métodos de Desenvolvimento de Software**, o qual tem como objetivo auxiliar os alunos da universidade a montarem suas grades de horários de forma mais fácil e intuitiva.
+O Sua Grade UnB é um projeto em desenvolvimento da matéria **Métodos de Desenvolvimento de Software**, a qual tem como objetivo auxiliar os alunos da Universidade de Brasília a montarem suas grades horárias de forma mais fácil e intuitiva.
 
 ## Equipe
 
@@ -38,7 +38,7 @@ O Sua Grade UnB é um projeto em desenvolvimento da matéria **Métodos de Desen
         <div style="text-align: center;">
             Henrique Quenino
             <br/>
-            <img src="https://github.com/HenrikhKenino.png" alt="Foto Henrique" width="130px" height="50%" style="border-radius:50%"/>
+            <img src="https://github.com/henriquecq.png" alt="Foto Henrique" width="130px" height="50%" style="border-radius:50%"/>
         </div>
         <div style="text-align: center;">
             Mateus Vieira
