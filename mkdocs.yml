@@ -1,0 +1,20 @@
+site_name: Docs - Sua Grade UnB
+repo_url: https://github.com/unb-mds/2023-2-Squad11
+
+nav:
+  - Home: index.md
+  - Como contribuir?: contributing.md
+  - Sprints:
+    - Sprint 0: sprints/sprint-0.md
+
+theme:
+  name: material
+  features:
+  - navigation.tabs
+  - navigation.tabs.sticky
+
+  palette:
+    primary: "indigo"
+
+  icon:
+    repo: fontawesome/brands/github
