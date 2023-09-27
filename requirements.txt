@@ -4,7 +4,6 @@ certifi==2023.7.22
 charset-normalizer==3.2.0
 click==8.1.7
 colorama==0.4.6
-decouple==0.0.7
 Django==4.2.5
 ghp-import==2.1.0
 idna==3.4
@@ -22,11 +21,13 @@ platformdirs==3.10.0
 Pygments==2.16.1
 pymdown-extensions==10.3
 python-dateutil==2.8.2
+python-decouple==3.8
 PyYAML==6.0.1
 pyyaml_env_tag==0.1
 regex==2023.8.8
 requests==2.31.0
 six==1.16.0
 sqlparse==0.4.4
+typing_extensions==4.8.0
 urllib3==2.0.5
 watchdog==3.0.0
