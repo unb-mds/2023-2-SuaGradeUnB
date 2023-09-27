@@ -1,0 +1,12 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/app/
+    env_file:
+      - api/.env
+    command: python3 ./api/manage.py runserver 0.0.0.0:8000
