@@ -15,7 +15,7 @@ git clone https://github.com/unb-mds/2023-2-Squad11.git
 Para rodar o projeto, você precisa instalar as dependências globais, que são:
 
 - Python v3.11 (ou superior)
-- Docker Engine v24.0.6 and Docker Compose v2.21.0 (or greater)
+- Docker Engine v24.0.6 e Docker Compose v2.21.0 (ou superior)
 
 ### Ambiente
 
