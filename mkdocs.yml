@@ -7,6 +7,7 @@ nav:
   - Sprints:
     - Sprint 0: sprints/sprint-0.md
     - Sprint 1: sprints/sprint-1.md
+    - Sprint 2: sprints/sprint-2.md
 
 theme:
   name: material
