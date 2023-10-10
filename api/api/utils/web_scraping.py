@@ -9,13 +9,12 @@ import requests.utils
 
 def get_list_of_departments():
     '''Get the list of departments'''
-    response = sessions.get_response(create_request_session())
-    soup = BeautifulSoup(response.content, "html.parser")
-    departments = soup.find("select", attrs={"id": "formTurma:inputDepto"})
+    response = sessions.get_response(create_request_session()) # Get the response from the request session
+    soup = BeautifulSoup(response.content, "html.parser") # Create a BeautifulSoup object
+    departments = soup.find("select", attrs={"id": "formTurma:inputDepto"}) # Find the <select> tag with id "formTurma:inputDepto"
     if departments is not None:
-        options_tag = departments.find_all("option")
-        code = [option["value"] for option in options_tag]
-        department_dict = dict()
+        options_tag = departments.find_all("option") # Find all <option> tags (It contains all departments)
+        code = [option["value"] for option in options_tag] # Create a list with the value of the option tag (The code of the department)
         return code
     else:
         return None
@@ -54,7 +53,7 @@ class DisciplineWebScraper:
         '''Make a post request to get the response of the disciplines's classes available'''
 
         response = self.session.post(
-            url=self.url, headers=HEADERS, cookies=self.cookie, data=self.data)
+            url=self.url, headers=HEADERS, cookies=self.cookie, data=self.data) # Make the post request
         return response
 
     def make_web_scraping_of_disciplines(self, response):
