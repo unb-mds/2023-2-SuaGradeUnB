@@ -40,7 +40,7 @@ def get_session_cookie(session: requests.Session) -> requests.cookies.RequestsCo
     return cookie_jar
 
 
-def get_current_year_and_period():
+def get_current_year_and_period() -> list:
     '''Get the current year and period'''
     today_date = datetime.now() # Get the current date
     current_year = today_date.year # Get the current year
