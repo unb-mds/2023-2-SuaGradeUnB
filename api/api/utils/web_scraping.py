@@ -48,10 +48,14 @@ class DisciplineWebScraper:
             self.cookie = cookie
 
     def get_response_from_disciplines_post_request(self) -> requests.Response:
-        '''Make a post request to get the response of the disciplines's classes available'''
-
+        # Faz uma requisição POST para obter a resposta das turmas disponíveis
         response = self.session.post(
-            url=self.url, headers=HEADERS, cookies=self.cookie, data=self.data) # Make the post request
+            url=self.url,
+            headers=HEADERS,
+            cookies=self.cookie,
+            data=self.data
+        )
+
         return response
 
     def make_web_scraping_of_disciplines(self, response):
