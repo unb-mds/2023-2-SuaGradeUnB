@@ -15,9 +15,15 @@ def get_list_of_departments() -> Optional[List]:
         return None
     
     options_tag = departments.find_all("option") # Find all <option> tags (It contains all departments)
-    code = [option["value"] for option in options_tag] # Create a list with the value of the option tag (The code of the department)
+    department_ids = []
 
-    return code
+    for option in options_tag:
+        value = option["value"]
+
+        if(value != "0"):
+            department_ids.append(value)
+
+    return department_ids
 
 class DisciplineWebScraper:
     # Classe que faz o web scraping das disciplinas
