@@ -20,37 +20,32 @@ def get_list_of_departments() -> Optional[List]:
     return code
 
 class DisciplineWebScraper:
-    '''Class to make the web scraping of disciplines'''
-
+    # Classe que faz o web scraping das disciplinas
     def __init__(self, department: str, year: str, period: str, session=None, cookie=None):
-        '''Constructor of the class DisciplineWebScraper'''
         self.disciplines = defaultdict(list)  # A dictionary with the disciplines
-        self.url = URL  # The url of the web page
         self.department = department  # The department code
-        self.year = year
         self.period = period  # 1 for first semester and 2 for second semester
+        self.year = year
+        self.url = URL  # The url of the web page
         self.data = {  # This data is necessary to make the post request
-            "formTurma":	"formTurma",
+            "formTurma": "formTurma",
             "formTurma:inputNivel":	"",
             "formTurma:inputDepto":	self.department,
-            "formTurma:inputAno":	self.year,
-            "formTurma:inputPeriodo":	self.period,
+            "formTurma:inputAno": self.year,
+            "formTurma:inputPeriodo": self.period,
             "formTurma:j_id_jsp_1370969402_11":	"Buscar",
-            "javax.faces.ViewState":	"j_id1"}
+            "javax.faces.ViewState": "j_id1"
+        }
 
         if session is None:
             self.session = create_request_session()  # Create a request session
         else:
             self.session = session
+
         if cookie is None:
-            # Get the cookie from the request session
             self.cookie = get_session_cookie(self.session)
         else:
             self.cookie = cookie
-
-        """ response = self.get_response_from_disciplines_post_request()
-        discipline_table = self.make_web_scraping_of_disciplines(response) """
-
 
     def get_response_from_disciplines_post_request(self) -> requests.Response:
         '''Make a post request to get the response of the disciplines's classes available'''
