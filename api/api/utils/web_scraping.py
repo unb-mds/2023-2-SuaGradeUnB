@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Optional
 from collections import defaultdict
 import sessions
 from sessions import create_request_session
@@ -8,19 +8,19 @@ from bs4 import BeautifulSoup
 import requests
 import requests.utils
 
-
-def get_list_of_departments():
-    '''Get the list of departments'''
+def get_list_of_departments() -> Optional[List]:
+    # Retorna uma lista com os códigos dos departamentos
     response = sessions.get_response(create_request_session()) # Get the response from the request session
     soup = BeautifulSoup(response.content, "html.parser") # Create a BeautifulSoup object
     departments = soup.find("select", attrs={"id": "formTurma:inputDepto"}) # Find the <select> tag with id "formTurma:inputDepto"
-    if departments is not None:
-        options_tag = departments.find_all("option") # Find all <option> tags (It contains all departments)
-        code = [option["value"] for option in options_tag] # Create a list with the value of the option tag (The code of the department)
-        return code
-    else:
+    
+    if departments is None:
         return None
+    
+    options_tag = departments.find_all("option") # Find all <option> tags (It contains all departments)
+    code = [option["value"] for option in options_tag] # Create a list with the value of the option tag (The code of the department)
 
+    return code
 
 class DisciplineWebScraper:
     '''Class to make the web scraping of disciplines'''
@@ -88,3 +88,7 @@ class DisciplineWebScraper:
                     class_workload = teacher_name_with_hours[-1].replace(('('), '').replace((')'), '')
                     classroom = table_data[7].get_text() # Find the <td> tag with class "sala"
                     schedule = table_data[3].get_text().strip().strip('\n').strip('\t').strip('\r') # Find the <td> tag with class "horario"
+
+print(get_list_of_departments())
+scraper = DisciplineWebScraper('640', '2023', '2')
+print(scraper)
