@@ -1,16 +1,13 @@
-from typing import List, Optional
-from collections import defaultdict
-import sessions
-from sessions import create_request_session
-from sessions import URL
-from sessions import HEADERS
+from sessions import URL, HEADERS, get_response, create_request_session, get_session_cookie
 from bs4 import BeautifulSoup
-import requests
+from collections import defaultdict
+from typing import List, Optional
 import requests.utils
+import requests
 
 def get_list_of_departments() -> Optional[List]:
     # Retorna uma lista com os códigos dos departamentos
-    response = sessions.get_response(create_request_session()) # Get the response from the request session
+    response = get_response(create_request_session()) # Get the response from the request session
     soup = BeautifulSoup(response.content, "html.parser") # Create a BeautifulSoup object
     departments = soup.find("select", attrs={"id": "formTurma:inputDepto"}) # Find the <select> tag with id "formTurma:inputDepto"
     
@@ -42,12 +39,12 @@ class DisciplineWebScraper:
             "javax.faces.ViewState":	"j_id1"}
 
         if session is None:
-            self.session = sessions.create_request_session()  # Create a request session
+            self.session = create_request_session()  # Create a request session
         else:
             self.session = session
         if cookie is None:
             # Get the cookie from the request session
-            self.cookie = sessions.get_session_cookie(self.session)
+            self.cookie = get_session_cookie(self.session)
         else:
             self.cookie = cookie
 
