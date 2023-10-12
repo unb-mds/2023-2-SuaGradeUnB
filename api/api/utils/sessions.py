@@ -1,5 +1,4 @@
 from datetime import datetime
-import json
 import requests
 import requests.utils
 import requests.cookies
