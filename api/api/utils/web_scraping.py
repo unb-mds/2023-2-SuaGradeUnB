@@ -59,32 +59,28 @@ class DisciplineWebScraper:
         return response
 
     def make_web_scraping_of_disciplines(self, response):
-        '''Make the web scraping of the disciplines'''
+        # Faz o web scraping das disciplinas
         soup = BeautifulSoup(response.content, "html.parser")
-        table = soup.find("table", attrs={"class": "listagem"}) # Find the <table> tag with class "listagem"
-        tr = table.find_all("tr") # Find all <tr> tags
-        """ print(tr[0])
-        print(tr[1])
-        print(tr[2]) """
+        tables = soup.find("table", attrs={"class": "listagem"}) # Find the <table> tag with class "listagem"
+        table_rows = tables.find_all("tr") # Find all <tr> tags
+
         aux_title_and_code = ""
-        if tr is not None:
-            for discipline in tr:
-                if discipline.find("span", attrs={"class": "tituloDisciplina"}) is not None: #Verify if the <tr> tag has a <span> tag with class "tituloDisciplina"
-                    title = discipline.find("span", attrs={"class": "tituloDisciplina"})# Find the <span> tag with class "tituloDisciplina"
-                    aux_title_and_code = title.get_text().strip('-')
-                elif "linhaPar" in discipline.get("class", []) or "linhaImpar" in discipline.get("class", []):
-                    discipline_treated = aux_title_and_code.split(' - ') # Split the title and code of the discipline to get the code and name
 
-                    discipline_code = discipline_treated[0]
-                    discipline_name = discipline_treated[1]
-                    table_data = discipline.find_all("td") # Find all <td> tags
-                    class_code = int(table_data[0].get_text()) # Find the <td> tag with class "turma"
-                    teacher_name_with_hours = discipline.find("td",attrs={"class":"nome"}).get_text().strip().strip('\n').split(' ') # Find the <td> tag with class "professor"
-                    teacher_name = ' '.join(teacher_name_with_hours[:-1])
-                    class_workload = teacher_name_with_hours[-1].replace(('('), '').replace((')'), '')
-                    classroom = table_data[7].get_text() # Find the <td> tag with class "sala"
-                    schedule = table_data[3].get_text().strip().strip('\n').strip('\t').strip('\r') # Find the <td> tag with class "horario"
+        if table_rows is None:
+            return None
+        
+        for discipline in table_rows:
+            if discipline.find("span", attrs={"class": "tituloDisciplina"}) is not None: #Verify if the <tr> tag has a <span> tag with class "tituloDisciplina"
+                title = discipline.find("span", attrs={"class": "tituloDisciplina"})# Find the <span> tag with class "tituloDisciplina"
+                aux_title_and_code = title.get_text().strip('-')
+            elif "linhaPar" in discipline.get("class", []) or "linhaImpar" in discipline.get("class", []):
+                discipline_treated = aux_title_and_code.split(' - ') # Split the title and code of the discipline to get the code and name
 
-print(get_list_of_departments())
-scraper = DisciplineWebScraper('640', '2023', '2')
-print(scraper)
+                discipline_code = discipline_treated[0]
+                discipline_name = discipline_treated[1]
+                table_data = discipline.find_all("td") # Find all <td> tags
+                class_code = int(table_data[0].get_text()) # Find the <td> tag with class "turma"
+                teacher_name_with_hours = discipline.find("td",attrs={"class":"nome"}).get_text().strip().strip('\n').split(' ') # Find the <td> tag with class "professor"                    teacher_name = ' '.join(teacher_name_with_hours[:-1])
+                class_workload = teacher_name_with_hours[-1].replace(('('), '').replace((')'), '')
+                classroom = table_data[7].get_text() # Find the <td> tag with class "sala"
+                schedule = table_data[3].get_text().strip().strip('\n').strip('\t').strip('\r') # Find the <td> tag with class "horario"
