@@ -2,8 +2,25 @@ from sessions import URL, HEADERS, get_response, create_request_session, get_ses
 from bs4 import BeautifulSoup
 from collections import defaultdict
 from typing import List, Optional
+from re import search
 import requests.utils
 import requests
+
+'''
+Modo de uso:
+
+1. É necessário ter o código do departamento escolhido. 
+Logo, temos a função get_list_of_departments() que retorna uma lista com os códigos dos departamentos.
+2. É necessário ter o ano e o período.
+3. É necessário ter uma instância da classe DisciplineWebScraper.
+
+- Exemplo:
+    department = "650"
+    year = "2023"
+    period = "2"
+    disciplines = DisciplineWebScraper(department, year, period)
+    disciplines.get_disciplines() # Retorna um dicionário com as disciplinas
+'''
 
 def get_list_of_departments() -> Optional[List]:
     # Retorna uma lista com os códigos dos departamentos
@@ -76,17 +93,80 @@ class DisciplineWebScraper:
             return None
         
         for discipline in table_rows:
-            if discipline.find("span", attrs={"class": "tituloDisciplina"}) is not None: #Verify if the <tr> tag has a <span> tag with class "tituloDisciplina"
-                title = discipline.find("span", attrs={"class": "tituloDisciplina"})# Find the <span> tag with class "tituloDisciplina"
+            if discipline.find("span", attrs={"class": "tituloDisciplina"}) is not None: 
+                title = discipline.find("span", attrs={"class": "tituloDisciplina"})
                 aux_title_and_code = title.get_text().strip('-')
-            elif "linhaPar" in discipline.get("class", []) or "linhaImpar" in discipline.get("class", []):
-                discipline_treated = aux_title_and_code.split(' - ') # Split the title and code of the discipline to get the code and name
 
-                discipline_code = discipline_treated[0]
-                discipline_name = discipline_treated[1]
-                table_data = discipline.find_all("td") # Find all <td> tags
-                class_code = int(table_data[0].get_text()) # Find the <td> tag with class "turma"
-                teacher_name_with_hours = discipline.find("td",attrs={"class":"nome"}).get_text().strip().strip('\n').split(' ') # Find the <td> tag with class "professor"                    teacher_name = ' '.join(teacher_name_with_hours[:-1])
-                class_workload = teacher_name_with_hours[-1].replace(('('), '').replace((')'), '')
-                classroom = table_data[7].get_text() # Find the <td> tag with class "sala"
-                schedule = table_data[3].get_text().strip().strip('\n').strip('\t').strip('\r') # Find the <td> tag with class "horario"
+            elif "linhaPar" in discipline.get("class", []) or "linhaImpar" in discipline.get("class", []):
+                code, name = aux_title_and_code.split(' - ', 1)
+                tables_data = discipline.find_all("td")
+
+                '''
+                    Parâmetros a serem salvos para cada disciplina:
+
+                    Chave: Código da disciplina (string)
+                    Valor: Lista de dicionários com as seguintes chaves:
+                    - name: Nome da disciplina (string)
+                    - class: Turma (int)
+                    - teachers: Nome dos professores (Lista de strings)
+                    - workload: Carga horária (int). Se não houver, o valor é -1!
+                    - classroom: Sala (string)
+                    - schedule: Código do horário (string)
+                    - days: Dias da semana com horário (Lista de strings)
+                '''
+
+                teachers_with_workload = discipline.find("td",attrs={"class":"nome"}).get_text().strip().strip().split(')')
+                teachers = []
+                days = []
+
+                for teacher in teachers_with_workload:
+                    teacher = teacher.replace("\n", "").replace("\r", "").replace("\t", "")
+                    content = teacher.split('(')
+                    
+                    if(len(content) < 2):
+                        continue
+
+                    teachers.append(content[0].strip())
+                
+                if(len(teachers) == 0):
+                    teachers.append("A definir")
+                
+                class_code = int(tables_data[0].get_text()) 
+                classroom = tables_data[7].get_text().strip() 
+                
+                schedule, week_days = tables_data[3].get_text().strip().split(maxsplit=1)
+                workload = self.calc_hours(schedule)
+                sep = week_days.rfind("\t")
+
+                if(sep != -1):
+                    week_days = week_days[sep+1:]
+
+                for character in week_days:
+                    if(character.isupper()):
+                        days.append(character)
+                    else:
+                        days[-1] += character
+                
+                self.disciplines[code].append({
+                    "name": name,
+                    "class_code": class_code,
+                    "teachers": teachers,
+                    "workload": workload,
+                    "classroom": classroom,
+                    "schedule": schedule,
+                    "days": days
+                })
+    
+    def calc_hours(self, schedule: str) -> int:
+        # Calcula a carga horária de uma disciplina
+        match = search(r'[a-zA-Z]', schedule)
+        hours = match.start() * (len(schedule) - match.start() - 1) * 15
+
+        return hours
+
+    def get_disciplines(self):
+        # Retorna um dicionário com as disciplinas
+        response = self.get_response_from_disciplines_post_request()
+        self.make_web_scraping_of_disciplines(response)
+
+        return self.disciplines 
