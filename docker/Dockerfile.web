@@ -1,0 +1,14 @@
+FROM node:18-alpine3.17
+
+# definir o diretório de trabalho
+WORKDIR /usr/src/app
+
+# baixar e instalar dependências
+COPY ./web/package.json /usr/src/app/package.json
+RUN npm install
+
+# adicionar rotas
+EXPOSE 3000
+
+# copiar arquivos do projeto
+COPY ./web /usr/src/app
