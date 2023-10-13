@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from django.contrib.auth.models import User
+from users.models import User
 from decouple import config
 
 
@@ -11,7 +11,9 @@ class Command(BaseCommand):
             password = config("ADMIN_PASS")
             print(f'Conta do usuário {username} será criada!')
             admin = User.objects.create_superuser(
-                username=username, password=password)
+                username=username, password=password,
+                email=config("ADMIN_EMAIL")
+            )
             admin.is_active = True
             admin.is_staff = True
             admin.save()
