@@ -9,7 +9,13 @@ nav:
     - Sprint 1: sprints/sprint-1.md
     - Sprint 2: sprints/sprint-2.md
     - Sprint 3: sprints/sprint-3.md
-    
+
+  - Frontend:
+    - Sprint 0: frontend/sprint-0.md 
+    - Sprint 1: frontend/sprint-1.md
+    - Sprint 2: frontend/sprint-2.md
+    - Sprint 3: frontend/sprint-3.md
+
 theme:
   name: material
   features:
