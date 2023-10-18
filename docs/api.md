@@ -13,10 +13,26 @@ Essa rota permite ao usuário fazer login com sua conta do Google.
 
 A resposta conterá informações de autenticação bem-sucedida, incluindo um token de autenticação.
 
-```json
-body: {   
-    "access_token": "token_de_acesso"
+```js
+{
+  "routes": [
+    {
+      "path": "/auth/google",
+      "method": "GET",
+      "description": "Iniciar autenticação do Google OAuth2.",
+      "scope": ["profile", "email"]
+    },
+    {
+      "path": "/auth/google/callback",
+      "method": "GET",
+      "description": "Rota de retorno de chamada após a autenticação do Google OAuth2. Recebe o token de acesso do Google.",
+      "successRedirect": "/profile",
+      "failureRedirect": "/login",
+      "receivesAccessToken": true
+    },
+  ],
 }
+
 ```
 
 - `"access_token"`: O token de acesso que permite ao usuário autenticado acessar recursos protegidos.
@@ -26,12 +42,11 @@ body: {
 **Método HTTP:** `GET`
 **Rota:** `/schedules`
 
-Esta rota permite ao usuário visualizar uma grade de matérias criada.
-
+Esta rota permite ao usuário visualizar várias grades de matérias criadas.
 
 **Requests:**
 
-```json
+```js
 headers = {
     "Authorization": "Token"
 }
@@ -39,9 +54,9 @@ headers = {
 
 **Response:**
 
-```json
+```js
 {
-    "schedules": {
+    "schedule 1": {
         "id": 123,
         "name": "Grade 1",
         "date": "2021-01-01",
@@ -52,10 +67,16 @@ headers = {
                     {
                         "name": "Cálculo 1",
                         "time": "2M34"
+                        "code": "MAT101"
+                        "teacher": ["LUIZA YOKO"]
+                        "classroom": "S1"
                     },
                     {
                         "name": "Fisica 1",
                         "time": "2T23"
+                        "code": "FIS101"
+                        "teacher": ["RAFAEL MORGADO DA SILVA"]
+                        "classroom": "S2"
                     }
                 ]
             },
@@ -65,10 +86,61 @@ headers = {
                     {
                         "name": "Cálculo 1",
                         "time": "3M34"
+                        "code": "MAT101"
+                        "teacher": ["LUIZA YOKO"]
+                        "classroom": "S1"
                     },
                     {
                         "name": "Fisica 1",
                         "time": "3T23"
+                        "code": "FIS101"
+                        "teacher": ["RAFAEL MORGADO DA SILVA"]
+                        "classroom": "S2"
+                    }
+                ]
+            }
+        ]
+    }
+    "schedule 2": {
+        "id": 456,
+        "name": "Grade 2",
+        "date": "2021-01-01",
+        "schedule": [
+            {
+                "day": "Quarta-feira",
+                "courses": [
+                    {
+                        "name": "Cálculo 1",
+                        "time": "2M34"
+                        "code": "MAT102"
+                        "teacher": ["Ricardo Fragelli"]
+                        "classroom": "S1"
+                    },
+                    {
+                        "name": "Fisica 1",
+                        "time": "2T23"
+                        "code": "FIS104"
+                        "teacher": ["RAFAEL MORGADO DA SILVA"]
+                        "classroom": "S2"
+                    }
+                ]
+            },
+            {
+                "day": "Sexta-feira",
+                "courses": [
+                    {
+                        "name": "Cálculo 1",
+                        "time": "3M34"
+                        "code": "MAT102"
+                        "teacher": ["Ricardo Fragelli"]
+                        "classroom": "S1"
+                    },
+                    {
+                        "name": "Fisica 1",
+                        "time": "3T23"
+                        "code": "FIS104"
+                        "teacher": ["RAFAEL MORGADO DA SILVA"]
+                        "classroom": "S2"
                     }
                 ]
             }
@@ -78,12 +150,14 @@ headers = {
 ```
 
 - `"schedule"`: Uma lista de objetos representando a grade de matérias por dia. Cada objeto possui um campo `"day"` e uma lista de cursos `"courses"` para esse dia.
-- `"courses"`: Uma lista de objetos representando as matérias selecionadas manualmente. Cada objeto contém o `"name"` (nome da matéria) e `"time"` (horário).
+- `"courses"`: Uma lista de objetos representando as matérias selecionadas manualmente. Cada objeto contém o `"name"` (nome da matéria), `"time"` (horário) e `"teacher"` (professor) e `"classroom"` (sala de aula).
 - `"date"`: A data em que a grade de matérias foi criada.
 - `"name"`: O nome da grade da matéria.
 - `"id"`: O identificador único da grade de matérias.
 - `"day"`: O dia da semana em que é ministrada a aula.
 - `"time"`: Código que fornece o horário em que é ministrada a aula e bem o dia da semana em que acontece.
+- `"teacher"`: O nome do professor que ministra a aula.
+- `"classroom"`: O código da sala de aula em que é ministrada a aula.
 
 
 ### Visualização de Perfil
@@ -95,7 +169,7 @@ Esta rota permite ao usuário visualizar seu perfil, incluindo informações pes
 
 **Requests:**
 
-```json
+```js
 headers = {
     "Authorization": "Token"
 }
@@ -103,15 +177,18 @@ headers = {
 
 **Response:**
 
-```json
+```js
 {   
     "info": {
-        "foto": "link",
-        "nome": "Nome do Usuário",
-        "email": "email_do_cliente@example.com"
+        "photo": "link",
+        "name": "Client name",
+        "email": "client@email.com"
     }  
 }
 ```
+- `"photo"`: A foto de perfil do usuário.
+- `"name"`: O nome do usuário.
+- `"email"`: O email do usuário.
 
 ### Logout
 
@@ -122,7 +199,7 @@ Esta rota permite ao usuário fazer logout de sua conta no site.
 
 **Requests:**
 
-```json
+```js
 headers = {
     "Authorization": "Token"
 }
@@ -137,7 +214,7 @@ Esta rota permite ao usuário criar uma grade de matérias, selecionando manualm
 
 **Response:**
 
-```json
+```js
 {
     "mode": "manual | automatic",
     "preference": "M",
@@ -145,6 +222,7 @@ Esta rota permite ao usuário criar uma grade de matérias, selecionando manualm
     "courses": [
         {
             "name": "Tópicos Especiais em Engenharia de Software",
+            "code": "ESW101",
             "times": [
                 ["23M34","Segunda e Terça - 10:00 a 12:00"],
                 ["2T23","Segunda - 14:00 a 16:00"]
@@ -153,6 +231,7 @@ Esta rota permite ao usuário criar uma grade de matérias, selecionando manualm
         },
         {
             "name": "Fisica 1",
+            "code": "FIS101",
             "times": [
                 ["45M34","Quarta e Quinta - 10:00 a 12:00"],
                 ["6T23","Sexta - 14:00 a 16:00"]
@@ -163,14 +242,13 @@ Esta rota permite ao usuário criar uma grade de matérias, selecionando manualm
     ]
 }
 ```
-
-- `"courses"`: Uma lista de objetos representando as matérias selecionadas manualmente. Cada objeto contém o `"name"` (nome da matéria), `"day"` (dia da semana) e `"time"` (horário).
-- `"preference"`: A preferência de horário escolhida pelo usuário (por exemplo, "M" para manhã, "T" para tarde, "N" para noite).
-- `"professors"`: Uma lista de nomes de professores preferidos escolhidos pelo usuário.
 - `"mode"`: O modo de montagem da grade de matérias, que pode ser manual ou automático.
-- `"schedule"`: Uma lista de objetos representando a grade de matérias por dia. Cada objeto possui um campo `"day"` e uma lista de cursos `"courses"` para esse dia.
-- `"courses"`: Uma lista de objetos representando as matérias selecionadas manualmente. Cada objeto contém o `"name"` (nome da matéria) e `"time"` (horário).
-
+- `"preference"`: A preferência de horário escolhida pelo usuário (por exemplo, "M" para manhã, "T" para tarde, "N" para noite).
+- `"courses"`: Uma lista de objetos representando as matérias selecionadas manualmente. Cada objeto contém o `"name"` (nome da matéria), `"code"` (código da disciplina), `"day"` (dia da semana) e `"time"` (horário).
+- `"name"`: O nome da matéria.
+- `"code"`: O código da matéria na universidade.
+- `"times"`: Uma lista de horários em que a matéria é ministrada.
+- `"professors"`: Uma lista de nomes de professores preferidos escolhidos pelo usuário.
 
 ### Update de Grade 
 
@@ -180,13 +258,13 @@ Esta rota permite ao usuário atualizar uma grade de matérias salva anteriormen
 
 **Requests:**
 
-```json
+```js
 headers = {
     "Authorization": "Token"
 }
 ```
 **Response:**
-```json
+```js
 body: {
     "schedule_id": 123,
     "mode": "manual",
@@ -194,6 +272,7 @@ body: {
     "courses": [
         {
             "name": "Tópicos Especiais em Engenharia de Software",
+            "code": "ESW101",
             "times": [
                 ["23M34","Segunda e Terça - 10:00 a 12:00"],
                 ["2T23","Segunda - 14:00 a 16:00"]
@@ -202,6 +281,7 @@ body: {
         },
         {
             "name": "Fisica 1",
+            "code": "FIS101",
             "times": [
                 ["45M34","Quarta e Quinta - 10:00 a 12:00"],
                 ["6T23","Sexta - 14:00 a 16:00"]
@@ -213,14 +293,13 @@ body: {
 }
 ```
 - `"schedule_id"`: O identificador único da grade de matérias a ser atualizada.
-- `"courses"`: Uma lista de objetos representando as matérias selecionadas manualmente. Cada objeto contém o `"name"` (nome da matéria), `"day"` (dia da semana) e `"time"` (horário).
-- `"professors"`: Uma lista de nomes de professores preferidos escolhidos pelo usuário.
+- `"courses"`: Uma lista de objetos representando as matérias selecionadas manualmente. Cada objeto contém o `"name"` (nome da matéria), `"code"` (código da disciplina), `"day"` (dia da semana) e `"time"` (horário).
 
 **Response:**
 
 A resposta confirmará a atualização bem-sucedida da grade de matérias.
 
-```json
+```js
 {
     "message": "Grade atualizada com sucesso."
 }
@@ -235,7 +314,7 @@ Esta rota permite ao usuário pesquisar e encontrar informações detalhadas sob
 
 **Request:**
 
-```json
+```js
 query = "Cálculo 1"
 ```
 
@@ -245,7 +324,7 @@ query = "Cálculo 1"
 
 A resposta incluirá informações detalhadas sobre a matéria procurada.
 
-```json
+```js
 {
     "course_name": "Cálculo 1",
     "course_code": "MAT101",
@@ -282,7 +361,7 @@ O usuário pode usar esta rota para excluir uma grade de matérias salva anterio
 
 **Requests:**
 
-```json
+```js
 headers = {
     "Authorization": "Token"
 }
@@ -290,7 +369,7 @@ headers = {
 
 **Response:**
 
-```json
+```js
 {
     "schedule_id": 123
 }
