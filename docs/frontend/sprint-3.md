@@ -4,8 +4,8 @@ Período: 25/09/2023 a 02/10/2023
 
 ## Descrição
 
-Nessa _Sprint_ foi definido o inicio do desenvolvimento do prótotipo de baixa fidelidade através da plataforma definida das outras sprints
+A Sprint 3 marca a continuação do desenvolvimento do protótipo front-end utilizando a ferramenta Figma. Nesta fase, a equipe concentra seus esforços na criação e refinamento dos protótipos da interface do usuário (UI) de acordo com os requisitos do projeto.
 
 ## Objetivos
 
-- Realizar protótipo de baixa fidelidade
+- Continuar o trabalho de realizacao do prototipo
