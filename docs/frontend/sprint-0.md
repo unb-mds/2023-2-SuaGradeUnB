@@ -4,11 +4,13 @@ Período: 04/09/2023 a 11/09/2023
 
 ## Descrição
 
-Nessa _Sprint_ foi definido a seção do time na qual seriam resposáveis pelo desenvolvimento frontend do projeto. Os colaboradores Artur Ribeiro e Caio Falcão.
-Foi definido também que mesmo tenda essa seção nenhuma área do projeto seria restrita, assim qualquer um pode colaborar no desenvolvimento frontend e outras áreas. A definicao da seção foi para a optimização do começo dos trabalhos.
+A Sprint 0 marca o início do projeto e se concentra na definição das ferramentas de desenvolvimento front-end que serão utilizadas ao longo do ciclo de desenvolvimento. Após uma análise detalhada das opções disponíveis, a equipe decidiu adotar o framework Flutter para o desenvolvimento da interface do usuário (UI).
 
 ## Objetivos
 
-- Realizar um esquemático do aplicativo
-- "brainstorm" de ideias do frontend
-- Discutir ferramentas de desenvolvimento
+- Definir as ferramentas de desenvolvimento front-end a serem utilizadas no projeto.
+- Escolher o framework mais adequado para o desenvolvimento da UI.
+
+## Finalização
+
+Com a decisão de adotar o Flutter para o desenvolvimento front-end, estamos preparados para avançar com determinação. Agradecemos a colaboração da equipe na escolha 
