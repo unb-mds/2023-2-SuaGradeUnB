@@ -5,7 +5,7 @@ hide:
 
 # Definição de rotas
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies ultricies, nunc nisl ultricies nunc, quis ul
+Nesta seção, serão definidas as rotas da API, bem como os métodos HTTP e os parâmetros necessários para cada uma delas.
 
 ## Autenticação do Google
 
@@ -18,7 +18,7 @@ Esta rota permite ao usuário fazer o login usando o Google OAuth2. Caso o usuá
 
 O request deve conter um token de autenticação do Google.
 
-```js
+```js linenums="1"
 body = {
     "access_token": "token"
 }
@@ -31,7 +31,7 @@ A resposta conterá informações de autenticação bem-sucedida, incluindo um t
 
 **Success (200 OK)**
 
-```js
+```js linenums="1"
 headers = {
     "Content-Type": "application/json",
     "Set-Cookie": "refresh=<refresh-token>; Secure; HttpOnly; SameSite=Lax; Expires=<expires-date>"
@@ -46,7 +46,7 @@ body = {
 
 **Error (400 BAD REQUEST)**
 
-```js
+```js linenums="1"
 body = {
     "errors": "descriptive error message"
 }
@@ -63,7 +63,7 @@ Esta rota atualiza o *refresh-token* do usuário e retorna um novo *access-token
 
 O request deve conter um *refresh-token*.
 
-```js
+```js linenums="1"
 headers = {
     "Cookie": "refresh=<refresh-token>"
 }
@@ -73,7 +73,7 @@ headers = {
 
 **Success (200 OK)**
 
-```js
+```js linenums="1"
 headers = {
     "Set-Cookie": "refresh=<refresh-token>; Secure; HttpOnly; SameSite=Lax; Expires=<expires-date>"
 },
@@ -94,7 +94,7 @@ Esta rota permite ao usuário fazer logout de sua conta no site.
 
 **Request:**
 
-```js
+```js linenums="1"
 headers = {
     "Cookie": "refresh=<refresh-token>",
     "Authorization": "Bearer <access-token>"
@@ -105,7 +105,7 @@ headers = {
 
 **Suceess (200 OK)**
 
-```js
+```js linenums="1"
 body = {
     "message": "Successfully logged out."
 }
@@ -113,7 +113,7 @@ body = {
 
 **Error (400 BAD REQUEST)**
 
-```js
+```js linenums="1"
 body = {
     "errors": "descriptive error message"
 }
@@ -121,7 +121,7 @@ body = {
 
 **Error (401 UNAUTHORIZED)**
 
-```js
+```js linenums="1"
 body = {
     "errors": "access token not provided or invalid"
 }
@@ -140,7 +140,7 @@ A resposta incluirá informações detalhadas sobre as matérias potenciais que 
 
 **Success (200 OK):**
 
-```js
+```js linenums="1"
 body = {
     "courses": [
         {
@@ -163,7 +163,7 @@ body = {
 
 **Error (400 BAD REQUEST):**
 
-```js
+```js linenums="1"
 body = {
     "errors": "descriptive error message"
 }
@@ -178,7 +178,7 @@ Esta rota permite ao usuário criar uma grade de matérias, selecionando manualm
 
 **Request:**
 
-```js
+```js linenums="1"
 body = {
     "preference": "M|T|N", 
     "courses": [
@@ -212,7 +212,7 @@ body = {
 
 A resposta incluirá três opções de grade de matérias, com base nas preferências do usuário.
 
-```js
+```js linenums="1"
 body = {
     "schedules": [
         {
@@ -236,7 +236,7 @@ body = {
 
 **Error (400 BAD REQUEST):**
 
-```js
+```js linenums="1"
 body = {
     "errors": "descriptive error message"
 }
@@ -251,7 +251,7 @@ Esta rota permite ao usuário salvar uma grade de matérias, caso deseje utiliz�
 
 **Request:**
 
-```js
+```js linenums="1"
 header = {
     "Authorization": "Bearer <access-token>"
 },
@@ -278,7 +278,7 @@ body = {
 
 A resposta confirmará a criação bem-sucedida da grade de matérias.
 
-```js
+```js linenums="1"
 body = {
     "message": "Grade salva com sucesso."
 }
@@ -286,7 +286,7 @@ body = {
 
 **Error (400 BAD REQUEST):**
 
-```js
+```js linenums="1"
 body = {
     "errors": "descriptive error message"
 }
@@ -294,7 +294,7 @@ body = {
 
 **Error (401 UNAUTHORIZED):**
 
-```js
+```js linenums="1"
 body = {
     "errors": "access token not provided or invalid"
 }
@@ -309,7 +309,7 @@ Esta rota permite ao usuário visualizar as grades de matérias criadas e salvas
 
 **Request:**
 
-```js
+```js linenums="1"
 headers = {
     "Authorization": "Bearer <access-token>"
 }
@@ -321,7 +321,7 @@ headers = {
 
 A resposta incluirá uma lista de grades de matérias salvas pelo usuário.
 
-```js
+```js linenums="1"
 body = {
     "schedules": [
         {
@@ -345,7 +345,7 @@ body = {
 
 **Error (400 BAD REQUEST):**
 
-```js
+```js linenums="1"
 body = {
     "errors": "descriptive error message"
 }
@@ -353,7 +353,7 @@ body = {
 
 **Error (401 UNAUTHORIZED):**
 
-```js
+```js linenums="1"
 body = {
     "errors": "access token not provided or invalid"
 }
@@ -368,7 +368,7 @@ Esta rota permite ao usuário excluir uma grade de matérias salva anteriormente
 
 **Request:**
 
-```js
+```js linenums="1"
 headers = {
     "Authorization": "Bearer <access-token>"
 },
@@ -383,7 +383,7 @@ body = {
 
 A resposta confirmará a exclusão bem-sucedida da grade de matérias.
 
-```js
+```js linenums="1"
 body = {
     "message": "Successfully deleted."
 }
@@ -391,7 +391,7 @@ body = {
 
 **Error (400 BAD REQUEST):**
 
-```js
+```js linenums="1"
 body = {
     "errors": "descriptive error message"
 }
@@ -399,7 +399,7 @@ body = {
 
 **Error (401 UNAUTHORIZED):**
 
-```js
+```js linenums="1"
 body = {
     "errors": "access token not provided or invalid"
 }
