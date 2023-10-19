@@ -14,3 +14,7 @@ Nessa _Sprint_ foi definido o inicio do desenvolvimento do prótotipo de baixa f
 - Definição da paleta de cores.
 - Seleção de tipografias.
 - Criação ou seleção de ícones e gráficos.
+
+## Finalização
+
+Nessa sprint foi realizado o inicio da prototipagem de baixa fidelidade do desenvolvimento frontend do projeto, atraves da plataforma Figma
