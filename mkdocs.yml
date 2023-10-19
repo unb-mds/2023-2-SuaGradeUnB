@@ -8,8 +8,9 @@ nav:
     - Sprint 0: sprints/sprint-0.md
     - Sprint 1: sprints/sprint-1.md
     - Sprint 2: sprints/sprint-2.md
+    - Sprint 3: sprints/sprint-3.md
   - API: api.md
-
+    
 theme:
   name: material
   features:

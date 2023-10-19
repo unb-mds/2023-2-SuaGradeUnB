@@ -20,6 +20,17 @@ services:
       - 8000:8000
     depends_on:
       - db
+    
+  web:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.web
+    command: npm run dev
+    ports:
+      - 3000:3000
+    depends_on:
+      - api
 
 volumes:
   postgres_data:
