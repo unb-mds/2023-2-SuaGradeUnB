@@ -1,378 +1,406 @@
+---
+hide:
+  - navigation
+--- 
+
 # Definição de rotas
 
-## Rotas do web site "Sua Grade UnB"
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies ultricies, nunc nisl ultricies nunc, quis ul
 
-### Autenticação do Google
+## Autenticação do Google
 
-**Método HTTP:** `GET`
-**Rota:** `/auth/google`
+**Método HTTP:** `POST` <br>
+**Rota:** `/users/register`
 
-Essa rota permite ao usuário fazer login com sua conta do Google.
+Esta rota permite ao usuário fazer o login usando o Google OAuth2. Caso o usuário não tenha uma conta, uma nova será criada.
+
+**Request:**
+
+O request deve conter um token de autenticação do Google.
+
+```js
+body = {
+    "access_token": "token"
+}
+```
+- `"access_token"`: O token de acesso do Google OAuth2.
 
 **Response:**
 
 A resposta conterá informações de autenticação bem-sucedida, incluindo um token de autenticação.
 
-```js
-{
-  "routes": [
-    {
-      "path": "/auth/google",
-      "method": "GET",
-      "description": "Iniciar autenticação do Google OAuth2.",
-      "scope": ["profile", "email"]
-    },
-    {
-      "path": "/auth/google/callback",
-      "method": "GET",
-      "description": "Rota de retorno de chamada após a autenticação do Google OAuth2. Recebe o token de acesso do Google.",
-      "successRedirect": "/profile",
-      "failureRedirect": "/login",
-      "receivesAccessToken": true
-    },
-  ],
-}
-
-```
-
-- `"access_token"`: O token de acesso que permite ao usuário autenticado acessar recursos protegidos.
-
-### Consulta da Grade de Matérias
-
-**Método HTTP:** `GET`
-**Rota:** `/schedules`
-
-Esta rota permite ao usuário visualizar várias grades de matérias criadas.
-
-**Requests:**
+**Success (200 OK)**
 
 ```js
 headers = {
-    "Authorization": "Token"
+    "Content-Type": "application/json",
+    "Set-Cookie": "refresh=<refresh-token>; Secure; HttpOnly; SameSite=Lax; Expires=<expires-date>"
+},
+body = {
+    "access": "token",
+    "first_name": "name",
+    "last_name": "name",
+    "email": "email"
+}
+```
+
+**Error (400 BAD REQUEST)**
+
+```js
+body = {
+    "errors": "descriptive error message"
+}
+```
+
+## Login 
+
+**Método HTTP:** `POST` <br>
+**Rota:** `/users/login`
+
+Esta rota atualiza o *refresh-token* do usuário e retorna um novo *access-token*.
+
+**Request:**
+
+O request deve conter um *refresh-token*.
+
+```js
+headers = {
+    "Cookie": "refresh=<refresh-token>"
 }
 ```
 
 **Response:**
 
-```js
-{
-    "schedule 1": {
-        "id": 123,
-        "name": "Grade 1",
-        "date": "2021-01-01",
-        "schedule": [
-            {
-                "day": "Segunda-feira",
-                "courses": [
-                    {
-                        "name": "Cálculo 1",
-                        "time": "2M34"
-                        "code": "MAT101"
-                        "teacher": ["LUIZA YOKO"]
-                        "classroom": "S1"
-                    },
-                    {
-                        "name": "Fisica 1",
-                        "time": "2T23"
-                        "code": "FIS101"
-                        "teacher": ["RAFAEL MORGADO DA SILVA"]
-                        "classroom": "S2"
-                    }
-                ]
-            },
-            {
-                "day": "Terça-feira",
-                "courses": [
-                    {
-                        "name": "Cálculo 1",
-                        "time": "3M34"
-                        "code": "MAT101"
-                        "teacher": ["LUIZA YOKO"]
-                        "classroom": "S1"
-                    },
-                    {
-                        "name": "Fisica 1",
-                        "time": "3T23"
-                        "code": "FIS101"
-                        "teacher": ["RAFAEL MORGADO DA SILVA"]
-                        "classroom": "S2"
-                    }
-                ]
-            }
-        ]
-    }
-    "schedule 2": {
-        "id": 456,
-        "name": "Grade 2",
-        "date": "2021-01-01",
-        "schedule": [
-            {
-                "day": "Quarta-feira",
-                "courses": [
-                    {
-                        "name": "Cálculo 1",
-                        "time": "2M34"
-                        "code": "MAT102"
-                        "teacher": ["Ricardo Fragelli"]
-                        "classroom": "S1"
-                    },
-                    {
-                        "name": "Fisica 1",
-                        "time": "2T23"
-                        "code": "FIS104"
-                        "teacher": ["RAFAEL MORGADO DA SILVA"]
-                        "classroom": "S2"
-                    }
-                ]
-            },
-            {
-                "day": "Sexta-feira",
-                "courses": [
-                    {
-                        "name": "Cálculo 1",
-                        "time": "3M34"
-                        "code": "MAT102"
-                        "teacher": ["Ricardo Fragelli"]
-                        "classroom": "S1"
-                    },
-                    {
-                        "name": "Fisica 1",
-                        "time": "3T23"
-                        "code": "FIS104"
-                        "teacher": ["RAFAEL MORGADO DA SILVA"]
-                        "classroom": "S2"
-                    }
-                ]
-            }
-        ]
-    }
-}
-```
-
-- `"schedule"`: Uma lista de objetos representando a grade de matérias por dia. Cada objeto possui um campo `"day"` e uma lista de cursos `"courses"` para esse dia.
-- `"courses"`: Uma lista de objetos representando as matérias selecionadas manualmente. Cada objeto contém o `"name"` (nome da matéria), `"time"` (horário) e `"teacher"` (professor) e `"classroom"` (sala de aula).
-- `"date"`: A data em que a grade de matérias foi criada.
-- `"name"`: O nome da grade da matéria.
-- `"id"`: O identificador único da grade de matérias.
-- `"day"`: O dia da semana em que é ministrada a aula.
-- `"time"`: Código que fornece o horário em que é ministrada a aula e bem o dia da semana em que acontece.
-- `"teacher"`: O nome do professor que ministra a aula.
-- `"classroom"`: O código da sala de aula em que é ministrada a aula.
-
-
-### Visualização de Perfil
-
-**Método HTTP:** `GET`
-**Rota:** `/profile`
-
-Esta rota permite ao usuário visualizar seu perfil, incluindo informações pessoais e configurações.
-
-**Requests:**
+**Success (200 OK)**
 
 ```js
 headers = {
-    "Authorization": "Token"
+    "Set-Cookie": "refresh=<refresh-token>; Secure; HttpOnly; SameSite=Lax; Expires=<expires-date>"
+},
+body = {
+    "access": "token",
+    "first_name": "name",
+    "last_name": "name",
+    "email": "email"
 }
 ```
 
-**Response:**
+## Logout
 
-```js
-{   
-    "info": {
-        "photo": "link",
-        "name": "Client name",
-        "email": "client@email.com"
-    }  
-}
-```
-- `"photo"`: A foto de perfil do usuário.
-- `"name"`: O nome do usuário.
-- `"email"`: O email do usuário.
-
-### Logout
-
-**Método HTTP:** `GET`
-**Rota:** `/logout`
+**Método HTTP:** `POST` <br>
+**Rota:** `users/logout`
 
 Esta rota permite ao usuário fazer logout de sua conta no site.
 
-**Requests:**
+**Request:**
 
 ```js
 headers = {
-    "Authorization": "Token"
+    "Cookie": "refresh=<refresh-token>",
+    "Authorization": "Bearer <access-token>"
 }
 ```
-
-### Montagem de Grade
-
-**Método HTTP:** `POST`
-**Rota:** `/schedules/create`
-
-Esta rota permite ao usuário criar uma grade de matérias, selecionando manualmente as matérias e horários ou deixando o sistema escolher automaticamente por preferencias determinadas pelo usuário.
 
 **Response:**
 
+**Suceess (200 OK)**
+
 ```js
-{
-    "mode": "manual | automatic",
-    "preference": "M",
-
-    "courses": [
-        {
-            "name": "Tópicos Especiais em Engenharia de Software",
-            "code": "ESW101",
-            "times": [
-                ["23M34","Segunda e Terça - 10:00 a 12:00"],
-                ["2T23","Segunda - 14:00 a 16:00"]
-            ],
-            "professors": ["BRUNO CESAR RIBAS", "EDSON ALVES DA COSTA JUNIOR"]
-        },
-        {
-            "name": "Fisica 1",
-            "code": "FIS101",
-            "times": [
-                ["45M34","Quarta e Quinta - 10:00 a 12:00"],
-                ["6T23","Sexta - 14:00 a 16:00"]
-            ],
-            "professors": ["LUIZA YOKO", "RAFAEL MORGADO DA SILVA"]
-
-        }
-    ]
+body = {
+    "message": "Successfully logged out."
 }
 ```
-- `"mode"`: O modo de montagem da grade de matérias, que pode ser manual ou automático.
-- `"preference"`: A preferência de horário escolhida pelo usuário (por exemplo, "M" para manhã, "T" para tarde, "N" para noite).
-- `"courses"`: Uma lista de objetos representando as matérias selecionadas manualmente. Cada objeto contém o `"name"` (nome da matéria), `"code"` (código da disciplina), `"day"` (dia da semana) e `"time"` (horário).
-- `"name"`: O nome da matéria.
-- `"code"`: O código da matéria na universidade.
-- `"times"`: Uma lista de horários em que a matéria é ministrada.
-- `"professors"`: Uma lista de nomes de professores preferidos escolhidos pelo usuário.
 
-### Update de Grade 
-
-**Método HTTP:** `PUT` Rota: `/schedules/update`
-
-Esta rota permite ao usuário atualizar uma grade de matérias salva anteriormente, caso deseje alterar uma configuração específica.
-
-**Requests:**
+**Error (400 BAD REQUEST)**
 
 ```js
-headers = {
-    "Authorization": "Token"
+body = {
+    "errors": "descriptive error message"
 }
 ```
-**Response:**
-```js
-body: {
-    "schedule_id": 123,
-    "mode": "manual",
 
-    "courses": [
-        {
-            "name": "Tópicos Especiais em Engenharia de Software",
-            "code": "ESW101",
-            "times": [
-                ["23M34","Segunda e Terça - 10:00 a 12:00"],
-                ["2T23","Segunda - 14:00 a 16:00"]
-            ],
-            "professors": ["BRUNO CESAR RIBAS", "EDSON ALVES DA COSTA JUNIOR"]
-        },
-        {
-            "name": "Fisica 1",
-            "code": "FIS101",
-            "times": [
-                ["45M34","Quarta e Quinta - 10:00 a 12:00"],
-                ["6T23","Sexta - 14:00 a 16:00"]
-            ],
-            "professors": ["LUIZA YOKO", "RAFAEL MORGADO DA SILVA"]
-
-        }
-    ]
-}
-```
-- `"schedule_id"`: O identificador único da grade de matérias a ser atualizada.
-- `"courses"`: Uma lista de objetos representando as matérias selecionadas manualmente. Cada objeto contém o `"name"` (nome da matéria), `"code"` (código da disciplina), `"day"` (dia da semana) e `"time"` (horário).
-
-**Response:**
-
-A resposta confirmará a atualização bem-sucedida da grade de matérias.
+**Error (401 UNAUTHORIZED)**
 
 ```js
-{
-    "message": "Grade atualizada com sucesso."
+body = {
+    "errors": "access token not provided or invalid"
 }
 ```
 
 ## Busca por Matéria
 
-**Método HTTP:** `GET`
-**Rota:** `/courses/search`
+**Método HTTP:** `GET` <br>
+**Rota:** `/courses/?search=<search>`
 
-Esta rota permite ao usuário pesquisar e encontrar informações detalhadas sobre uma matéria específica na universidade.
-
-**Request:**
-
-```js
-query = "Cálculo 1"
-```
-
-- `query`: A consulta que o usuário deseja fazer para encontrar informações sobre uma matéria específica.
+Esta rota permite ao usuário pesquisar e encontrar informações detalhadas sobre matérias potenciais que podem se relacionar com o termo de busca *(máximo 5)*. A busca deve ser pelo nome da matéria. 
 
 **Response:**
 
-A resposta incluirá informações detalhadas sobre a matéria procurada.
+A resposta incluirá informações detalhadas sobre as matérias potenciais que se relacionam com o termo de busca.
+
+**Success (200 OK):**
 
 ```js
-{
-    "course_name": "Cálculo 1",
-    "course_code": "MAT101",
-    "description": "Este curso aborda os conceitos fundamentais de cálculo, incluindo limites, derivadas e integrais.",
-    "professors": ["LUIZA YOKO", "RICARDO FRAGELLI"],
-    "schedule": [
+body = {
+    "courses": [
         {
-            "day": "Segunda-feira",
-            "time": "2M34"
-        },
-        {
-            "day": "Terça-feira",
-            "time": "2T23"
+            "name": "Tópicos Especiais em Programação",
+            "code": "FGA0053",
+            "options": [
+                {
+                    "teachers": ["Edson Alves da Costa Junior"],
+                    "schedule": "2M34",
+                    "days": ["Segunda e Terça - 10:00 a 12:00"],
+                    "classroom": "FGA - S1",
+                    "workload": 60, 
+                    "class": 1
+                }
+            ]
         }
     ]
 }
 ```
 
-- `"course_name"`: O nome da matéria pesquisada.
-
-- `"course_code"`: O código da matéria na universidade.
-
-- `"description"`: Uma breve descrição do conteúdo do curso.
-
-- `"professors"`: Uma lista de professores que ministram o curso.
-
-- `"schedule"`: Um horário típico de aulas para a matéria, incluindo os dias da semana e horários.
-### Deleção de Grade Salva
-
-**Método HTTP:** `DELETE`
-**Rota:** `/schedules`
-
-O usuário pode usar esta rota para excluir uma grade de matérias salva anteriormente, caso deseje remover uma configuração específica.
-
-**Requests:**
+**Error (400 BAD REQUEST):**
 
 ```js
-headers = {
-    "Authorization": "Token"
+body = {
+    "errors": "descriptive error message"
+}
+```
+
+## Montagem de Grade
+
+**Método HTTP:** `POST` <br>
+**Rota:** `/schedules/automatic/create`
+
+Esta rota permite ao usuário criar uma grade de matérias, selecionando manualmente as matérias e horários ou deixando o sistema escolher automaticamente por preferencias determinadas pelo usuário. Ao utilizar esta rota, o usuário receberá três opções de grade.
+
+**Request:**
+
+```js
+body = {
+    "preference": "M|T|N", 
+    "courses": [
+        {
+            "name": "Tópicos Especiais em Engenharia de Software",
+            "code": "ESW101",
+            "options": [
+                {
+                    "teachers": ["Edson Alves da Costa Junior"],
+                    "schedule": "2M34"
+                },
+                {
+                    "teachers": ["BRUNO CESAR RIBAS"],
+                    "schedule": "2T23"
+                }
+            ]
+        },
+        {
+            "name": "Fisica 1",
+            "code": "FIS101"
+        }
+    ]
+}
+```
+
+- Caso as opções de matéria possuam horários ou professores ou ambos, o sistema dará preferência para escolha dessas opções. Caso contrário, o sistema escolherá automaticamente.
+
+**Response:**
+
+**Success (200 OK):**
+
+A resposta incluirá três opções de grade de matérias, com base nas preferências do usuário.
+
+```js
+body = {
+    "schedules": [
+        {
+            "courses": [
+                {
+                    "FGA0053": {
+                        "teachers": ["Edson Alves da Costa Junior"],
+                        "schedule": "2M34"
+                    },
+                    "FGA0030": {
+                        "teachers": ["BRUNO CESAR RIBAS"],
+                        "schedule": "2T23"
+                    }
+                }
+            ]
+        },
+        ...
+    ]
+}
+```
+
+**Error (400 BAD REQUEST):**
+
+```js
+body = {
+    "errors": "descriptive error message"
+}
+```
+
+## Salvar Grade
+
+**Método HTTP:** `POST` <br>
+**Rota:** `/schedules/save`
+
+Esta rota permite ao usuário salvar uma grade de matérias, caso deseje utilizá-la novamente no futuro.
+
+**Request:**
+
+```js
+header = {
+    "Authorization": "Bearer <access-token>"
+},
+body = {
+    "id": 123,
+    "courses": [
+        {
+            "FGA0053": {
+                "teachers": ["Edson Alves da Costa Junior"],
+                "schedule": "2M34"
+            },
+            "FGA0030": {
+                "teachers": ["BRUNO CESAR RIBAS"],
+                "schedule": "2T23"
+            }
+        }
+    ]
 }
 ```
 
 **Response:**
 
+**Success (201 CREATED):**
+
+A resposta confirmará a criação bem-sucedida da grade de matérias.
+
 ```js
-{
-    "schedule_id": 123
+body = {
+    "message": "Grade salva com sucesso."
 }
 ```
 
-- `"schedule_id"`: O identificador único da grade de matérias a ser excluída.
+**Error (400 BAD REQUEST):**
+
+```js
+body = {
+    "errors": "descriptive error message"
+}
+```
+
+**Error (401 UNAUTHORIZED):**
+
+```js
+body = {
+    "errors": "access token not provided or invalid"
+}
+```
+
+## Consulta da Grade de Matérias
+
+**Método HTTP:** `GET` <br>
+**Rota:** `/schedules`
+
+Esta rota permite ao usuário visualizar as grades de matérias criadas e salvas por ele.
+
+**Request:**
+
+```js
+headers = {
+    "Authorization": "Bearer <access-token>"
+}
+```
+
+**Response:**
+
+**Success (200 OK):**
+
+A resposta incluirá uma lista de grades de matérias salvas pelo usuário.
+
+```js
+body = {
+    "schedules": [
+        {
+            "id": 123,
+            "courses": [
+                {
+                    "FGA0053": {
+                        "teachers": ["Edson Alves da Costa Junior"],
+                        "schedule": "2M34"
+                    },
+                    "FGA0030": {
+                        "teachers": ["BRUNO CESAR RIBAS"],
+                        "schedule": "2T23"
+                    }
+                }
+            ]
+        }
+    ]
+}
+```
+
+**Error (400 BAD REQUEST):**
+
+```js
+body = {
+    "errors": "descriptive error message"
+}
+```
+
+**Error (401 UNAUTHORIZED):**
+
+```js
+body = {
+    "errors": "access token not provided or invalid"
+}
+```
+
+## Deleção de Grade Salva
+
+**Método HTTP:** `DELETE` <br>
+**Rota:** `/schedules/delete`
+
+Esta rota permite ao usuário excluir uma grade de matérias salva anteriormente.
+
+**Request:**
+
+```js
+headers = {
+    "Authorization": "Bearer <access-token>"
+},
+body = {
+    "id": 123
+}
+```
+
+**Response:**
+
+**Success (200 OK):**
+
+A resposta confirmará a exclusão bem-sucedida da grade de matérias.
+
+```js
+body = {
+    "message": "Successfully deleted."
+}
+```
+
+**Error (400 BAD REQUEST):**
+
+```js
+body = {
+    "errors": "descriptive error message"
+}
+```
+
+**Error (401 UNAUTHORIZED):**
+
+```js
+body = {
+    "errors": "access token not provided or invalid"
+}
+```
