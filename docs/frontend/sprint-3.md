@@ -8,4 +8,8 @@ A Sprint 3 marca a continuação do desenvolvimento do protótipo front-end util
 
 ## Objetivos
 
-- Continuar o trabalho de realizacao do prototipo
+- Continuar o trabalho de realizacao do protótipo
+
+## Finalização
+
+Com o final dessa semana, o protótipo de design avançou em seu desenvolvimento assim visando o término do mesmo nas semanas seguintes.

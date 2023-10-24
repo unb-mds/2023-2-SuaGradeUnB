@@ -8,12 +8,12 @@ A _Sprint 5_ marca uma etapa crucial no desenvolvimento do nosso projeto. Durant
 
 ## Objetivos
 
-- [ ] Definição de Requisitos: Antes de iniciar o protótipo, revisamos os requisitos para garantir que todos os aspectos do projeto fossem considerados.
-- [ ]Design de Interface: Utilizar o Figma para desenhar as interfaces do aplicativo, garantindo que estejam de acordo com as diretrizes de design e as expectativas do usuário.
-- [ ] Interação e Navegação: Implementar a interatividade no protótipo para simular a navegação real do aplicativo.
+- Definição de Requisitos: Antes de iniciar o protótipo, revisamos os requisitos para garantir que todos os aspectos do projeto fossem considerados.
+- Design de Interface: Utilizar o Figma para desenhar as interfaces do aplicativo, garantindo que estejam de acordo com as diretrizes de design e as expectativas do usuário.
+- Interação e Navegação: Implementar a interatividade no protótipo para simular a navegação real do aplicativo.
 
 ## Finalização
 
 Ao final desta sprint, temos um protótipo que, embora não esteja completamente finalizado, já está funcional. Isso significa que ele captura as principais características e funcionalidades que queremos apresentar, permitindo uma interação preliminar e fornecendo uma visão inicial de como será a versão final do produto. O feedback das próximas revisões e testes será essencial para refinar e completar nosso protótipo nas sprints subsequentes.
----
+
 
