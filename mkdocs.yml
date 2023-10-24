@@ -10,8 +10,6 @@ nav:
     - Sprint 2: sprints/sprint-2.md
     - Sprint 3: sprints/sprint-3.md
     - Sprint 4: sprints/sprint-4.md
-    - Sprint 5: sprints/sprint-5.md
-    - Sprint 6: sprints/sprint-6.md
 
   - Front-end:
     - Sprint 0: frontend/sprint-0.md 
@@ -22,14 +20,26 @@ nav:
     - Sprint 5: frontend/sprint-5.md
     - Sprint 6: frontend/sprint-6.md
 
+  - API: api.md
+    
 theme:
   name: material
   features:
   - navigation.tabs
   - navigation.tabs.sticky
+  - content.code.copy
 
   palette:
     primary: "indigo"
 
   icon:
     repo: fontawesome/brands/github
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
