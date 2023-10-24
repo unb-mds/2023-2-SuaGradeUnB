@@ -1,10 +1,10 @@
-# Sprint 6
+# Semana 6
 
 Período: 18/10/2023 a 25/10/2023
 
 ## Descrição
 
-O principal objetivo da _Sprint 6_ é a conclusão total do protótipo de alta fidelidade que foi iniciado na Sprint anterior. Com o protótipo finalizado, pretendemos oferecer uma visão completa e precisa da experiência do usuário e da interface do produto. Paralelamente, esta sprint também se dedica ao estudo da ferramenta React, que será utilizada como base para o desenvolvimento do front end do projeto.
+O principal objetivo da _Semana 6_ é a conclusão total do protótipo de alta fidelidade que foi iniciado na Sprint anterior. Com o protótipo finalizado, pretendemos oferecer uma visão completa e precisa da experiência do usuário e da interface do produto. Paralelamente, esta sprint também se dedica ao estudo da ferramenta React, que será utilizada como base para o desenvolvimento do front end do projeto.
 
 ## Objetivos
 
@@ -14,4 +14,4 @@ O principal objetivo da _Sprint 6_ é a conclusão total do protótipo de alta f
 
 ## Finalização
 
-Ao final dessa _sprint_ o grupo está devidamente organizado e preparado para a primeira entrega do projeto, visando a demonstração do prótotipo de alta fidelidade.
+Ao final dessa _semana_ o grupo está devidamente organizado e preparado para a primeira entrega do projeto, visando a demonstração do prótotipo de alta fidelidade.

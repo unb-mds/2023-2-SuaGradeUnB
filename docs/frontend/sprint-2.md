@@ -1,10 +1,10 @@
-# Sprint 2
+# Semana 2
 
 Período: 18/09/2023 a 25/09/2023
 
 ## Descrição
 
-Nessa _Sprint_ foi definido o inicio do desenvolvimento do prótotipo de baixa fidelidade através da plataforma definida das outras sprints. Assim definindo os esboços de logotipo, tipografias, paleta de cores e etc.
+Nessa _Semana_ foi definido o inicio do desenvolvimento do prótotipo de baixa fidelidade através da plataforma definida das outras sprints. Assim definindo os esboços de logotipo, tipografias, paleta de cores e etc.
 
 ## Objetivos
 
@@ -17,4 +17,4 @@ Nessa _Sprint_ foi definido o inicio do desenvolvimento do prótotipo de baixa f
 
 ## Finalização
 
-Nessa sprint foi realizado o inicio da prototipagem de baixa fidelidade do desenvolvimento frontend do projeto, atraves da plataforma Figma
+Nessa semana foi realizado o inicio da prototipagem de baixa fidelidade do desenvolvimento frontend do projeto, atraves da plataforma Figma
