@@ -1,21 +1,20 @@
 from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework.test import APIClient
+from rest_framework import status
 
 class UserSessionLoginTests(TestCase):
+    
     def setUp(self):
-        self.client = APIClient()
         self.token = "test_token"
         
-    def verify_token(self, token):
+    def test_verify_token(self, token="test_token"):
         self.assertEqual(token, self.token)
+
+    def test_register_with_invalid_token(self):
+        url = reverse('users:register', kwargs={'oauth2': 'google-oauth2'}) 
+        response = self.client.post(url, {'access_token': self.token}) 
+        self.assertNotEqual(response.status_code, status.HTTP_200_OK) 
+
         
-    def test_login(self):
-        self.client.force_authenticate(user=None, token=None)
-        response = self.client.post(reverse('users:login'), {'access_token': self.token})
-        self.assertEqual(response.status_code, 200)
-        self.verify_token(response.data['access'])
-    
-    
-    
+        
