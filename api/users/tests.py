@@ -6,7 +6,15 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from http.cookies import SimpleCookie
 from datetime import timedelta
 
-
+class UserSessionRegisterTests(APITestCase):
+    
+    def test_register_with_invalid_token(self):
+        url = reverse('users:register', kwargs={'oauth2': 'google'})
+        info = {
+            'access_token': 'wrong_token'
+        } 
+        response = self.client.post(url, info, format='json') 
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST) 
         
 class UserSessionLoginTests(APITestCase):
     
