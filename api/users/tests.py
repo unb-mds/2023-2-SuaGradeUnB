@@ -1,25 +1,44 @@
-from django.conf import settings
-from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
+from rest_framework.test import APITestCase
+from users.models import User
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from http.cookies import SimpleCookie
+from datetime import timedelta
 
-class UserSessionLoginTests(TestCase):
+
+        
+class UserSessionLoginTests(APITestCase):
+    
+    url = reverse('users:login')
     
     def setUp(self):
-        self.token = "test_token"
-        
-    def test_verify_token(self, token="test_token"):
-        self.assertEqual(token, self.token)
+        self.user, created = User.objects.get_or_create(
+            first_name="test",
+            last_name="banana",
+            email="uiui@pichuruco.com",
+        )
+        self.user.save()
+    
+    def make_refresh_jwt_post_request(self, cookie_enable=True, cookie_expired=False, cookie_value=None):
+        if cookie_enable:
+            refresh_token = TokenObtainPairSerializer.get_token(self.user)
 
-    def test_register_with_invalid_token(self):
-        url = reverse('users:register', kwargs={'oauth2': 'google-oauth2'}) 
-        response = self.client.post(url, {'access_token': self.token}) 
-        self.assertNotEqual(response.status_code, status.HTTP_200_OK) 
+            if cookie_expired:
+                refresh_token.set_exp(lifetime=timedelta(days=0))
+
+            self.client.cookies = SimpleCookie({'refresh': refresh_token if not cookie_value else cookie_value})
+
+        return self.client.post(self.url, {}, format='json')
 
     def test_user_login_with_invalid_token(self):
-        url = reverse('users:login')
-        response = self.client.post(url, {'access_token': self.token})
-        self.assertNotEqual(response.status_code, status.HTTP_200_OK)
+        response = self.make_refresh_jwt_post_request(cookie_value='wrong_token')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        
+    def test_user_login_with_valid_token(self):
+        response = self.make_refresh_jwt_post_request()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['first_name'], self.user.first_name)
+        self.assertEqual(response.data['last_name'], self.user.last_name)
+        self.assertEqual(response.data['email'], self.user.email)        
         
