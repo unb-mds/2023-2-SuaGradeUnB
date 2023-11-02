@@ -1,14 +1,15 @@
-FROM node:18-alpine3.17
+FROM node:20.9.0-alpine3.18
 
 # definir o diretório de trabalho
-WORKDIR /usr/src/app
+WORKDIR /usr/src/web
 
 # baixar e instalar dependências
-COPY ./web/package.json /usr/src/app/package.json
+COPY ./web/package.json /usr/src/web/package.json
+COPY ./web/package-lock.json /usr/src/web/package-lock.json
 RUN npm install
 
 # adicionar rotas
 EXPOSE 3000
 
 # copiar arquivos do projeto
-COPY ./web /usr/src/app
+COPY ./web /usr/src/web
