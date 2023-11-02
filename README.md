@@ -14,7 +14,8 @@ git clone https://github.com/unb-mds/2023-2-Squad11.git
 
 Para rodar o projeto, você precisa instalar as dependências globais, que são:
 
-- Python v3.11 (ou superior)
+- Python v3.11.6 e Pip v22.0.2 (ou superior)
+- Node v20.9.0 e NPM v10.1.0 (ou superior)
 - Docker Engine v24.0.6 e Docker Compose v2.21.0 (ou superior)
 
 ### Ambiente
@@ -25,12 +26,49 @@ Para configurar o ambiente, você pode rodar o seguinte script:
 bash ./scripts/env.sh
 ```
 
+### Dependências do projeto
+
+Para instalar as dependências do projeto, você pode rodar os seguintes comando:
+
+```bash
+# Crie um ambiente virtual Python
+python3 -m venv env
+
+# Ative o ambiente virtual
+source env/bin/activate
+
+# Instale os pacotes do Python
+pip install -r requirements.txt
+
+# Instale os pacotes do Node
+cd web && npm install
+
+# Volte para a raiz do projeto
+cd ..
+
+# Confirmar permissão de execução do entrypoint
+chmod +x ./api/entrypoint.sh
+```
+
 ### Execução
 
 Para executar o projeto, você pode rodar o seguinte comando:
 
 ```bash
 docker compose up
+```
+
+**Observações do Docker:**
+
+```bash
+# Se você quiser rodar em segundo plano
+docker compose up -d
+
+# Se alterações foram feitas no Dockerfile ou no docker-compose.yml
+docker compose up --build
+
+# Se for necessário deletar os volumes
+docker compose down -v
 ```
 
 ### Migrations
