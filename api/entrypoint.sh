@@ -14,7 +14,4 @@ python3 manage.py migrate
 echo 'Criando usuário admin...'
 python3 manage.py initadmin
 
-echo 'Coletando arquivos estáticos...'
-python3 manage.py collectstatic --no-input
-
 exec "$@"
