@@ -14,6 +14,7 @@ git clone https://github.com/unb-mds/2023-2-Squad11.git
 
 Para rodar o projeto, você precisa instalar as dependências globais, que são:
 
+- GNU Make 4.3 (ou superior)
 - Python v3.11.6 e Pip v22.0.2 (ou superior)
 - Node v20.9.0 e NPM v10.1.0 (ou superior)
 - Docker Engine v24.0.6 e Docker Compose v2.21.0 (ou superior)
@@ -23,7 +24,7 @@ Para rodar o projeto, você precisa instalar as dependências globais, que são:
 Para configurar o ambiente, você pode rodar o seguinte script:
 
 ```bash
-bash ./scripts/env.sh
+make
 ```
 
 ### Dependências do projeto
@@ -45,9 +46,6 @@ cd web && npm install
 
 # Volte para a raiz do projeto
 cd ..
-
-# Confirmar permissão de execução do entrypoint
-chmod +x ./api/entrypoint.sh
 ```
 
 ### Execução
