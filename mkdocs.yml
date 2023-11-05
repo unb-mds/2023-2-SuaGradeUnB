@@ -9,6 +9,19 @@ nav:
     - Sprint 1: sprints/sprint-1.md
     - Sprint 2: sprints/sprint-2.md
     - Sprint 3: sprints/sprint-3.md
+    - Sprint 4: sprints/sprint-4.md
+    - Sprint 5: sprints/sprint-5.md
+    - Sprint 6: sprints/sprint-6.md
+
+  - Front-end:
+    - Semana 0: frontend/semana-0.md 
+    - Semana 1: frontend/semana-1.md
+    - Semana 2: frontend/semana-2.md
+    - Semana 3: frontend/semana-3.md
+    - Semana 4: frontend/semana-4.md 
+    - Semana 5: frontend/semana-5.md
+    - Semana 6: frontend/semana-6.md
+
   - API: api.md
     
 theme:
