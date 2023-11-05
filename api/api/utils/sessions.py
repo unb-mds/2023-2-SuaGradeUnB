@@ -4,6 +4,10 @@ from urllib3.util.retry import Retry
 from datetime import datetime
 from typing import List
 
+"""Este módulo contém funções necessárias para realizar uma requsição ao SIGAA
+corretamente.
+"""
+
 URL = "https://sigaa.unb.br/sigaa/public/turmas/listar.jsf"
 HEADERS = {
     'Access-Control-Allow-Origin': '*',
@@ -13,7 +17,7 @@ HEADERS = {
     'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0'
 }
 
-'''Create a request session with retry and backoff_factor'''
+"""Cria uma sessão de requisição e retorna um objeto Session."""
 def create_request_session() -> Session:
     session = Session() # Create a persistent request session
     retry = Retry(connect=3, backoff_factor=0.5) # Create a retry object
@@ -22,14 +26,15 @@ def create_request_session() -> Session:
 
     return session
 
-'''Get the response from the request session'''
+"""Obtem a resposta da requisição ao SIGAA e retorna um objeto Response."""
 def get_response(session: Session) -> Response:
     response = session.get(url=URL, headers=HEADERS) # Make a get request to the url
 
     return response
 
+"""Obtem o cookie da sessão de requisição necessário para acessar a pagina de turmas
+e retorna um cookie jar."""
 def get_session_cookie(session: Session) -> cookies.RequestsCookieJar:
-    '''Get the cookie from the request session'''
     response = get_response(session) # Get the response from the request session
     cookie = response.cookies.get_dict() # Get the cookie from the response
     cookie_jar = cookies.RequestsCookieJar() # Create a cookie jar
@@ -37,9 +42,9 @@ def get_session_cookie(session: Session) -> cookies.RequestsCookieJar:
 
     return cookie_jar
 
+"""Obtem o ano e o período atual e retorna uma lista com esses valores."""
 def get_current_year_and_period() -> List[int | str]:
-    # Pega o ano e o período atual
-    current_date = datetime.now() 
+    current_date = datetime.now()
     current_year = current_date.year
     period = "1"
 
