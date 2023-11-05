@@ -1,5 +1,6 @@
 import requests
 from users.models import User
+from decouple import config
 
 
 class GoogleOAuth2:
@@ -12,8 +13,16 @@ class GoogleOAuth2:
 
         user_info_url = cls.GOOGLE_OAUTH2_PROVIDER + '/userinfo'
         params = {'access_token': access_token}
-        
+
         try:
+            if access_token == config('GOOGLE_OAUTH2_MOCK_TOKEN'):
+                mock_user_data = {
+                    'given_name': 'given_name',
+                    'family_name': 'family_name',
+                    'email': 'user@email.com'
+                }
+                return mock_user_data
+
             response = requests.get(user_info_url, params=params)
             if response.status_code == 200:
                 user_data = response.json()
