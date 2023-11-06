@@ -69,3 +69,15 @@ def get_next_period() -> List[str | str]:
     date[1] = "1"
 
     return date
+
+def get_previous_period() -> List[str | str]:
+    date = get_current_year_and_period()
+
+    if date[1] == "2":
+        date[1] = "1"
+        return date
+
+    date[0] = str(int(date[0]) - 1)
+    date[1] = "2"
+
+    return date
