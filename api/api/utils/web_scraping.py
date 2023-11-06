@@ -23,7 +23,7 @@ Logo, temos a função get_list_of_departments() que retorna uma lista com os c�
 '''
 
 def get_list_of_departments() -> Optional[List]:
-    # Retorna uma lista com os códigos dos departamentos
+    """Obtem a lista de departamentos da UnB."""
     response = get_response(create_request_session()) # Get the response from the request session
     soup = BeautifulSoup(response.content, "html.parser") # Create a BeautifulSoup object
     departments = soup.find("select", attrs={"id": "formTurma:inputDepto"}) # Find the <select> tag with id "formTurma:inputDepto"
@@ -43,6 +43,7 @@ def get_list_of_departments() -> Optional[List]:
     return department_ids
 
 def get_department_disciplines(department_id: str, current_year: str, current_period: str):
+    """Obtem as disciplinas de um departamento"""
     discipline_scraper = DisciplineWebScraper(department_id, current_year, current_period)
     disciplines = discipline_scraper.get_disciplines()
 
@@ -51,7 +52,7 @@ def get_department_disciplines(department_id: str, current_year: str, current_pe
 class DisciplineWebScraper:
     # Classe que faz o web scraping das disciplinas
     def __init__(self, department: str, year: str, period: str, session=None, cookie=None):
-        self.disciplines = defaultdict(list)  # A dictionary with the disciplines
+        self.disciplines: defaultdict[str, List[dict]] = defaultdict(list)  # A dictionary with the disciplines
         self.department = department  # The department code
         self.period = period  # 1 for first semester and 2 for second semester
         self.year = year
@@ -117,7 +118,7 @@ class DisciplineWebScraper:
                     Chave: Código da disciplina (string)
                     Valor: Lista de dicionários com as seguintes chaves:
                     - name: Nome da disciplina (string)
-                    - class: Turma (int)
+                    - class: Turma (str)
                     - teachers: Nome dos professores (Lista de strings)
                     - workload: Carga horária (int). Se não houver, o valor é -1!
                     - classroom: Sala (string)
@@ -138,13 +139,18 @@ class DisciplineWebScraper:
 
                     teachers.append(content[0].strip())
 
-                if(len(teachers) == 0):
+                if len(teachers) == 0:
                     teachers.append("A definir")
 
-                class_code = int(tables_data[0].get_text())
+                class_code = tables_data[0].get_text()
                 classroom = tables_data[7].get_text().strip()
 
-                schedule, week_days = tables_data[3].get_text().strip().split(maxsplit=1)
+                schedule = "A definir"
+                week_days = "A definir"
+
+                if len(tables_data[3].get_text().strip().split(maxsplit=1)) == 2:
+                    schedule, week_days = tables_data[3].get_text().strip().split(maxsplit=1)
+
                 workload = self.calc_hours(schedule)
                 sep = week_days.rfind("\t")
 
