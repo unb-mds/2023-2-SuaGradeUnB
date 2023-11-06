@@ -1,6 +1,8 @@
 import requests
 from users.models import User
 from decouple import config
+from requests import Response
+from rest_framework import status
 
 
 class GoogleOAuth2:
@@ -15,15 +17,20 @@ class GoogleOAuth2:
         params = {'access_token': access_token}
 
         try:
-            if access_token == config('GOOGLE_OAUTH2_MOCK_TOKEN'):
-                mock_user_data = {
-                    'given_name': 'given_name',
-                    'family_name': 'family_name',
-                    'email': 'user@email.com'
-                }
-                return mock_user_data
+            response = Response()
+            response.status_code = status.HTTP_400_BAD_REQUEST 
+            response.headers = {'Content-Type': 'application/json'}
 
-            response = requests.get(user_info_url, params=params)
+            if access_token != config('GOOGLE_OAUTH2_MOCK_TOKEN'):
+                response = requests.get(user_info_url, params=params)
+            else:
+                response._content = b'''{
+                    "given_name": "given_name",
+                    "family_name": "family_name",
+                    "email": "user@email.com"
+                }'''
+                response.status_code = status.HTTP_200_OK
+
             if response.status_code == 200:
                 user_data = response.json()
                 return user_data

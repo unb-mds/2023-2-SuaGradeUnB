@@ -1,12 +1,13 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from users.models import User
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from users.models import User
 from http.cookies import SimpleCookie
 from datetime import timedelta
 from decouple import config
-from core.settings.base import REFRESH_TOKEN_LIFETIME
+import time
+import jwt
 
 
 class UserSessionRegisterTests(APITestCase):
@@ -71,7 +72,7 @@ class UserSessionRegisterTests(APITestCase):
         )
 
         refresh_cookie = response.cookies.get('refresh')
-        max_age = REFRESH_TOKEN_LIFETIME.total_seconds()
+        max_age = 30 * 24 * 60 * 60  # 30 days in seconds
         self.assertFalse("refresh" in response.data)
         self.assertEqual(refresh_cookie.get('max-age'), max_age)
         self.assertTrue(refresh_cookie.get('httponly'))
@@ -113,8 +114,7 @@ class UserSessionLoginTests(APITestCase):
         return self.client.post(url, {}, format='json')
 
     def test_user_login_with_invalid_token(self):
-        response = self.make_login_post_request(
-            cookie_value='wrong_token')
+        response = self.make_login_post_request(cookie_value='wrong_token')
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -125,3 +125,42 @@ class UserSessionLoginTests(APITestCase):
         self.assertEqual(response.data['first_name'], self.user.first_name)
         self.assertEqual(response.data['last_name'], self.user.last_name)
         self.assertEqual(response.data['email'], self.user.email)
+
+    def test_user_login_access_token(self):
+        response = self.make_login_post_request()
+
+        access_token = response.data.get('access')
+        decoded_token = jwt.decode(
+            access_token,
+            config('DJANGO_SECRET_KEY'),
+            algorithms=["HS256"],
+        )
+
+        def check_in_range(decoded_token):
+            current_time = int(time.time())
+            seconds_access_token = 1 * 24 * 60 * 60  # 1 day in seconds
+            expected_expiration = current_time + seconds_access_token
+
+            real_expiration = decoded_token.get('exp')
+
+            lower = real_expiration <= expected_expiration + 10
+            higher = expected_expiration - 10 <= real_expiration
+
+            return lower and higher
+
+        self.assertTrue(check_in_range(decoded_token))
+        self.assertTrue('access' in response.data)
+
+    def test_user_login_without_refresh_token(self):
+        response = self.make_login_post_request(cookie_enable=False)
+
+        self.assertEqual(response.data.get('detail').code, 'not_authenticated')
+        self.assertEqual(response.data.get('detail'), 'Refresh cookie error.')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_user_login_with_expired_cookie(self):
+        response = self.make_login_post_request(cookie_expired=True)
+
+        self.assertEqual(response.data.get('code'), 'token_not_valid')
+        self.assertEqual(response.data.get('detail'), 'Token is invalid or expired')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
