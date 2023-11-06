@@ -28,14 +28,6 @@ class Command(BaseCommand):
         # Apaga as disciplinas do período interior
         db_handler.delete_all_departments_using_year_and_period(previous_period_year, previous_period)
 
-        # Pega a lista de departamentos do web scraping
-        departments_ids = web_scraping.get_list_of_departments()
-
-        # Se não for possível obter os códigos dos departamentos, exibe uma mensagem de erro
-        if departments_ids is None:
-            self.display_error_message("department_ids")
-            return
-
         # Atualiza as disciplinas do período atual
         start_time = time()
         self.update_departments(departments_ids=departments_ids, year=current_year, period=current_period)
