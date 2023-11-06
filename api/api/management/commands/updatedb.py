@@ -18,6 +18,8 @@ class Command(BaseCommand):
             self.display_error_message("department_ids")
             return
 
+        print("Atualizando o banco de dados...")
+
         # Obtem o ano e o período atual e o ano e o período seguinte
         previous_period_year, previous_period = sessions.get_previous_period()
         current_year, current_period = sessions.get_current_year_and_period()
@@ -37,12 +39,12 @@ class Command(BaseCommand):
         # Atualiza as disciplinas do período atual
         start_time = time()
         self.update_departments(departments_ids=departments_ids, year=current_year, period=current_period)
-        self.display_success_message(operation="atualização de departamentos e matérias do período atual", start_time=start_time)
+        self.display_success_message(operation=f"{current_year}/{current_period}", start_time=start_time)
 
         # Atualiza as disciplinas do período seguinte
         start_time = time()
         self.update_departments(departments_ids=departments_ids, year=next_period_year, period=next_period)
-        self.display_success_message(operation="atualização de departamentos e matérias", start_time=start_time)
+        self.display_success_message(operation=f"{next_period_year}/{next_period}", start_time=start_time)
 
     def update_departments(self, departments_ids: list, year: str, period: str) -> None:
         for department_id in departments_ids:
@@ -67,9 +69,9 @@ class Command(BaseCommand):
     def display_error_message(self, operation: str) -> None:
         print("Não foi possível realizar a operação de atualização do banco de dados.")
         print("Verifique se o SIGAA está funcionando corretamente.")
-        print(f"Falha em {operation}")
+        print(f"Falha em {operation}", end="\n\n")
 
     def display_success_message(self, operation: str, start_time: float) -> None:
         print("Operação de atualização do banco de dados realizada com sucesso.")
         print(f"Sucesso em {operation}")
-        print(f"Tempo de execução: {(time() - start_time):.1f}s")
+        print(f"Tempo de execução: {(time() - start_time):.1f}s", end="\n\n")
