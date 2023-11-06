@@ -1,7 +1,7 @@
 from django.test import TestCase
 from .models import Department, Discipline,Class
 
-class DisciplineTests(TestCase):
+class DisciplineModelsTest(TestCase):
     def setUp(self):
         self.department = Department.objects.create(
             code = 'INF',
@@ -20,7 +20,7 @@ class DisciplineTests(TestCase):
             classroom = 'MOCAP',
             schedule = '46M34',
             days = ['Quarta-Feira 10:00 às 11:50', 'Sexta-Feira 10:00 às 11:50'],
-            _class = 1,
+            _class = "1",
             discipline = self.discipline
         )
 
@@ -36,7 +36,7 @@ class DisciplineTests(TestCase):
         self.assertEqual(self._class.classroom, 'MOCAP')
         self.assertEqual(self._class.schedule, '46M34')
         self.assertEqual(self._class.days, ['Quarta-Feira 10:00 às 11:50', 'Sexta-Feira 10:00 às 11:50'])
-        self.assertEqual(self._class._class, 1)
+        self.assertEqual(self._class._class, "1")
         self.assertEqual(self._class.discipline, self.discipline)
 
     def test_create_department(self):
