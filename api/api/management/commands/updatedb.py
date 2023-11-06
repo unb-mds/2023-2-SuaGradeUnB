@@ -38,14 +38,14 @@ class Command(BaseCommand):
     def update_departments(self, departments_ids: list, year: str, period: str) -> None:
         for department_id in departments_ids:
             disciplines_list = web_scraping.get_department_disciplines(department_id=department_id, current_year=year, current_period=period)
-            department = db_handler.create_department(code=department_id, year=year, period=period)
+            department = db_handler.get_or_create_department(code=department_id, year=year, period=period)
 
             # Para cada disciplina do período atual, deleta as turmas previamente cadastradas e cadastra novas turmas no banco de dados
             for discipline_code in disciplines_list:
                 classes_info = disciplines_list[discipline_code]
 
                 # Cria ou pega a disciplina
-                discipline = db_handler.create_discipline(name=classes_info[0]["name"], code=discipline_code, department=department)
+                discipline = db_handler.get_or_create_discipline(name=classes_info[0]["name"], code=discipline_code, department=department)
                 # Deleta as turmas previamente cadastradas
                 db_handler.delete_classes_from_discipline(discipline=discipline)
 

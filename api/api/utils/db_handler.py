@@ -3,12 +3,12 @@ from api.models import Discipline, Department, Class
 """ Este módulo lida com as operações de banco de dados."""
 
 
-def create_department(code: str, year: str, period: str) -> Department:
+def get_or_create_department(code: str, year: str, period: str) -> Department:
     """Cria um departamento."""
     return Department.objects.get_or_create(code=code, year=year, period=period)[0]
 
 
-def create_discipline(name: str, code: str, department: Department) -> Discipline:
+def get_or_create_discipline(name: str, code: str, department: Department) -> Discipline:
     """Cria uma disciplina."""
     return Discipline.objects.get_or_create(name=name, code=code, department=department)[0]
 
