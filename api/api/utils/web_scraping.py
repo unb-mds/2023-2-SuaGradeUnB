@@ -1,4 +1,4 @@
-from sessions import URL, HEADERS, get_response, create_request_session, get_session_cookie
+from .sessions import URL, HEADERS, get_response, create_request_session, get_session_cookie
 from bs4 import BeautifulSoup
 from collections import defaultdict
 from typing import List, Optional
@@ -9,7 +9,7 @@ import requests
 '''
 Modo de uso:
 
-1. É necessário ter o código do departamento escolhido. 
+1. É necessário ter o código do departamento escolhido.
 Logo, temos a função get_list_of_departments() que retorna uma lista com os códigos dos departamentos.
 2. É necessário ter o ano e o período.
 3. É necessário ter uma instância da classe DisciplineWebScraper.
@@ -23,14 +23,14 @@ Logo, temos a função get_list_of_departments() que retorna uma lista com os c�
 '''
 
 def get_list_of_departments() -> Optional[List]:
-    # Retorna uma lista com os códigos dos departamentos
+    """Obtem a lista de departamentos da UnB."""
     response = get_response(create_request_session()) # Get the response from the request session
     soup = BeautifulSoup(response.content, "html.parser") # Create a BeautifulSoup object
     departments = soup.find("select", attrs={"id": "formTurma:inputDepto"}) # Find the <select> tag with id "formTurma:inputDepto"
-    
+
     if departments is None:
         return None
-    
+
     options_tag = departments.find_all("option") # Find all <option> tags (It contains all departments)
     department_ids = []
 
@@ -42,10 +42,17 @@ def get_list_of_departments() -> Optional[List]:
 
     return department_ids
 
+def get_department_disciplines(department_id: str, current_year: str, current_period: str):
+    """Obtem as disciplinas de um departamento"""
+    discipline_scraper = DisciplineWebScraper(department_id, current_year, current_period)
+    disciplines = discipline_scraper.get_disciplines()
+
+    return disciplines
+
 class DisciplineWebScraper:
     # Classe que faz o web scraping das disciplinas
     def __init__(self, department: str, year: str, period: str, session=None, cookie=None):
-        self.disciplines = defaultdict(list)  # A dictionary with the disciplines
+        self.disciplines: defaultdict[str, List[dict]] = defaultdict(list)  # A dictionary with the disciplines
         self.department = department  # The department code
         self.period = period  # 1 for first semester and 2 for second semester
         self.year = year
@@ -85,15 +92,19 @@ class DisciplineWebScraper:
         # Faz o web scraping das disciplinas
         soup = BeautifulSoup(response.content, "html.parser")
         tables = soup.find("table", attrs={"class": "listagem"}) # Find the <table> tag with class "listagem"
+
+        if tables is None:
+            return None
+
         table_rows = tables.find_all("tr") # Find all <tr> tags
 
         aux_title_and_code = ""
 
         if table_rows is None:
             return None
-        
+
         for discipline in table_rows:
-            if discipline.find("span", attrs={"class": "tituloDisciplina"}) is not None: 
+            if discipline.find("span", attrs={"class": "tituloDisciplina"}) is not None:
                 title = discipline.find("span", attrs={"class": "tituloDisciplina"})
                 aux_title_and_code = title.get_text().strip('-')
 
@@ -107,7 +118,7 @@ class DisciplineWebScraper:
                     Chave: Código da disciplina (string)
                     Valor: Lista de dicionários com as seguintes chaves:
                     - name: Nome da disciplina (string)
-                    - class: Turma (int)
+                    - class: Turma (str)
                     - teachers: Nome dos professores (Lista de strings)
                     - workload: Carga horária (int). Se não houver, o valor é -1!
                     - classroom: Sala (string)
@@ -122,19 +133,24 @@ class DisciplineWebScraper:
                 for teacher in teachers_with_workload:
                     teacher = teacher.replace("\n", "").replace("\r", "").replace("\t", "")
                     content = teacher.split('(')
-                    
+
                     if(len(content) < 2):
                         continue
 
                     teachers.append(content[0].strip())
-                
-                if(len(teachers) == 0):
+
+                if len(teachers) == 0:
                     teachers.append("A definir")
-                
-                class_code = int(tables_data[0].get_text()) 
-                classroom = tables_data[7].get_text().strip() 
-                
-                schedule, week_days = tables_data[3].get_text().strip().split(maxsplit=1)
+
+                class_code = tables_data[0].get_text()
+                classroom = tables_data[7].get_text().strip()
+
+                schedule = "A definir"
+                week_days = "A definir"
+
+                if len(tables_data[3].get_text().strip().split(maxsplit=1)) == 2:
+                    schedule, week_days = tables_data[3].get_text().strip().split(maxsplit=1)
+
                 workload = self.calc_hours(schedule)
                 sep = week_days.rfind("\t")
 
@@ -146,7 +162,7 @@ class DisciplineWebScraper:
                         days.append(character)
                     else:
                         days[-1] += character
-                
+
                 self.disciplines[code].append({
                     "name": name,
                     "class_code": class_code,
@@ -156,7 +172,7 @@ class DisciplineWebScraper:
                     "schedule": schedule,
                     "days": days
                 })
-    
+
     def calc_hours(self, schedule: str) -> int:
         # Calcula a carga horária de uma disciplina
         match = search(r'[a-zA-Z]', schedule)
@@ -169,4 +185,4 @@ class DisciplineWebScraper:
         response = self.get_response_from_disciplines_post_request()
         self.make_web_scraping_of_disciplines(response)
 
-        return self.disciplines 
+        return self.disciplines
