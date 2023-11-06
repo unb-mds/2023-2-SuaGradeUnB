@@ -1,10 +1,7 @@
 from typing import Any
 from django.core.management.base import BaseCommand
 from api.utils import sessions, web_scraping, db_handler
-from api.models import Discipline, Department
-from decouple import config
 from time import time
-
 
 class Command(BaseCommand):
     """Comando para atualizar o banco de dados."""
