@@ -24,7 +24,7 @@ Para rodar o projeto, você precisa instalar as dependências globais, que são:
 Para configurar o ambiente, você pode rodar o seguinte script:
 
 ```bash
-make
+make config
 ```
 
 ### Dependências do projeto
@@ -38,14 +38,8 @@ python3 -m venv env
 # Ative o ambiente virtual
 source env/bin/activate
 
-# Instale os pacotes do Python
-pip install -r requirements.txt
-
-# Instale os pacotes do Node
-cd web && npm install
-
-# Volte para a raiz do projeto
-cd ..
+# Instale os pacotes do Python e Node
+make install
 ```
 
 ### Execução
