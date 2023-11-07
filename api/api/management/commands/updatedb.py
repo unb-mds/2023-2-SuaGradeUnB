@@ -48,6 +48,7 @@ class Command(BaseCommand):
         # Apaga as disciplinas do período interior
         delete_all_departments_using_year_and_period(
             previous_period_year, previous_period)
+
         if not delete_current_period and not delete_next_period:
             if current_period_enabled:
                 # Atualiza as disciplinas do período atual
@@ -69,39 +70,17 @@ class Command(BaseCommand):
 
         elif delete_current_period and delete_next_period:
             # Deleta ambos os períodos
-            start_time = time()
-            current_year, current_period = sessions.get_current_year_and_period()
-            next_period_year, next_period = sessions.get_next_period()
-            self.display_deleting_message(
-                operation=f"{current_year}/{current_period} and {next_period_year}/{next_period}")
-            delete_all_departments_using_year_and_period(
-                year=current_year, period=current_period)
-            delete_all_departments_using_year_and_period(
-                year=next_period_year, period=next_period)
-            self.display_success_delete_message(
-                operation=f"{current_year}/{current_period} and {next_period_year}/{next_period}", start_time=start_time)
+            self.delete_both_periods()
             return
         elif delete_current_period:
             # Deleta o período atual
-            start_time = time()
             current_year, current_period = sessions.get_current_year_and_period()
-            self.display_deleting_message(
-                operation=f"{current_year}/{current_period}")
-            delete_all_departments_using_year_and_period(
-                year=current_year, period=current_period)
-            self.display_success_delete_message(
-                operation=f"{current_year}/{current_period}", start_time=start_time)
+            self.delete_period(year=current_year, period=current_period)
             return
         else:
             # Deleta o período seguinte
-            start_time = time()
             next_period_year, next_period = sessions.get_next_period()
-            self.display_deleting_message(
-                operation=f"{next_period_year}/{next_period}")
-            delete_all_departments_using_year_and_period(
-                year=next_period_year, period=next_period)
-            self.display_success_delete_message(
-                operation=f"{next_period_year}/{next_period}", start_time=start_time)
+            self.delete_period(year=next_period_year, period=next_period)
             return
 
     def update_departments(self, departments_ids: list, year: str, period: str) -> None:
@@ -125,6 +104,29 @@ class Command(BaseCommand):
                     create_class(workload=class_info["workload"], teachers=class_info["teachers"],
                                  classroom=class_info["classroom"], schedule=class_info["schedule"],
                                  days=class_info["days"], _class=class_info["class_code"], discipline=discipline)
+
+    def delete_both_periods(self) -> None:
+        """Deleta ambos os períodos do banco de dados."""
+        start_time = time()
+        current_year, current_period = sessions.get_current_year_and_period()
+        next_period_year, next_period = sessions.get_next_period()
+
+        self.display_deleting_message(
+            operation=f"{current_year}/{current_period} and {next_period_year}/{next_period}")
+        delete_all_departments_using_year_and_period(
+            year=current_year, period=current_period)
+        delete_all_departments_using_year_and_period(
+            year=next_period_year, period=next_period)
+        self.display_success_delete_message(
+            operation=f"{current_year}/{current_period} and {next_period_year}/{next_period}", start_time=start_time)
+
+    def delete_period(self, year: str, period: str) -> None:
+        """Deleta um período do banco de dados."""
+        start_time = time()
+        self.display_deleting_message(operation=f"{year}/{period}")
+        delete_all_departments_using_year_and_period(year=year, period=period)
+        self.display_success_delete_message(
+            operation=f"{year}/{period}", start_time=start_time)
 
     def display_error_message(self, operation: str) -> None:
         self.stdout.write(self.style.ERROR(
