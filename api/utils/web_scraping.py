@@ -22,9 +22,8 @@ Logo, temos a função get_list_of_departments() que retorna uma lista com os c�
     disciplines.get_disciplines() # Retorna um dicionário com as disciplinas
 '''
 
-def get_list_of_departments() -> Optional[List]:
+def get_list_of_departments(response = get_response(create_request_session())) -> Optional[List]:
     """Obtem a lista de departamentos da UnB."""
-    response = get_response(create_request_session()) # Get the response from the request session
     soup = BeautifulSoup(response.content, "html.parser") # Create a BeautifulSoup object
     departments = soup.find("select", attrs={"id": "formTurma:inputDepto"}) # Find the <select> tag with id "formTurma:inputDepto"
 
