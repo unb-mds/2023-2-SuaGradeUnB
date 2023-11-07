@@ -1,7 +1,10 @@
 from typing import Any
-from utils.sessions import get_response, create_request_session
+from requests import Response
+from random import choice
+from utils import sessions as sns, web_scraping as wbp
 from django.core.management.base import BaseCommand
 from pathlib import Path
+import json
 import os
 
 
@@ -13,9 +16,34 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any):
         current_path = Path(__file__).parent.parent.parent.absolute()
 
-        os.remove(current_path / "mock/departments.html")
-        with open(current_path / "mock/departments.html", "a") as mockfile:
-            response = get_response(create_request_session())
-            encoding = response.encoding if response.encoding else 'utf-8'
+        try:
+            os.remove(current_path / f"mock/sigaa.html")
+            os.remove(current_path / "mock/infos.json")
+        except Exception as error:
+            print('Error:', error)
 
-            mockfile.write(response.content.decode(encoding))
+        try:
+            current_year, current_period = sns.get_current_year_and_period()
+            departments = wbp.get_list_of_departments()
+            department = choice(departments)
+            
+            with open(current_path / f"mock/sigaa.html", "a") as mock_file:
+                discipline_scraper = wbp.DisciplineWebScraper(department, current_year, current_period)
+                response = discipline_scraper.get_response_from_disciplines_post_request()
+                mock_file.write(self.response_decode(response))
+            
+            with open(current_path / "mock/infos.json", "a") as info_file:
+                data = {
+                    "year": current_year,
+                    "period": current_period,
+                    "department": department
+                }
+                info_file.write(json.dumps(data))
+
+        except Exception as error:
+            print('Não foi possível atualizar o mock!')
+            print('Error:', error)
+
+    def response_decode(self, response: Response) -> str:
+        encoding = response.encoding if response.encoding else 'utf-8'
+        return response.content.decode(encoding)
