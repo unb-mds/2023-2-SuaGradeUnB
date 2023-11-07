@@ -1,6 +1,6 @@
 from typing import Any
 from django.core.management.base import BaseCommand
-from api.utils import sessions, web_scraping, db_handler
+from utils import sessions, web_scraping, db_handler
 from time import time
 
 class Command(BaseCommand):
