@@ -18,9 +18,16 @@ class Command(BaseCommand):
         parser.add_argument('-rn', '--remove-next-period', action='store_false', default=True,
                             dest='next_period', help="Ativa ou desativa sistema para atualização do próximo período.")
 
+        parser.add_argument('-dc', '--delete-current-period', action='store_true', default=False,
+                            dest='delete_current_period', help="Deleta o período atual do banco de dados")
+        parser.add_argument('-dn', '--delete-next-period', action='store_true', default=False,
+                            dest='delete_next_period', help="Deleta o próximo período do banco de dados")
+
     def handle(self, *args: Any, **options: Any):
         current_period_enabled = options["current_period"]
         next_period_enabled = options["next_period"]
+        delete_current_period = options["delete_current_period"]
+        delete_next_period = options["delete_next_period"]
 
         if not current_period_enabled and not next_period_enabled:
             self.stderr.write(
@@ -33,7 +40,7 @@ class Command(BaseCommand):
             self.display_error_message("department_ids")
             return
 
-        print("Atualizando o banco de dados...")
+        print("Atualizando o banco de dados...\n")
 
         # Obtem o ano e o período atual e o ano e o período seguinte
         previous_period_year, previous_period = sessions.get_previous_period()
@@ -41,24 +48,61 @@ class Command(BaseCommand):
         # Apaga as disciplinas do período interior
         delete_all_departments_using_year_and_period(
             previous_period_year, previous_period)
+        if not delete_current_period and not delete_next_period:
+            if current_period_enabled:
+                # Atualiza as disciplinas do período atual
+                start_time = time()
+                current_year, current_period = sessions.get_current_year_and_period()
+                self.update_departments(
+                    departments_ids=departments_ids, year=current_year, period=current_period)
+                self.display_success_update_message(
+                    operation=f"{current_year}/{current_period}", start_time=start_time)
 
-        if current_period_enabled:
-            # Atualiza as disciplinas do período atual
+            if next_period_enabled:
+                # Atualiza as disciplinas do período seguinte
+                start_time = time()
+                next_period_year, next_period = sessions.get_next_period()
+                self.update_departments(
+                    departments_ids=departments_ids, year=next_period_year, period=next_period)
+                self.display_success_update_message(
+                    operation=f"{next_period_year}/{next_period}", start_time=start_time)
+
+        elif delete_current_period and delete_next_period:
+            # Deleta ambos os períodos
             start_time = time()
             current_year, current_period = sessions.get_current_year_and_period()
-            self.update_departments(
-                departments_ids=departments_ids, year=current_year, period=current_period)
-            self.display_success_message(
+            next_period_year, next_period = sessions.get_next_period()
+            self.display_deleting_message(
+                operation=f"{current_year}/{current_period} and {next_period_year}/{next_period}")
+            delete_all_departments_using_year_and_period(
+                year=current_year, period=current_period)
+            delete_all_departments_using_year_and_period(
+                year=next_period_year, period=next_period)
+            self.display_success_delete_message(
+                operation=f"{current_year}/{current_period} and {next_period_year}/{next_period}", start_time=start_time)
+            return
+        elif delete_current_period:
+            # Deleta o período atual
+            start_time = time()
+            current_year, current_period = sessions.get_current_year_and_period()
+            self.display_deleting_message(
+                operation=f"{current_year}/{current_period}")
+            delete_all_departments_using_year_and_period(
+                year=current_year, period=current_period)
+            self.display_success_delete_message(
                 operation=f"{current_year}/{current_period}", start_time=start_time)
-
-        if next_period_enabled:
-            # Atualiza as disciplinas do período seguinte
+            return
+        else:
+            # Deleta o período seguinte
             start_time = time()
             next_period_year, next_period = sessions.get_next_period()
-            self.update_departments(
-                departments_ids=departments_ids, year=next_period_year, period=next_period)
-            self.display_success_message(
+            self.display_deleting_message(
+                operation=f"{next_period_year}/{next_period}")
+            delete_all_departments_using_year_and_period(
+                year=next_period_year, period=next_period)
+            self.display_success_delete_message(
                 operation=f"{next_period_year}/{next_period}", start_time=start_time)
+            return
 
     def update_departments(self, departments_ids: list, year: str, period: str) -> None:
         """Atualiza os departamentos do banco de dados e suas respectivas disciplinas."""
@@ -89,9 +133,21 @@ class Command(BaseCommand):
             "Verifique se o SIGAA está funcionando corretamente."))
         self.stdout.write(self.style.ERROR(f"Falha em {operation}\n\n"))
 
-    def display_success_message(self, operation: str, start_time: float) -> None:
+    def display_success_update_message(self, operation: str, start_time: float) -> None:
         self.stdout.write(self.style.SUCCESS(
             "Operação de atualização do banco de dados realizada com sucesso."))
         self.stdout.write(self.style.SUCCESS(f"Sucesso em {operation}"))
         self.stdout.write(self.style.SUCCESS(
             f"Tempo de execução: {(time() - start_time):.1f}s\n\n"))
+
+    def display_success_delete_message(self, operation: str, start_time: float) -> None:
+        self.stdout.write(self.style.SUCCESS(
+            "Operação de remoção do banco de dados realizada com sucesso."))
+        self.stdout.write(self.style.SUCCESS(f"Sucesso em {operation}"))
+        self.stdout.write(self.style.SUCCESS(
+            f"Tempo de execução: {(time() - start_time):.1f}s\n\n"))
+
+    def display_deleting_message(self, operation: str) -> None:
+        self.stdout.write(
+            "Operação de remoção do banco de dados iniciada.")
+        self.stdout.write(f"Deletando {operation}...\n\n")
