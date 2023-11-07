@@ -43,8 +43,11 @@ def get_session_cookie(session: Session) -> cookies.RequestsCookieJar:
     return cookie_jar
 
 """Obtem o ano e o período atual e retorna uma lista com esses valores."""
-def get_current_year_and_period() -> List[str | str]:
+def get_current_year_and_period(date: datetime | None = None) -> List[str | str]:
     current_date = datetime.now()
+    if date is not None:
+        current_date = date
+    
     current_year = current_date.year
     period = "1"
 
@@ -58,8 +61,8 @@ def get_current_year_and_period() -> List[str | str]:
     return [str(current_year), period]
 
 """Obtem o ano e o período seguinte e retorna uma lista com esses valores."""
-def get_next_period() -> List[str | str]:
-    date = get_current_year_and_period()
+def get_next_period(date: datetime | None = None) -> List[str | str]:
+    date = get_current_year_and_period(date)
 
     if date[1] == "1":
         date[1] = "2"
@@ -70,8 +73,8 @@ def get_next_period() -> List[str | str]:
 
     return date
 
-def get_previous_period() -> List[str | str]:
-    date = get_current_year_and_period()
+def get_previous_period(date: datetime | None = None) -> List[str | str]:
+    date = get_current_year_and_period(date)
 
     if date[1] == "2":
         date[1] = "1"
