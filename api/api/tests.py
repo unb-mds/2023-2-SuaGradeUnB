@@ -43,3 +43,12 @@ class DisciplineModelsTest(TestCase):
         self.assertEqual(self.department.code, 'INF')
         self.assertEqual(self.department.year, '2023')
         self.assertEqual(self.department.period, '2')
+
+    def test_str_method_of_discipline(self):
+        self.assertEqual(str(self.discipline), self.discipline.name)
+    
+    def test_str_method_of_class(self):
+        self.assertEqual(str(self._class), self._class._class)
+
+    def test_str_method_of_department(self):
+        self.assertEqual(str(self.department), self.department.code)

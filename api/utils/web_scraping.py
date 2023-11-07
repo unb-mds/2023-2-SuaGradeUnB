@@ -46,10 +46,9 @@ def get_list_of_departments(response=get_response(create_request_session())) -> 
     return department_ids
 
 
-def get_department_disciplines(department_id: str, current_year: str, current_period: str) -> defaultdict[str, List[dict]]:
+def get_department_disciplines(department_id: str, current_year: str, current_period: str, url=URL, session=None, cookie=None) -> defaultdict[str, List[dict]]:
     """Obtem as disciplinas de um departamento"""
-    discipline_scraper = DisciplineWebScraper(
-        department_id, current_year, current_period)
+    discipline_scraper = DisciplineWebScraper(department_id, current_year, current_period, url, session, cookie)
     disciplines = discipline_scraper.get_disciplines()
 
     return disciplines
@@ -57,13 +56,13 @@ def get_department_disciplines(department_id: str, current_year: str, current_pe
 
 class DisciplineWebScraper:
     # Classe que faz o web scraping das disciplinas
-    def __init__(self, department: str, year: str, period: str, session=None, cookie=None):
+    def __init__(self, department: str, year: str, period: str, url=URL, session=None, cookie=None):
         self.disciplines: defaultdict[str, List[dict]] = defaultdict(
             list)  # A dictionary with the disciplines
         self.department = department  # The department code
         self.period = period  # 1 for first semester and 2 for second semester
         self.year = year
-        self.url = URL  # The url of the web page
+        self.url = url  # The url of the web page
         self.data = {  # This data is necessary to make the post request
             "formTurma": "formTurma",
             "formTurma:inputNivel":	"",
@@ -87,7 +86,7 @@ class DisciplineWebScraper:
     def get_response_from_disciplines_post_request(self) -> requests.Response:
         # Faz uma requisição POST para obter a resposta das turmas disponíveis
         response = self.session.post(
-            url=self.url,
+            self.url,
             headers=HEADERS,
             cookies=self.cookie,
             data=self.data
@@ -108,7 +107,7 @@ class DisciplineWebScraper:
 
         aux_title_and_code = ""
 
-        if table_rows is None:
+        if table_rows is None or not len(table_rows):
             return None
 
         for discipline in table_rows:
