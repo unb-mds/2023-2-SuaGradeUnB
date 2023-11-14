@@ -21,6 +21,7 @@ import sys
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
+    path('courses/', include('api.urls'))
 ]
 
 if 'test' in sys.argv:
