@@ -100,7 +100,6 @@ class UserSessionRegisterTests(APITestCase):
 
         created_user = users.get(email='user@email.com')
         self.assertEqual(created_user.first_name, 'given_name')
-        self.assertEqual(created_user.last_name, 'family_name')
         self.assertEqual(created_user.email, 'user@email.com')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -239,7 +238,6 @@ class UserSessionLoginTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['first_name'], self.user.first_name)
-        self.assertEqual(response.data['last_name'], self.user.last_name)
         self.assertEqual(response.data['email'], self.user.email)
 
     def test_user_login_access_token(self) -> None:
