@@ -40,7 +40,7 @@ export default function SignInSection() {
                     first_name: userData.first_name,
                     email: userData.email,
                 });
-                router.replace('/schedule');
+                router.push('/schedules/home');
             }).catch(error => {
                 toast.error('Algo deu errado: ' + error.response.data.errors);
             });
@@ -51,7 +51,7 @@ export default function SignInSection() {
         <Button
             className='text-sm hover:bg-slate-100 bg-white text-black'
             onClick={() => {
-                if (!user.is_anonymous) router.replace('/schedule');
+                if (!user.is_anonymous) router.push('/schedules/home');
                 else signInWithGoogle(router);
             }}
         >

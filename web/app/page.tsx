@@ -25,7 +25,7 @@ export default function Home() {
       </div>
       <div className='flex flex-col justify-center items-center gap-3'>
         <SignInSection />
-        <Link href='/schedule' className='font-bold underline underline-offset-2'>
+        <Link href='/schedules/home' className='font-bold underline underline-offset-2'>
           Continuar como anônimo
         </Link>
       </div>

@@ -21,5 +21,5 @@ export default function signInWithGoogle(router: AppRouterInstance) {
     });
 
     const url = `${tokenEndpoint}?${params}`;
-    router.push(url);
+    router.replace(url);
 }
