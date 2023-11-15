@@ -43,11 +43,13 @@ class GoogleOAuth2:
     def do_auth(user_data: dict) -> User | None:
         user, created = User.objects.get_or_create(
             first_name=user_data['given_name'],
-            last_name=user_data['family_name'],
+            email=user_data['email'],
         )
 
+        if user_data.get('family_name'):
+            user.last_name = user_data['family_name']
+
         if created:
-            user.email = user_data['email']
             user.save()
 
         return user
