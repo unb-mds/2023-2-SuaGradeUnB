@@ -12,7 +12,6 @@ class RefreshJWTSerializer(TokenRefreshSerializer):
         user = jwt_authentication.get_user(validated_token)
 
         data["first_name"] = str(user.first_name)
-        data["last_name"] = str(user.last_name)
         data["email"] = str(user.email)
 
         return data
