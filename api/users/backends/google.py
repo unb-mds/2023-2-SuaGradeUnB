@@ -27,6 +27,7 @@ class GoogleOAuth2:
                 response._content = b'''{
                     "given_name": "given_name",
                     "family_name": "family_name",
+                    "picture_url": "https://photo.aqui.com",
                     "email": "user@email.com"
                 }'''
                 response.status_code = status.HTTP_200_OK
@@ -48,6 +49,9 @@ class GoogleOAuth2:
 
         if user_data.get('family_name'):
             user.last_name = user_data['family_name']
+        
+        if user_data.get('picture_url'):
+            user.picture_url = user_data['picture_url']
 
         if created:
             user.save()
