@@ -4,6 +4,7 @@
 config: copy-env setup-env config-mock entrypoint-chmod
 copy-env: 
 	cp ./api/.env.example ./api/.env
+	cp ./web/.env.example ./web/.env.local
 
 setup-env: 
 	bash scripts/env.sh
