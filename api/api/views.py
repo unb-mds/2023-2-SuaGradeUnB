@@ -4,6 +4,7 @@ from .serializers import DisciplineSerializer
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import status
+from django.db.models import QuerySet
 
 MAXIMUM_RETURNED_DISCIPLINES = 5
 ERROR_MESSAGE = "no valid argument found for 'search', 'year' or 'period'"
@@ -21,8 +22,18 @@ class Search(APIView):
                     "errors": ERROR_MESSAGE
                 }, status.HTTP_400_BAD_REQUEST)
 
-        disciplines = filter_disciplines_by_name(
-            name=name) | filter_disciplines_by_code(code=name)
+        name = name.split()
+        disciplines = filter_disciplines_by_name(name=name[0])
+
+        for term in name[1:]:
+            disciplines &= filter_disciplines_by_name(name=term)
+
+        if not disciplines.count():
+            disciplines = filter_disciplines_by_code(code=name[0])
+
+            for term in name[1:]:
+                disciplines &= filter_disciplines_by_code(code=term)
+            
         filtered_disciplines = filter_disciplines_by_year_and_period(
             year=year, period=period, disciplines=disciplines)
         data = DisciplineSerializer(filtered_disciplines, many=True).data
