@@ -14,11 +14,11 @@ import Image from 'next/image';
 import Button from './Button';
 import toast from 'react-hot-toast';
 
-interface UserData {
+export interface UserData {
     access: string;
     first_name: string;
     email: string;
-
+    picture_url: string;
 }
 
 export default function SignInSection() {
@@ -60,5 +60,6 @@ export default function SignInSection() {
             />
             Continuar com o Google
         </Button>
+
     );
 }
