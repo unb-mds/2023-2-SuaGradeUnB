@@ -139,6 +139,52 @@ class TestSearchAPI(APITestCase):
         self.assertEqual(content[1]['classes'][0]
                          ['teachers'], self._class_2.teachers)
 
+    def test_with_code_search(self):
+        """
+        Testa a busca por disciplinas através do código da matéria
+        Testes:
+        - Status code (200 OK)
+        - Quantidade de disciplinas retornadas
+        """
+
+        response_for_discipline_1 = self.client.get(
+            '/courses/?search=MAT518&year=2023&period=2')
+        response_for_discipline_2 = self.client.get(
+            '/courses/?search=MAT519&year=2023&period=2')
+        content_1 = json.loads(response_for_discipline_1.content)
+        content_2 = json.loads(response_for_discipline_2.content)
+
+        # Testes da disciplina 1
+        self.assertEqual(response_for_discipline_1.status_code, 200)
+        self.assertEqual(len(content_1), 1)
+
+        # Testes da disciplina 2
+        self.assertEqual(response_for_discipline_2.status_code, 200)
+        self.assertEqual(len(content_2), 1)
+    
+    def test_with_code_search_spaced(self):
+        """
+        Testa a busca por disciplinas através do código da matéria com espaços
+        Testes:
+        - Status code (200 OK)
+        - Quantidade de disciplinas retornadas
+        """
+
+        response_for_discipline_1 = self.client.get(
+            '/courses/?search=MAT+518&year=2023&period=2')
+        response_for_discipline_2 = self.client.get(
+            '/courses/?search=MAT+519&year=2023&period=2')
+        content_1 = json.loads(response_for_discipline_1.content)
+        content_2 = json.loads(response_for_discipline_2.content)
+
+        # Testes da disciplina 1
+        self.assertEqual(response_for_discipline_1.status_code, 200)
+        self.assertEqual(len(content_1), 1)
+
+        # Testes da disciplina 2
+        self.assertEqual(response_for_discipline_2.status_code, 200)
+        self.assertEqual(len(content_2), 1)
+
     def test_with_bad_url_search_missing_year(self):
         """
         Testa a busca por disciplinas sem os parâmetros de ano, como None e como string vazia
