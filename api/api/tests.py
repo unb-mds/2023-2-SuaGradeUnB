@@ -60,7 +60,7 @@ class DisciplineModelsTest(TestCase):
         self.assertEqual(str(self.department), self.department.code)
 
 
-class Testsad(APITestCase):
+class TestSearchAPI(APITestCase):
     def setUp(self) -> None:
         self.department = get_or_create_department(
             code='518', year='2023', period='2')
