@@ -1,12 +1,15 @@
 'use client';
 
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
+import request from '../utils/request';
+import { UserData } from '../components/SignInSection';
 
 interface User {
     is_anonymous: boolean;
     access?: string;
     first_name?: string;
     email?: string;
+    picture_url?: string;
 }
 
 export const defaultUser: User = {
@@ -26,6 +29,29 @@ export const UserContext = createContext({} as UserContextType);
 
 export default function UserContextProvider({ children, ...props }: UserContextProviderProps) {
     const [user, setUser] = useState<User>(defaultUser);
+
+    useEffect(() => {
+        const settings = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+        };
+
+        request.post('/users/login/', {}, settings).then(response => {
+            const userData: UserData = response.data;
+            setUser({
+                is_anonymous: false,
+                access: userData.access,
+                first_name: userData.first_name,
+                email: userData.email,
+                picture_url: userData.picture_url
+            });
+        }).catch(error => {
+            setUser(defaultUser);
+        });
+    }, [setUser]);
 
     return (
         <UserContext.Provider value={{ user, setUser }}>
