@@ -39,6 +39,7 @@ export default function SignInSection() {
                     access: userData.access,
                     first_name: userData.first_name,
                     email: userData.email,
+                    picture_url: userData.picture_url
                 });
                 router.push('/schedules/home');
             }).catch(error => {

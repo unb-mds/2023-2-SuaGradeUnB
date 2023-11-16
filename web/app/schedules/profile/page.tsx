@@ -1,21 +1,20 @@
 'use client';
 
-import useUser from '@/app/hooks/useUser';
 import Image from 'next/image';
-import LogoImage from '@/public/logo.svg';
-import Button from '@/app/components/Button';
-import signInWithGoogle from '@/app/utils/signInWithGoogle';
 import { useRouter } from 'next/navigation';
+
+import useUser from '@/app/hooks/useUser';
+
+import LogoImage from '@/public/logo.svg';
 import defaultProfile from '@/public/profile.svg';
 
+import Button from '@/app/components/Button';
+
+import signInWithGoogle from '@/app/utils/signInWithGoogle';
+
 export default function Profile() {
-    const router = useRouter();
     const { user } = useUser();
-    
-
-    function handleSignOut() {
-
-    }
+    const router = useRouter();
 
     return (
         <>
@@ -27,8 +26,8 @@ export default function Profile() {
             />
             <div className="w-[100px] h-[100px] absolute top-[60px] right-10 z-10">
                 <Image
-                    className='rounded-full border-[5px]'
-                    src={defaultProfile}
+                    className='shadow-lg rounded-full border-[5px]'
+                    src={user.picture_url || defaultProfile}
                     alt='Foto de perfil do usuário'
                     width={120} height={120}
                 />
