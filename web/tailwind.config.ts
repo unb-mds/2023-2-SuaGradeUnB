@@ -17,7 +17,7 @@ const config: Config = {
         sans: ['var(--font-poppins)'],
       },
       colors: {
-        primary: '#0F8548',
+        primary: '#13AF5E',
         basewhite: '#4080F4'
       }
     },
