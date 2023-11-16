@@ -5,9 +5,9 @@ import logoImage from '../public/logo.svg';
 
 import SignInSection from './components/SignInSection';
 
-export default function Home() {
+export default function Welcome() {
   return (
-    <main className='flex flex-col justify-center items-center gap-8 text-white mt-16 p-8'>
+    <main className='flex flex-col justify-center items-center gap-8 text-white p-8 h-screen w-screen bg-primary'>
       <Image
         src={logoImage} alt='Pessoa marcando datas em um calendário com borda azul'
       />
