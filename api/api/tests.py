@@ -2,7 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APITestCase
 from .models import Department, Discipline, Class
 from utils.db_handler import get_or_create_department, get_or_create_discipline, create_class
-from .views import Search, ERROR_MESSAGE
+from .views import ERROR_MESSAGE
 import json
 
 
