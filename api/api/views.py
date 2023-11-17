@@ -10,10 +10,16 @@ ERROR_MESSAGE = "no valid argument found for 'search', 'year' or 'period'"
 
 
 class Search(APIView):
+    def treat_string(self, string: str | None) -> str | None:
+        if string is not None:
+            string = string.strip()
+
+        return string
+    
     def get(self, request: Request, *args, **kwargs) -> Response:
-        name = request.GET.get('search', None)
-        year = request.GET.get('year', None)
-        period = request.GET.get('period', None)
+        name = self.treat_string(request.GET.get('search', None))
+        year = self.treat_string(request.GET.get('year', None))
+        period = self.treat_string(request.GET.get('period', None))
 
         if name is None or len(name) == 0 or year is None or len(year) == 0 or period is None or len(period) == 0:
             return Response(
