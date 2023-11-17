@@ -282,3 +282,29 @@ class TestSearchAPI(APITestCase):
         self.assertEqual(response_2.status_code, 400)
         self.assertEqual(len(content_2), 1)
         self.assertEqual(content_2['errors'], ERROR_MESSAGE)
+
+    def test_with_only_spaces(self):
+        """
+        Testa a busca por disciplinas com apenas espaços nos parâmetros
+        Testes:
+        - Status code (400 BAD REQUEST)
+        """
+
+        response_1 = self.client.get('/courses/?search=     &year=2023&period=2')
+        response_2 = self.client.get('/courses/?search=calculo&year=     &period=2')
+        response_3 = self.client.get('/courses/?search=calculo&year=2023&period=     ')
+        content_1 = json.loads(response_1.content)
+        content_2 = json.loads(response_2.content)
+        content_3 = json.loads(response_3.content)
+
+        self.assertEqual(response_1.status_code, 400)
+        self.assertEqual(len(content_1), 1)
+        self.assertEqual(content_1['errors'], ERROR_MESSAGE)
+
+        self.assertEqual(response_2.status_code, 400)
+        self.assertEqual(len(content_2), 1)
+        self.assertEqual(content_2['errors'], ERROR_MESSAGE)
+
+        self.assertEqual(response_3.status_code, 400)
+        self.assertEqual(len(content_3), 1)
+        self.assertEqual(content_3['errors'], ERROR_MESSAGE)
