@@ -1,4 +1,5 @@
 from api.models import Discipline, Department, Class
+from django.db.models.query import QuerySet
 
 """ Este módulo lida com as operações de banco de dados."""
 
@@ -27,5 +28,15 @@ def delete_all_departments_using_year_and_period(year: str, period: str) -> None
     """Deleta um departamento de um periodo especifico."""
     Department.objects.filter(year=year, period=period).delete()
 
+def filter_disciplines_by_name(name: str, disciplines: Discipline = Discipline.objects) -> QuerySet:
+    """Filtra as disciplinas pelo nome."""
+    return disciplines.filter(name__unaccent__icontains=name)
 
+def filter_disciplines_by_code(code: str, disciplines: Discipline = Discipline.objects) -> QuerySet:
+    """Filtra as disciplinas pelo código."""
+    return disciplines.filter(code__icontains=code)
+
+def filter_disciplines_by_year_and_period(year: str, period: str, disciplines: Discipline = Discipline.objects) -> QuerySet:
+    """Filtra as disciplinas pelo ano e período."""
+    return disciplines.filter(department__year=year, department__period=period)
 
