@@ -4,7 +4,6 @@ from .serializers import DisciplineSerializer
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework import status
-from django.db.models import QuerySet
 
 MAXIMUM_RETURNED_DISCIPLINES = 5
 ERROR_MESSAGE = "no valid argument found for 'search', 'year' or 'period'"
