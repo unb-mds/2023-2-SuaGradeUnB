@@ -4,12 +4,11 @@ from api.models import Department, Discipline, Class
 class DepartmentSerializer(ModelSerializer):
     class Meta:
         model = Department
-        fields = ('code', 'year', 'period')
-
+        fields = '__all__'
 class ClassSerializer(ModelSerializer):
     class Meta:
         model = Class
-        fields = ('workload', 'teachers', 'classroom', 'schedule', 'days', '_class')
+        fields = '__all__'
 
 class DisciplineSerializer(ModelSerializer):
     department = DepartmentSerializer()
@@ -17,4 +16,4 @@ class DisciplineSerializer(ModelSerializer):
     
     class Meta:
         model = Discipline
-        fields = ('name', 'code', 'department', 'classes')
+        fields = '__all__'
