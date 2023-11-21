@@ -35,8 +35,8 @@ export default function SchedulesLayout({
     const currentWeekDay = days[currentDate.getDay()];
 
     return (
-        <main>
-            <header className='rounded-b-[40px] flex flex-col justify-end bg-primary px-6 h-28'>
+        <main className='h-screen'>
+            <header className='rounded-b-[40px] mb-8 flex flex-col justify-end bg-primary px-6 h-28'>
                 <h1 className='col-span-2 font-semibold text-base text-white'>
                     Olá, {user.is_anonymous ? 'Anônimo' : user.first_name}!
                 </h1>
