@@ -2,8 +2,9 @@
 import Link from 'next/link';
 
 import { useEffect, useState } from 'react';
-
 import useUser from '@/app/hooks/useUser';
+
+import DisciplineBox from '@/app/components/DisciplineBox';
 
 export default function Home() {
    const { user } = useUser();
@@ -34,21 +35,14 @@ export default function Home() {
          </div>
 
          <div className='flex flex-col items-center gap-5 overflow-auto h-3/5 pt-5 pb-2'>
-            <span className='flex flex-row items-center rounded-lg font-semibold w-10/12 h-10 py-2 px-4 mx-4 shadow-lg hover:shadow-md bg-slate-200/100 text-sm'>
-               data first
-            </span>
-            <span className='flex flex-row items-center rounded-lg font-semibold w-10/12 h-10 py-2 px-4 mx-4 shadow-lg hover:shadow-md bg-slate-200/100 text-sm'>
-               data
-            </span>
-            <span className='flex flex-row items-center rounded-lg font-semibold w-10/12 h-10 py-2 px-4 mx-4 shadow-lg hover:shadow-md bg-slate-200/100 text-sm'>
-               data 
-            </span>
-            <span className='flex flex-row items-center rounded-lg font-semibold w-10/12 h-10 py-2 px-4 mx-4 shadow-lg hover:shadow-md bg-slate-200/100 text-sm'>
-               data 
-            </span>
-            <span className='flex flex-row items-center rounded-lg font-semibold w-10/12 h-10 py-2 px-4 mx-4 shadow-lg hover:shadow-md bg-slate-200/100 text-sm'>
-               data last
-            </span>
+            <DisciplineBox name='Cálculo 1' code='MAT0025' teachers={['Ricardo']} schedule='Segunda, Terça - Tal Horário' />
+            <DisciplineBox name='Cálculo 1' code='MAT0025' teachers={['Ricardo', 'dois', 'três']} schedule='Segunda, Terça - Tal Horário' />
+            <DisciplineBox name='Cálculo 1' code='MAT0025' teachers={['Ricardo', 'dois', 'três']} schedule='Segunda, Terça - Tal Horário' />
+            <DisciplineBox name='Cálculo 1' code='MAT0025' teachers={['Ricardo', 'dois', 'três']} schedule='Segunda, Terça - Tal Horário' />
+            <DisciplineBox name='Cálculo 1' code='MAT0025' teachers={['Ricardo', 'dois', 'três']} schedule='Segunda, Terça - Tal Horário' />
+            <DisciplineBox name='Cálculo 1' code='MAT0025' teachers={['Ricardo', 'dois', 'três']} schedule='Segunda, Terça - Tal Horário' />
+            <DisciplineBox name='Cálculo 1' code='MAT0025' teachers={['Ricardo', 'dois', 'três']} schedule='Segunda, Terça - Tal Horário' />
+            <DisciplineBox name='Cálculo 1' code='MAT0025' teachers={['Ricardo', 'dois', 'três']} schedule='Segunda, Terça - Tal Horário' />
          </div>
 
          <div className='flex justify-center z-10'>
