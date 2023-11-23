@@ -18,7 +18,7 @@ class GoogleOAuth2:
 
         try:
             response = Response()
-            response.status_code = status.HTTP_400_BAD_REQUEST 
+            response.status_code = status.HTTP_400_BAD_REQUEST
             response.headers = {'Content-Type': 'application/json'}
 
             if access_token != config('GOOGLE_OAUTH2_MOCK_TOKEN'):
@@ -43,13 +43,14 @@ class GoogleOAuth2:
     @staticmethod
     def do_auth(user_data: dict) -> User | None:
         user, created = User.objects.get_or_create(
-            first_name=user_data['given_name'],
-            email=user_data['email'],
-        )
+            email=user_data['email'])
+
+        if user_data.get('given_name'):
+            user.first_name = user_data['given_name']
 
         if user_data.get('family_name'):
             user.last_name = user_data['family_name']
-        
+
         if user_data.get('picture'):
             user.picture_url = user_data['picture']
 
