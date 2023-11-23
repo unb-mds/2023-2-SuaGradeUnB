@@ -33,7 +33,7 @@ export default function Home() {
             </Link>
          </div>
 
-         <div className='flex flex-col justify-center items-center gap-5 overflow-auto h-3/5 pt-72 pb-2'>
+         <div className='flex flex-col items-center gap-5 overflow-auto h-3/5 pt-5 pb-2'>
             <span className='flex flex-row items-center rounded-lg font-semibold w-10/12 h-10 py-2 px-4 mx-4 shadow-lg hover:shadow-md bg-slate-200/100 text-sm'>
                data first
             </span>
@@ -41,37 +41,10 @@ export default function Home() {
                data
             </span>
             <span className='flex flex-row items-center rounded-lg font-semibold w-10/12 h-10 py-2 px-4 mx-4 shadow-lg hover:shadow-md bg-slate-200/100 text-sm'>
-               data
+               data 
             </span>
             <span className='flex flex-row items-center rounded-lg font-semibold w-10/12 h-10 py-2 px-4 mx-4 shadow-lg hover:shadow-md bg-slate-200/100 text-sm'>
-               data
-            </span>
-            <span className='flex flex-row items-center rounded-lg font-semibold w-10/12 h-10 py-2 px-4 mx-4 shadow-lg hover:shadow-md bg-slate-200/100 text-sm'>
-               data
-            </span>
-            <span className='flex flex-row items-center rounded-lg font-semibold w-10/12 h-10 py-2 px-4 mx-4 shadow-lg hover:shadow-md bg-slate-200/100 text-sm'>
-               data
-            </span>
-            <span className='flex flex-row items-center rounded-lg font-semibold w-10/12 h-10 py-2 px-4 mx-4 shadow-lg hover:shadow-md bg-slate-200/100 text-sm'>
-               data
-            </span>
-            <span className='flex flex-row items-center rounded-lg font-semibold w-10/12 h-10 py-2 px-4 mx-4 shadow-lg hover:shadow-md bg-slate-200/100 text-sm'>
-               data
-            </span>
-            <span className='flex flex-row items-center rounded-lg font-semibold w-10/12 h-10 py-2 px-4 mx-4 shadow-lg hover:shadow-md bg-slate-200/100 text-sm'>
-               data
-            </span>
-            <span className='flex flex-row items-center rounded-lg font-semibold w-10/12 h-10 py-2 px-4 mx-4 shadow-lg hover:shadow-md bg-slate-200/100 text-sm'>
-               data last
-            </span>
-            <span className='flex flex-row items-center rounded-lg font-semibold w-10/12 h-10 py-2 px-4 mx-4 shadow-lg hover:shadow-md bg-slate-200/100 text-sm'>
-               data last
-            </span>
-            <span className='flex flex-row items-center rounded-lg font-semibold w-10/12 h-10 py-2 px-4 mx-4 shadow-lg hover:shadow-md bg-slate-200/100 text-sm'>
-               data last
-            </span>
-            <span className='flex flex-row items-center rounded-lg font-semibold w-10/12 h-10 py-2 px-4 mx-4 shadow-lg hover:shadow-md bg-slate-200/100 text-sm'>
-               data last
+               data 
             </span>
             <span className='flex flex-row items-center rounded-lg font-semibold w-10/12 h-10 py-2 px-4 mx-4 shadow-lg hover:shadow-md bg-slate-200/100 text-sm'>
                data last
@@ -80,7 +53,7 @@ export default function Home() {
 
          <div className='flex justify-center z-10'>
             <div id='addClass' className={`w-11/12 ${showContent ? 'h-5/6' : 'h-0'} hide transition-all duration-500 m-auto absolute bottom-0 flex justify-center items-center rounded-t-[40px] bg-slate-200/100 z-10 ${user}`}>
-               {showContent && 'Estou aqui'}
+               {showContent}
             </div>
          </div>
 
