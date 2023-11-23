@@ -93,24 +93,43 @@ class DisciplineWebScraper:
         )
 
         return response
+    
+    def get_teachers(self, data: list) -> list:
+        teachers = []
+        
+        for teacher in data:
+            teacher = teacher.replace("\n", "").replace(
+                "\r", "").replace("\t", "")
+            content = teacher.split('(')
 
-    def make_web_scraping_of_disciplines(self, response) -> None:
-        # Faz o web scraping das disciplinas
-        soup = BeautifulSoup(response.content, "html.parser")
-        # Find the <table> tag with class "listagem"
-        tables = soup.find("table", attrs={"class": "listagem"})
+            if (len(content) < 2):
+                continue
 
-        if tables is None:
+            teachers.append(content[0].strip())
+
+        if len(teachers) == 0:
+            teachers.append("A definir")
+        
+        return teachers
+    
+    def get_days(self, data: str) -> list:
+        days = []
+        
+        for character in data:
+            if (character.isupper()):
+                days.append(character)
+            else:
+                days[-1] += character
+        
+        return days
+    
+    def make_disciplines(self, rows: str) -> None:
+        if rows is None or not len(rows):
             return None
-
-        table_rows = tables.find_all("tr")  # Find all <tr> tags
-
+        
         aux_title_and_code = ""
-
-        if table_rows is None or not len(table_rows):
-            return None
-
-        for discipline in table_rows:
+        
+        for discipline in rows:
             if discipline.find("span", attrs={"class": "tituloDisciplina"}) is not None:
                 title = discipline.find(
                     "span", attrs={"class": "tituloDisciplina"})
@@ -136,25 +155,9 @@ class DisciplineWebScraper:
 
                 teachers_with_workload = discipline.find(
                     "td", attrs={"class": "nome"}).get_text().strip().strip().split(')')
-                teachers = []
-                days = []
-
-                for teacher in teachers_with_workload:
-                    teacher = teacher.replace("\n", "").replace(
-                        "\r", "").replace("\t", "")
-                    content = teacher.split('(')
-
-                    if (len(content) < 2):
-                        continue
-
-                    teachers.append(content[0].strip())
-
-                if len(teachers) == 0:
-                    teachers.append("A definir")
-
                 class_code = tables_data[0].get_text()
                 classroom = tables_data[7].get_text().strip()
-
+                
                 schedule = "A definir"
                 week_days = "A definir"
 
@@ -162,17 +165,14 @@ class DisciplineWebScraper:
                     schedule, week_days = tables_data[3].get_text(
                     ).strip().split(maxsplit=1)
 
-                workload = self.calc_hours(schedule)
                 sep = week_days.rfind("\t")
 
                 if (sep != -1):
                     week_days = week_days[sep+1:]
-
-                for character in week_days:
-                    if (character.isupper()):
-                        days.append(character)
-                    else:
-                        days[-1] += character
+                
+                teachers = self.get_teachers(teachers_with_workload)
+                workload = self.calc_hours(schedule)
+                days = self.get_days(week_days)
 
                 self.disciplines[code].append({
                     "name": name,
@@ -183,6 +183,19 @@ class DisciplineWebScraper:
                     "schedule": schedule,
                     "days": days
                 })
+
+    def make_web_scraping_of_disciplines(self, response) -> None:
+        # Faz o web scraping das disciplinas
+        soup = BeautifulSoup(response.content, "html.parser")
+        # Find the <table> tag with class "listagem"
+        tables = soup.find("table", attrs={"class": "listagem"})
+
+        if tables is None:
+            return None
+
+        table_rows = tables.find_all("tr")  # Find all <tr> tags
+
+        self.make_disciplines(table_rows)
 
     def calc_hours(self, schedule: str) -> int:
         # Calcula a carga horária de uma disciplina
@@ -197,3 +210,4 @@ class DisciplineWebScraper:
         self.make_web_scraping_of_disciplines(response)
 
         return self.disciplines
+    
