@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import { useEffect, useState } from 'react';
 import useUser from '@/app/hooks/useUser';
+import Button from '@/app/components/Button';
 
 import DisciplineBox from '@/app/components/DisciplineBox';
 
@@ -47,7 +48,12 @@ export default function Home() {
 
          <div className='flex justify-center z-10'>
             <div id='addClass' className={`w-11/12 ${showContent ? 'h-5/6' : 'h-0'} hide transition-all duration-500 m-auto absolute bottom-0 flex justify-center items-center rounded-t-[40px] bg-slate-200/100 z-10 ${user}`}>
-               {showContent}
+               {showContent && ( 
+                  <button className = 'relative inset-x-0 -bottom-80 shadow-lg justify-center items-center gap-3 font-medium rounded-xl py-3 px-5 hover:shadow-md bg-primary text-white'>
+                     Adicionar
+                  </button>
+               )}
+
             </div>
          </div>
 
