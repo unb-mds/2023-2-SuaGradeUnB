@@ -31,14 +31,14 @@ class WebScrapingTest(APITestCase):
             period = data.get('period')
             department = data.get('department')
 
-        url = reverse(f'utils:{path_name}')
+        url = reverse(f'utils:sigaa', kwargs={"path": path_name})
         args = [department, year, period, url, self.client, self.cookie()]
         disciplines = wbp.get_department_disciplines(*args)
 
         return disciplines
 
     def test_get_list_of_departments(self):
-        response = self.client.get(reverse('utils:sigaa'))
+        response = self.client.get(reverse('utils:sigaa', kwargs={"path": "sigaa"}))
 
         departments = wbp.get_list_of_departments(response)
         self.assertEqual(type(list()), type(departments))
@@ -46,7 +46,7 @@ class WebScrapingTest(APITestCase):
             self.assertEqual(type(str()), type(departments[0]))
 
     def test_get_list_of_departments_when_empty(self):
-        response = self.client.get(reverse('utils:empty'))
+        response = self.client.get(reverse('utils:sigaa', kwargs={"path": "empty"}))
 
         departments = wbp.get_list_of_departments(response)
         self.assertIsNone(departments)
