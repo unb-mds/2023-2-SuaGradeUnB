@@ -3,8 +3,9 @@
 import { createContext, useEffect, useState } from 'react';
 import request from '../utils/request';
 import { UserData } from '../components/SignInSection';
+import { settings } from '../utils/settings';
 
-interface User {
+export interface User {
     is_anonymous: boolean;
     access?: string;
     first_name?: string;
@@ -16,7 +17,7 @@ export const defaultUser: User = {
     is_anonymous: true,
 };
 
-interface UserContextType {
+export interface UserContextType {
     user: User;
     setUser: React.Dispatch<React.SetStateAction<User>>;
 }
@@ -31,14 +32,6 @@ export default function UserContextProvider({ children, ...props }: UserContextP
     const [user, setUser] = useState<User>(defaultUser);
 
     useEffect(() => {
-        const settings = {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            withCredentials: true,
-        };
-
         request.post('/users/login/', {}, settings).then(response => {
             const userData: UserData = response.data;
             setUser({
