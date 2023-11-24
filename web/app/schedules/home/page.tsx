@@ -10,7 +10,7 @@ import AsideSchedulePopUp from '@/app/components/AsideSchedulePopUp';
 export default function Home() {
    const router = useRouter();
 
-   const [showContent, setShowContent] = useState(true);
+   const [showContent, setShowContent] = useState(false);
 
    const divAddClassRef = useRef(null);
    const buttonAddDisciplineRef = useRef(null);
