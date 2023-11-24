@@ -45,7 +45,6 @@ class DatabaseHandlerTest(APITestCase):
         )
 
         _class = dbh.create_class(
-            workload = 60,
             teachers = ['Mateus Vieira'],
             classroom = 'Gather Town',
             schedule = '46M34',
@@ -54,7 +53,6 @@ class DatabaseHandlerTest(APITestCase):
             discipline = discipline
         )
 
-        self.assertEqual(_class.workload, 60)
         self.assertEqual(_class.teachers, ['Mateus Vieira'])
         self.assertEqual(_class.classroom, 'Gather Town')
         self.assertEqual(_class.schedule, '46M34')
@@ -76,7 +74,6 @@ class DatabaseHandlerTest(APITestCase):
         )
 
         _class = dbh.create_class(
-            workload = 60,
             teachers = ['Henrique Camelo'],
             classroom = 'Gather Town',
             schedule = '46M34',

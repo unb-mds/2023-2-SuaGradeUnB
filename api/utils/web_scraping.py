@@ -147,8 +147,6 @@ class DisciplineWebScraper:
                     - name: Nome da disciplina (string)
                     - class: Turma (str)
                     - teachers: Nome dos professores (Lista de strings)
-                    - workload: Carga horária (int). Se não houver, o valor é -1!
-                    - classroom: Sala (string)
                     - schedule: Código do horário (string)
                     - days: Dias da semana com horário (Lista de strings)
                 '''
@@ -171,14 +169,12 @@ class DisciplineWebScraper:
                     week_days = week_days[sep+1:]
                 
                 teachers = self.get_teachers(teachers_with_workload)
-                workload = self.calc_hours(schedule)
                 days = self.get_days(week_days)
 
                 self.disciplines[code].append({
                     "name": name,
                     "class_code": class_code,
                     "teachers": teachers,
-                    "workload": workload,
                     "classroom": classroom,
                     "schedule": schedule,
                     "days": days
@@ -196,13 +192,6 @@ class DisciplineWebScraper:
         table_rows = tables.find_all("tr")  # Find all <tr> tags
 
         self.make_disciplines(table_rows)
-
-    def calc_hours(self, schedule: str) -> int:
-        # Calcula a carga horária de uma disciplina
-        match = search(r'[a-zA-Z]', schedule)
-        hours = match.start() * (len(schedule) - match.start() - 1) * 15
-
-        return hours
 
     def get_disciplines(self) -> defaultdict[str, List[dict]]:
         # Retorna um dicionário com as disciplinas
