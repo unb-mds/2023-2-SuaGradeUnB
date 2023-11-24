@@ -18,7 +18,11 @@ const config: Config = {
       },
       colors: {
         primary: '#13AF5E',
-        basewhite: '#4080F4'
+        secondary: '#4080F4',
+        snow: {
+          primary: '#F6F6F6',
+          secondary: '#E9E9E9',
+        }
       }
     },
   },
