@@ -34,10 +34,10 @@ export default function Profile() {
             </div>
 
             <div className="flex flex-col justify-end w-[131px] absolute h-36 bg-primary rounded-[15px] top-[140px] right-[25px] z-0">
-                <Button onClick={() => signInWithGoogle(router)} className='!shadow-none text-white'>
+                <Button onClick={() => signInWithGoogle(router)} className='!shadow-none'>
                     Trocar de conta
                 </Button>
-                <Button className='!shadow-none text-white'>
+                <Button className='!shadow-none'>
                     Sair
                 </Button>
             </div>
