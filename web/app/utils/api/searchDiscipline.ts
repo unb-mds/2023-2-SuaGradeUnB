@@ -4,6 +4,7 @@ import request from '../request';
 import { settings } from '../settings';
 
 export type ResponseType = Array<{
+    expanded: boolean,
     code: string,
     name: string,
     classes: Array<{
@@ -29,7 +30,6 @@ export default async function searchDiscipline(search: string, year: string, per
         });
 
         const data: ResponseType = response.data;
-        console.log(data);
         return data;
     } catch (error: any) {
         toast.error(error.response.data.detail);
