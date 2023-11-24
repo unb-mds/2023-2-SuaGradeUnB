@@ -29,7 +29,6 @@ class Discipline(models.Model):
 
 class Class(models.Model):
     """Classe que representa uma turma.
-    workload:int -> Carga horária da turma
     teachers:list -> Lista de professores da turma
     classroom:str -> Sala da turma
     schedule:str -> Horário da turma
@@ -37,7 +36,6 @@ class Class(models.Model):
     _class:str -> Turma da disciplina
     discipline:Discipline -> Disciplina da turma
     """
-    workload = models.IntegerField()
     teachers = ArrayField(models.CharField(max_length=100))
     classroom = models.CharField(max_length=60)
     schedule = models.CharField(max_length=60)
