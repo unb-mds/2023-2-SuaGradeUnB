@@ -20,8 +20,8 @@ class Discipline(models.Model):
     code:str -> Código da disciplina
     department:Department -> Departamento da disciplina
     """
-    name = models.CharField(max_length=100)
-    code = models.CharField(max_length=20)
+    name = models.CharField(max_length=128)
+    code = models.CharField(max_length=64)
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='disciplines')
 
     def __str__(self):
@@ -36,12 +36,13 @@ class Class(models.Model):
     _class:str -> Turma da disciplina
     discipline:Discipline -> Disciplina da turma
     """
-    teachers = ArrayField(models.CharField(max_length=100))
-    classroom = models.CharField(max_length=60)
-    schedule = models.CharField(max_length=60)
-    days = ArrayField(models.CharField(max_length=60))
-    _class = models.CharField(max_length=30)
+    teachers = ArrayField(models.CharField(max_length=256))
+    classroom = models.CharField(max_length=64)
+    schedule = models.CharField(max_length=512)
+    days = ArrayField(models.CharField(max_length=64))
+    _class = models.CharField(max_length=64)
     discipline = models.ForeignKey(Discipline, on_delete=models.CASCADE, related_name='classes')
+    special_dates = ArrayField(models.CharField(max_length=256), default=list)
 
     def __str__(self):
         return self._class
