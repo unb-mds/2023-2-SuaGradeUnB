@@ -81,9 +81,9 @@ class Command(BaseCommand):
 
                 # Cadastra as novas turmas
                 for class_info in classes_info:
-                    create_class(workload=class_info["workload"], teachers=class_info["teachers"],
+                    create_class(teachers=class_info["teachers"],
                                  classroom=class_info["classroom"], schedule=class_info["schedule"],
-                                 days=class_info["days"], _class=class_info["class_code"], discipline=discipline)
+                                 days=class_info["days"], _class=class_info["class_code"], discipline=discipline, special_dates=class_info["special_dates"])
 
     def delete_period(self, year: str, period: str) -> None:
         """Deleta um período do banco de dados."""
