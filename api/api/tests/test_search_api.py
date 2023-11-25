@@ -12,9 +12,9 @@ class TestSearchAPI(APITestCase):
         self.discipline_2 = get_or_create_discipline(
             name='CÁLCULO 2', code='MAT519', department=self.department)
         self._class_1 = create_class(teachers=['RICARDO FRAGELLI'], classroom='MOCAP', schedule='46M34',
-                                     days=['Quarta-Feira 10:00 às 11:50', 'Sexta-Feira 10:00 às 11:50'], _class="1", discipline=self.discipline_1)
+                                     days=['Quarta-Feira 10:00 às 11:50', 'Sexta-Feira 10:00 às 11:50'], _class="1", special_dates=[], discipline=self.discipline_1)
         self._class_2 = create_class(teachers=['VINICIUS RISPOLI'], classroom='S1', schedule='24M34', days=[
-                                     'Segunda-Feira 10:00 às 11:50', 'Quarta-Feira 10:00 às 11:50'], _class="1", discipline=self.discipline_2)
+                                     'Segunda-Feira 10:00 às 11:50', 'Quarta-Feira 10:00 às 11:50'], _class="1", special_dates=[], discipline=self.discipline_2)
 
     def test_with_complete_correct_search(self):
         """
