@@ -3,18 +3,22 @@ import toast from 'react-hot-toast';
 import request from '../request';
 import { settings } from '../settings';
 
-export type ResponseType = Array<{
+export type ClassType = {
+    id: number,
+    _class: string,
+    classroom: string,
+    days: Array<string>,
+    schedule: string,
+    teachers: Array<string>
+}
+
+export type DisciplineType = {
     expanded: boolean,
+    id: number,
     code: string,
     name: string,
-    classes: Array<{
-        _class: string,
-        classroom: string,
-        days: Array<string>,
-        schedule: string,
-        teachers: Array<string>
-    }>
-}>
+    classes: Array<ClassType>
+}
 
 export default async function searchDiscipline(search: string, year: string, period: string) {
     const params = {
@@ -29,7 +33,7 @@ export default async function searchDiscipline(search: string, year: string, per
             params: params
         });
 
-        const data: ResponseType = response.data;
+        const data: Array<DisciplineType> = response.data;
         return data;
     } catch (error: any) {
         toast.error(error.response.data.detail);
