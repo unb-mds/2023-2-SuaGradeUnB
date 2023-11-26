@@ -58,7 +58,6 @@ class WebScrapingTest(APITestCase):
             self.assertTrue('name' in class_discipline)
             self.assertTrue('class_code' in class_discipline)
             self.assertTrue('teachers' in class_discipline)
-            self.assertTrue('workload' in class_discipline)
             self.assertTrue('schedule' in class_discipline)
             self.assertTrue('days' in class_discipline)
 

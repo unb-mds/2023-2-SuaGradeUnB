@@ -15,7 +15,6 @@ class DisciplineModelsTest(TestCase):
             department=self.department
         )
         self._class = Class.objects.create(
-            workload=60,
             teachers=['Professor 1', 'Professor 2'],
             classroom='MOCAP',
             schedule='46M34',
@@ -31,7 +30,6 @@ class DisciplineModelsTest(TestCase):
         self.assertEqual(self.discipline.department, self.department)
 
     def test_create_class(self):
-        self.assertEqual(self._class.workload, 60)
         self.assertEqual(self._class.teachers, ['Professor 1', 'Professor 2'])
         self.assertEqual(self._class.classroom, 'MOCAP')
         self.assertEqual(self._class.schedule, '46M34')

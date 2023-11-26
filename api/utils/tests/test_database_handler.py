@@ -45,23 +45,23 @@ class DatabaseHandlerTest(APITestCase):
         )
 
         _class = dbh.create_class(
-            workload = 60,
             teachers = ['Mateus Vieira'],
             classroom = 'Gather Town',
             schedule = '46M34',
             days = ['Quarta-Feira 10:00 às 11:50', 'Sexta-Feira 10:00 às 11:50'],
             _class = "1",
+            special_dates=[],
             discipline = discipline
         )
 
-        self.assertEqual(_class.workload, 60)
         self.assertEqual(_class.teachers, ['Mateus Vieira'])
         self.assertEqual(_class.classroom, 'Gather Town')
         self.assertEqual(_class.schedule, '46M34')
         self.assertEqual(_class.days, ['Quarta-Feira 10:00 às 11:50', 'Sexta-Feira 10:00 às 11:50'])
         self.assertEqual(_class._class, "1")
+        self.assertEqual(_class.special_dates, [])
         self.assertTrue(_class.discipline == discipline)
-    
+        
     def test_delete_classes_from_discipline(self):
         department = dbh.get_or_create_department(
             code = 'HCQ',
@@ -76,12 +76,12 @@ class DatabaseHandlerTest(APITestCase):
         )
 
         _class = dbh.create_class(
-            workload = 60,
             teachers = ['Henrique Camelo'],
             classroom = 'Gather Town',
             schedule = '46M34',
             days = ['Quarta-Feira 10:00 às 11:50', 'Sexta-Feira 10:00 às 11:50'],
             _class = "1",
+            special_dates=['20/12/2023 - 30/12/2023'],
             discipline = discipline
         )
 
