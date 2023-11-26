@@ -1,25 +1,34 @@
+import { ClassValueType } from '../contexts/SelectedClassesContext';
+import useSelectedClasses from '../hooks/useSelectedClasses';
+import ClassInfo from './ClassInfo';
+
 interface DisciplineBoxPropsType {
-    name: string,
-    code: string,
-    teachers: Array<string>,
-    schedule: string
+    currentClass: ClassValueType
+    discipline: {
+        id: number,
+        name: string,
+        code: string
+    }
 }
 
-export default function DisciplineBox(props: DisciplineBoxPropsType) {
+export default function DisciplineBox({ currentClass, discipline }: DisciplineBoxPropsType) {
+    const { selectedClasses, setSelectedClasses } = useSelectedClasses();
+
+    function handleDeleteClass() {
+        const newSelectedClasses = selectedClasses;
+        newSelectedClasses.get(discipline.id)?.delete(currentClass.class.id);
+        setSelectedClasses(newSelectedClasses);
+    }
+
     return (
-        <span className='flex items-center justify-between rounded-lg font-semibold w-10/12 max-h-28 py-2 px-4 shadow-lg bg-snow-primary text-sm'>
-            <div className='flex flex-col gap-1'>
+        <span className='flex justify-between rounded-lg w-10/12 py-2 px-4 shadow-lg bg-snow-primary'>
+            <div>
                 <section>
-                    {props.name} - {props.code}
+                    <span className='font-semibold'>Disciplina: </span> {discipline.name} - {discipline.code}
                 </section>
-                {props.teachers.length && (
-                    <section>
-                        {props.teachers[0]} {props.teachers.length > 1 && 'e outros'}
-                    </section>
-                )}
-                <section>{props.schedule}</section>
+                <ClassInfo currentClass={currentClass} />
             </div>
-            <button className='material-symbols-rounded hover:text-red-900'>
+            <button onClick={handleDeleteClass} className='material-symbols-rounded hover:text-red-900'>
                 delete
             </button>
         </span>
