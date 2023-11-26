@@ -1,8 +1,8 @@
-from .sessions import URL, HEADERS, get_response, create_request_session, get_session_cookie
+from .sessions import URL, HEADERS, create_request_session, get_session_cookie, get_response
 from bs4 import BeautifulSoup
 from collections import defaultdict
 from typing import List, Optional
-from re import search
+from re import findall
 import requests.utils
 import requests
 
@@ -53,7 +53,6 @@ def get_department_disciplines(department_id: str, current_year: str, current_pe
 
     return disciplines
 
-
 class DisciplineWebScraper:
     # Classe que faz o web scraping das disciplinas
     def __init__(self, department: str, year: str, period: str, url=URL, session=None, cookie=None):
@@ -93,24 +92,52 @@ class DisciplineWebScraper:
         )
 
         return response
+    
+    def get_teachers(self, data: list) -> list:
+        teachers = []
+        
+        for teacher in data:
+            teacher = teacher.replace("\n", "").replace(
+                "\r", "").replace("\t", "")
+            content = teacher.split('(')
 
-    def make_web_scraping_of_disciplines(self, response) -> None:
-        # Faz o web scraping das disciplinas
-        soup = BeautifulSoup(response.content, "html.parser")
-        # Find the <table> tag with class "listagem"
-        tables = soup.find("table", attrs={"class": "listagem"})
+            if (len(content) < 2):
+                continue
 
-        if tables is None:
+            teachers.append(content[0].strip())
+
+        if len(teachers) == 0:
+            teachers.append("A definir")
+        
+        return teachers
+
+    def get_schedules(self, data: str) -> list:
+        regex = "\d+[MTN]\d+"
+        occurrences = findall(regex, data)
+        
+        return occurrences
+    
+    def get_special_dates(self, data: str) -> list:
+        date_format = "\d{2}\/\d{2}\/\d{4}"
+        regex = f"\(({date_format}\s\-\s{date_format})\)"
+        occurrences = findall(regex, data)
+        
+        return occurrences
+    
+    def get_week_days(self, data: str) -> list:
+        hours_format = "\d+\:\d+"
+        regex = f"[A-Z]\w?[a-z|ç]+\-?[a-z]*\s{hours_format}\sàs\s{hours_format}"
+        occurrences = findall(regex, data)
+        
+        return occurrences
+    
+    def make_disciplines(self, rows: str) -> None:
+        if rows is None or not len(rows):
             return None
-
-        table_rows = tables.find_all("tr")  # Find all <tr> tags
-
+        
         aux_title_and_code = ""
-
-        if table_rows is None or not len(table_rows):
-            return None
-
-        for discipline in table_rows:
+        
+        for discipline in rows:
             if discipline.find("span", attrs={"class": "tituloDisciplina"}) is not None:
                 title = discipline.find(
                     "span", attrs={"class": "tituloDisciplina"})
@@ -128,68 +155,43 @@ class DisciplineWebScraper:
                     - name: Nome da disciplina (string)
                     - class: Turma (str)
                     - teachers: Nome dos professores (Lista de strings)
-                    - workload: Carga horária (int). Se não houver, o valor é -1!
-                    - classroom: Sala (string)
                     - schedule: Código do horário (string)
                     - days: Dias da semana com horário (Lista de strings)
                 '''
 
                 teachers_with_workload = discipline.find(
                     "td", attrs={"class": "nome"}).get_text().strip().strip().split(')')
-                teachers = []
-                days = []
-
-                for teacher in teachers_with_workload:
-                    teacher = teacher.replace("\n", "").replace(
-                        "\r", "").replace("\t", "")
-                    content = teacher.split('(')
-
-                    if (len(content) < 2):
-                        continue
-
-                    teachers.append(content[0].strip())
-
-                if len(teachers) == 0:
-                    teachers.append("A definir")
-
-                class_code = tables_data[0].get_text()
+                schedule_context = tables_data[3].get_text().strip()
+                
+                class_code = tables_data[0].get_text().strip()
                 classroom = tables_data[7].get_text().strip()
-
-                schedule = "A definir"
-                week_days = "A definir"
-
-                if len(tables_data[3].get_text().strip().split(maxsplit=1)) == 2:
-                    schedule, week_days = tables_data[3].get_text(
-                    ).strip().split(maxsplit=1)
-
-                workload = self.calc_hours(schedule)
-                sep = week_days.rfind("\t")
-
-                if (sep != -1):
-                    week_days = week_days[sep+1:]
-
-                for character in week_days:
-                    if (character.isupper()):
-                        days.append(character)
-                    else:
-                        days[-1] += character
-
+                schedule = self.get_schedules(schedule_context)
+                special_dates = self.get_special_dates(schedule_context) 
+                days = self.get_week_days(schedule_context)
+                teachers = self.get_teachers(teachers_with_workload)
+                
                 self.disciplines[code].append({
                     "name": name,
                     "class_code": class_code,
                     "teachers": teachers,
-                    "workload": workload,
                     "classroom": classroom,
-                    "schedule": schedule,
+                    "schedule": " ".join(schedule),
+                    "special_dates": special_dates,
                     "days": days
                 })
 
-    def calc_hours(self, schedule: str) -> int:
-        # Calcula a carga horária de uma disciplina
-        match = search(r'[a-zA-Z]', schedule)
-        hours = match.start() * (len(schedule) - match.start() - 1) * 15
+    def make_web_scraping_of_disciplines(self, response) -> None:
+        # Faz o web scraping das disciplinas
+        soup = BeautifulSoup(response.content, "html.parser")
+        # Find the <table> tag with class "listagem"
+        tables = soup.find("table", attrs={"class": "listagem"})
 
-        return hours
+        if tables is None:
+            return None
+
+        table_rows = tables.find_all("tr")  # Find all <tr> tags
+
+        self.make_disciplines(table_rows)
 
     def get_disciplines(self) -> defaultdict[str, List[dict]]:
         # Retorna um dicionário com as disciplinas

@@ -14,11 +14,11 @@ def get_or_create_discipline(name: str, code: str, department: Department) -> Di
     return Discipline.objects.get_or_create(name=name, code=code, department=department)[0]
 
 
-def create_class(workload: int, teachers: list, classroom: str, schedule: str,
-                 days: list, _class: str, discipline: Discipline) -> Class:
+def create_class(teachers: list, classroom: str, schedule: str,
+                 days: list, _class: str, special_dates: list, discipline: Discipline) -> Class:
     """Cria uma turma de uma disciplina."""
-    return Class.objects.create(workload=workload, teachers=teachers, classroom=classroom, schedule=schedule,
-                                days=days, _class=_class, discipline=discipline)
+    return Class.objects.create(teachers=teachers, classroom=classroom, schedule=schedule,
+                                days=days, _class=_class, special_dates=special_dates, discipline=discipline)
 
 def delete_classes_from_discipline(discipline: Discipline) -> None:
     """Deleta todas as turmas de uma disciplina."""

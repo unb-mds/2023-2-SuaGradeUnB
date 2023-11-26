@@ -11,9 +11,11 @@ import defaultProfile from '@/public/profile.svg';
 import Button from '@/app/components/Button';
 
 import signInWithGoogle from '@/app/utils/signInWithGoogle';
+import handleLogout from '@/app/utils/api/logout';
 
 export default function Profile() {
-    const { user } = useUser();
+    const userContext = useUser();
+    const { user } = userContext;
     const router = useRouter();
 
     return (
@@ -37,7 +39,9 @@ export default function Profile() {
                 <Button onClick={() => signInWithGoogle(router)} className='!shadow-none'>
                     Trocar de conta
                 </Button>
-                <Button className='!shadow-none'>
+                <Button onClick={() => handleLogout({
+                    userContext, router
+                })} className='!shadow-none text-white'>
                     Sair
                 </Button>
             </div>

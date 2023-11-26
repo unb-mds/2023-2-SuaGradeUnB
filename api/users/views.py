@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework import exceptions
 from rest_framework.response import Response
 from rest_framework.request import Request
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenBlacklistView
 from users.backends.utils import get_backend
 from users.simplejwt.decorators import move_refresh_token_to_cookie
 
@@ -43,13 +43,27 @@ class Register(TokenObtainPairView):
             }, status.HTTP_400_BAD_REQUEST)
 
 
-class RefreshJWTView(TokenRefreshView):
+class HandleRefreshMixin:
 
-    @move_refresh_token_to_cookie
-    def post(self, request, *args, **kwargs):
+    def handle(self, request):
         try:
             request.data['refresh'] = request.COOKIES['refresh']
         except KeyError:
             raise exceptions.NotAuthenticated('Refresh cookie error.')
 
+        return request
+
+
+class RefreshJWTView(TokenRefreshView, HandleRefreshMixin):
+
+    @move_refresh_token_to_cookie
+    def post(self, request, *args, **kwargs):
+        request = self.handle(request)
+        return super().post(request, *args, **kwargs)
+
+
+class BlacklistJWTView(TokenBlacklistView, HandleRefreshMixin):
+
+    def post(self, request, *args, **kwargs):
+        request = self.handle(request)
         return super().post(request, *args, **kwargs)

@@ -1,64 +1,7 @@
-from django.test import TestCase
 from rest_framework.test import APITestCase
-from .models import Department, Discipline, Class
 from utils.db_handler import get_or_create_department, get_or_create_discipline, create_class
-from .views import ERROR_MESSAGE
+from api.views import ERROR_MESSAGE
 import json
-
-
-class DisciplineModelsTest(TestCase):
-    def setUp(self):
-        self.department = Department.objects.create(
-            code='INF',
-            year="2023",
-            period="2"
-        )
-
-        self.discipline = Discipline.objects.create(
-            name='Métodos de Desenvolvimento de Software',
-            code='MDS1010',
-            department=self.department
-        )
-        self._class = Class.objects.create(
-            workload=60,
-            teachers=['Professor 1', 'Professor 2'],
-            classroom='MOCAP',
-            schedule='46M34',
-            days=['Quarta-Feira 10:00 às 11:50', 'Sexta-Feira 10:00 às 11:50'],
-            _class="1",
-            discipline=self.discipline
-        )
-
-    def test_create_discipline(self):
-        self.assertEqual(self.discipline.name,
-                         'Métodos de Desenvolvimento de Software')
-        self.assertEqual(self.discipline.code, 'MDS1010')
-        self.assertEqual(self.discipline.department, self.department)
-
-    def test_create_class(self):
-        self.assertEqual(self._class.workload, 60)
-        self.assertEqual(self._class.teachers, ['Professor 1', 'Professor 2'])
-        self.assertEqual(self._class.classroom, 'MOCAP')
-        self.assertEqual(self._class.schedule, '46M34')
-        self.assertEqual(self._class.days, [
-                         'Quarta-Feira 10:00 às 11:50', 'Sexta-Feira 10:00 às 11:50'])
-        self.assertEqual(self._class._class, "1")
-        self.assertEqual(self._class.discipline, self.discipline)
-
-    def test_create_department(self):
-        self.assertEqual(self.department.code, 'INF')
-        self.assertEqual(self.department.year, '2023')
-        self.assertEqual(self.department.period, '2')
-
-    def test_str_method_of_discipline(self):
-        self.assertEqual(str(self.discipline), self.discipline.name)
-
-    def test_str_method_of_class(self):
-        self.assertEqual(str(self._class), self._class._class)
-
-    def test_str_method_of_department(self):
-        self.assertEqual(str(self.department), self.department.code)
-
 
 class TestSearchAPI(APITestCase):
     def setUp(self) -> None:
@@ -68,10 +11,10 @@ class TestSearchAPI(APITestCase):
             name='CÁLCULO 1', code='MAT518', department=self.department)
         self.discipline_2 = get_or_create_discipline(
             name='CÁLCULO 2', code='MAT519', department=self.department)
-        self._class_1 = create_class(workload=60, teachers=['RICARDO FRAGELLI'], classroom='MOCAP', schedule='46M34',
-                                     days=['Quarta-Feira 10:00 às 11:50', 'Sexta-Feira 10:00 às 11:50'], _class="1", discipline=self.discipline_1)
-        self._class_2 = create_class(workload=60, teachers=['VINICIUS RISPOLI'], classroom='S1', schedule='24M34', days=[
-                                     'Segunda-Feira 10:00 às 11:50', 'Quarta-Feira 10:00 às 11:50'], _class="1", discipline=self.discipline_2)
+        self._class_1 = create_class(teachers=['RICARDO FRAGELLI'], classroom='MOCAP', schedule='46M34',
+                                     days=['Quarta-Feira 10:00 às 11:50', 'Sexta-Feira 10:00 às 11:50'], _class="1", special_dates=[], discipline=self.discipline_1)
+        self._class_2 = create_class(teachers=['VINICIUS RISPOLI'], classroom='S1', schedule='24M34', days=[
+                                     'Segunda-Feira 10:00 às 11:50', 'Quarta-Feira 10:00 às 11:50'], _class="1", special_dates=[], discipline=self.discipline_2)
 
     def test_with_complete_correct_search(self):
         """

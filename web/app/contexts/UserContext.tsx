@@ -3,12 +3,11 @@
 import { createContext, useEffect, useState } from 'react';
 
 import { UserData } from '../components/SignInSection';
-import { LoadingScreen } from '../components/LoadingScreen';
 
 import { settings } from '../utils/settings';
 import request from '../utils/request';
 
-interface User {
+export interface User {
     is_anonymous: boolean;
     access?: string;
     first_name?: string;
@@ -20,7 +19,7 @@ export const defaultUser: User = {
     is_anonymous: true,
 };
 
-interface UserContextType {
+export interface UserContextType {
     user: User;
     setUser: React.Dispatch<React.SetStateAction<User>>;
     isLoading: boolean;
