@@ -1,6 +1,6 @@
 from rest_framework.test import APITestCase
 from utils.db_handler import get_or_create_department, get_or_create_discipline, create_class
-from api.views import ERROR_MESSAGE
+from api.views import ERROR_MESSAGE, ERROR_MESSAGE_SEARCH_LENGTH
 import json
 
 class TestSearchAPI(APITestCase):
@@ -251,3 +251,17 @@ class TestSearchAPI(APITestCase):
         self.assertEqual(response_3.status_code, 400)
         self.assertEqual(len(content_3), 1)
         self.assertEqual(content_3['errors'], ERROR_MESSAGE)
+        
+    def test_with_insufficient_search_length(self):
+        """
+        Testa a busca por disciplinas com menos de 4 caracteres no parâmetro de busca
+        Testes:
+        - Status code (400 BAD REQUEST)
+        """
+
+        response_1 = self.client.get('/courses/?search=cal&year=2023&period=2')
+        content_1 = json.loads(response_1.content)
+
+        self.assertEqual(response_1.status_code, 400)
+        self.assertEqual(len(content_1), 1)
+        self.assertEqual(content_1['errors'], ERROR_MESSAGE_SEARCH_LENGTH)
