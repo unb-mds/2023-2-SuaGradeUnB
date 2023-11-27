@@ -4,26 +4,29 @@
 }
 
 .tooltip .tooltiptext {
-    visibility: hidden;
-    width: 16rem;
-    background-color: hsl(0, 0%, 98%);
     color: black;
     border-radius: 6px;
-    translate: -50% 10%;
     font-size: 1rem;
 
-    position: absolute;
     z-index: 1;
+}
+
+.inside {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: fixed;
+
+    height: 100vh;
+    width: 100vw;
+
+    top: 0;
+    left: 0;
+
+    background-color: hsla(0, 0%, 80%, 0.55)
 }
 
 .tooltip:hover {
     cursor: pointer;
-}
-
-.tooltip:hover .tooltiptext {
-    visibility: visible;
-}
-
-.tooltip:active .tooltiptext {
-    visibility: visible;
 }
