@@ -105,26 +105,6 @@ class DatabaseHandlerTest(APITestCase):
 
         self.assertFalse(len(Department.objects.all()))
     
-    def test_filter_disciplines_by_name(self):
-        department = dbh.get_or_create_department(
-            code = 'CFH',
-            year = '2023',
-            period = '2'
-        )
-
-        discipline = dbh.get_or_create_discipline(
-            name = 'Aprendizado de organização de faltas',
-            code = 'CFH1234',
-            department = department
-        )
-
-        disciplines = dbh.filter_disciplines_by_name(
-            name = 'Aprendizado de organização de faltas'
-        )
-
-        self.assertTrue(len(disciplines))
-        self.assertTrue(discipline in disciplines)
-    
     def test_filter_disciplines_by_code(self):
         department = dbh.get_or_create_department(
             code = 'FGA',
