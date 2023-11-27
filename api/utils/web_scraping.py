@@ -48,10 +48,12 @@ def get_list_of_departments(response=get_response(create_request_session())) -> 
 
 def get_department_disciplines(department_id: str, current_year: str, current_period: str, url=URL, session=None, cookie=None) -> defaultdict[str, List[dict]]:
     """Obtem as disciplinas de um departamento"""
-    discipline_scraper = DisciplineWebScraper(department_id, current_year, current_period, url, session, cookie)
+    discipline_scraper = DisciplineWebScraper(
+        department_id, current_year, current_period, url, session, cookie)
     disciplines = discipline_scraper.get_disciplines()
 
     return disciplines
+
 
 class DisciplineWebScraper:
     # Classe que faz o web scraping das disciplinas
@@ -92,10 +94,10 @@ class DisciplineWebScraper:
         )
 
         return response
-    
+
     def get_teachers(self, data: list) -> list:
         teachers = []
-        
+
         for teacher in data:
             teacher = teacher.replace("\n", "").replace(
                 "\r", "").replace("\t", "")
@@ -108,53 +110,68 @@ class DisciplineWebScraper:
 
         if len(teachers) == 0:
             teachers.append("A definir")
-        
+
         return teachers
 
     def get_schedules_and_intervals(self, data: str) -> list[list[str], list[tuple[int, int]]]:
         regex = "\d+[MTN]\d+"
         occurrences = finditer(regex, data)
         values = [[], []]
-        
+
         for value in occurrences:
             values[0].append(value.group())
             values[1].append((value.start(), value.end()))
-        
+
         return values
-    
+
+    def check_start(self, *args, **kwargs) -> bool:
+        start_index = kwargs.get("start_index")
+        last_included = kwargs.get("last_included")
+
+        end_interval = kwargs.get("interval")[1]
+        already_included = kwargs["index"] + 1 > last_included
+        value_start_check = kwargs.get("value").start() > end_interval
+
+        return start_index is None and value_start_check and already_included
+
+    def check_end(self, *args, **kwargs) -> bool:
+        end_index = kwargs.get("end_index")
+
+        start_interval = kwargs.get("interval")[0]
+        value_start_check = kwargs.get("value").start() < start_interval
+
+        return end_index is None and value_start_check
+
     def get_start_and_end(self, value: Iterator, intervals: list[tuple[int, int]], last_included: int) -> tuple[int, int]:
         interval_size = len(intervals)
         start_index = None
         end_index = None
-        
-        for index, interval in enumerate(intervals):
-            start_interval = interval[0]
-            end_interval = interval[1]
 
-            already_included = index + 1 > last_included
-            if start_index is None and value.start() > end_interval and already_included:
+        for index, interval in enumerate(intervals):
+            if self.check_start(start_index=start_index, last_included=last_included, interval=interval, index=index, value=value):
                 start_index = index + 1
-                
-            if end_index is None and value.start() < start_interval:
+
+            if self.check_end(end_index=end_index, interval=interval, index=index, value=value):
                 end_index = index
                 break
         else:
             end_index = interval_size
-        
+
         return start_index, end_index
-    
+
     def get_values_from_special_dates(self, occurrences: Iterator, intervals: list[tuple[int, int]]) -> list[list[str, int, int]]:
         last_included = -1
         values = []
-        
+
         for value in occurrences:
             date = value.group()
-            start, end = self.get_start_and_end(value, intervals, last_included)
+            start, end = self.get_start_and_end(
+                value, intervals, last_included)
             last_included = end
             values.append([date, start, end])
-            
+
         return values
-    
+
     def get_special_dates(self, data: str, intervals: list[tuple[int, int]]) -> list[list[str, int, int]]:
         date_format = "\d{2}\/\d{2}\/\d{4}"
         regex = f"{date_format}\s\-\s{date_format}"
@@ -162,20 +179,20 @@ class DisciplineWebScraper:
         values = self.get_values_from_special_dates(occurrences, intervals)
 
         return values
-    
+
     def get_week_days(self, data: str) -> list:
         hours_format = "\d+\:\d+"
         regex = f"[A-Z]\w?[a-z|ç]+\-?[a-z]*\s{hours_format}\sàs\s{hours_format}"
         occurrences = findall(regex, data)
-        
+
         return occurrences
-    
+
     def make_disciplines(self, rows: str) -> None:
         if rows is None or not len(rows):
             return None
-        
+
         aux_title_and_code = ""
-        
+
         for discipline in rows:
             if discipline.find("span", attrs={"class": "tituloDisciplina"}) is not None:
                 title = discipline.find(
@@ -201,14 +218,16 @@ class DisciplineWebScraper:
                 teachers_with_workload = discipline.find(
                     "td", attrs={"class": "nome"}).get_text().strip().strip().split(')')
                 schedule_context = tables_data[3].get_text().strip()
-                
+
                 class_code = tables_data[0].get_text().strip()
                 classroom = tables_data[7].get_text().strip()
-                schedules_and_intervals = self.get_schedules_and_intervals(schedule_context)
-                special_dates = self.get_special_dates(schedule_context, schedules_and_intervals[1]) 
+                schedules_and_intervals = self.get_schedules_and_intervals(
+                    schedule_context)
+                special_dates = self.get_special_dates(
+                    schedule_context, schedules_and_intervals[1])
                 days = self.get_week_days(schedule_context)
                 teachers = self.get_teachers(teachers_with_workload)
-                
+
                 self.disciplines[code].append({
                     "name": name,
                     "class_code": class_code,
@@ -238,4 +257,3 @@ class DisciplineWebScraper:
         self.make_web_scraping_of_disciplines(response)
 
         return self.disciplines
-    
