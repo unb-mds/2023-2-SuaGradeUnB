@@ -142,21 +142,21 @@ class DisciplineWebScraper:
 
         return end_index is None and value_start_check
 
-    def get_start_and_end(self, value: Iterator, intervals: list[tuple[int, int]], last_included: int) -> tuple[int, int]:
-        interval_size = len(intervals)
-        start_index = None
-        end_index = None
-
+    def get_start_index(self, intervals, last_included, value):
         for index, interval in enumerate(intervals):
-            if self.check_start(start_index=start_index, last_included=last_included, interval=interval, index=index, value=value):
-                start_index = index + 1
+            if self.check_start(start_index=index, last_included=last_included, interval=interval, index=index, value=value):
+                return index + 1
+        return None
 
-            if self.check_end(end_index=end_index, interval=interval, index=index, value=value):
-                end_index = index
-                break
-        else:
-            end_index = interval_size
+    def get_end_index(self, intervals, value):
+        for index, interval in enumerate(intervals):
+            if self.check_end(end_index=index, interval=interval, index=index, value=value):
+                return index
+        return len(intervals)
 
+    def get_start_and_end(self, value: Iterator, intervals: list[tuple[int, int]], last_included: int) -> tuple[int, int]:
+        start_index = self.get_start_index(intervals, last_included, value)
+        end_index = self.get_end_index(intervals, value)
         return start_index, end_index
 
     def get_values_from_special_dates(self, occurrences: Iterator, intervals: list[tuple[int, int]]) -> list[list[str, int, int]]:
