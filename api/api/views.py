@@ -1,4 +1,4 @@
-from utils.db_handler import filter_disciplines_by_year_and_period
+from utils.db_handler import filter_disciplines_by_year_and_period, get_best_similarities_by_name, filter_disciplines_by_code
 from .models import Discipline
 from unidecode import unidecode
 from django.contrib import admin
@@ -54,9 +54,13 @@ class Search(APIView):
                 {
                     "errors": ERROR_MESSAGE_SEARCH_LENGTH
                 }, status.HTTP_400_BAD_REQUEST)
-
+        
         disciplines = self.filter_disciplines(request, name)
-
+        disciplines = get_best_similarities_by_name(name, disciplines)
+        
+        if not disciplines.count():
+            disciplines = filter_disciplines_by_code(name)
+            
         filtered_disciplines = filter_disciplines_by_year_and_period(
             year=year, period=period, disciplines=disciplines)
         data = DisciplineSerializer(filtered_disciplines, many=True).data
