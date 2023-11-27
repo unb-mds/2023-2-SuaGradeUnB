@@ -2,11 +2,11 @@
 
 # Configuration
 config: copy-env setup-env config-mock entrypoint-chmod
-copy-env: 
+copy-env:
 	cp ./api/.env.example ./api/.env
 	cp ./web/.env.example ./web/.env.local
 
-setup-env: 
+setup-env:
 	bash scripts/env.sh
 
 config-mock:
@@ -24,7 +24,7 @@ install:
 ## Docker ##
 
 start:
-	sudo docker compose up -d 
+	sudo docker compose up -d
 
 start-b:
 	sudo docker compose up --build -d
@@ -33,7 +33,7 @@ stop:
 	sudo docker compose down
 
 stop-v:
-	sudo docker compose down -v 
+	sudo docker compose down -v
 
 
 ## Django Shortcuts ##
@@ -42,7 +42,7 @@ stop-v:
 test:
 	python3 scripts/test.py --clean
 
-testfull: 
+testfull:
 	python3 scripts/test.py
 	sudo docker exec django-api coverage html
 	python3 scripts/report.py
@@ -57,3 +57,9 @@ makemigrations:
 
 migrate:
 	sudo docker exec django-api python3 manage.py migrate
+
+# Database Operations
+updatedb-all:
+	sudo docker exec django-api python3 manage.py updatedb -a
+deletedb-all:	
+	sudo docker exec django-api python3 manage.py updatedb -d -a
