@@ -1,7 +1,7 @@
 from .sessions import URL, HEADERS, create_request_session, get_session_cookie, get_response
 from bs4 import BeautifulSoup
 from collections import defaultdict
-from typing import List, Optional
+from typing import List, Optional, Iterator
 from re import findall, finditer
 import requests.utils
 import requests
@@ -122,32 +122,41 @@ class DisciplineWebScraper:
         
         return values
     
-    def get_special_dates(self, data: str, intervals: list[tuple[int, int]]) -> list[list[str, int, int]]:
-        date_format = "\d{2}\/\d{2}\/\d{4}"
-        regex = f"{date_format}\s\-\s{date_format}"
-        occurrences = finditer(regex, data)
+    def get_start_and_end(self, value: Iterator, intervals: list[tuple[int, int]], last_included: int) -> tuple[int, int]:
         interval_size = len(intervals)
+        start = None
+        end = None
+        
+        for index, interval in enumerate(intervals):
+            if start is None and value.start() > interval[1] and index + 1 > last_included:
+                start = index + 1
+                
+            if end is None and value.start() < interval[0]:
+                end = index
+                break
+        else:
+            end = interval_size
+        
+        return start, end
+    
+    def get_values_from_special_dates(self, occurrences: Iterator, intervals: list[tuple[int, int]]) -> list[list[str, int, int]]:
         last_included = -1
         values = []
         
         for value in occurrences:
             date = value.group()
-            start = None
-            end = None
-            
-            for index, interval in enumerate(intervals):
-                if start is None and value.start() > interval[1] and index + 1 > last_included:
-                    start = index + 1
-                
-                if end is None and value.start() < interval[0]:
-                    end = index
-                    break
-            else:
-                end = interval_size
-            
+            start, end = self.get_start_and_end(value, intervals, last_included)
             last_included = end
             values.append([date, start, end])
-        
+            
+        return values
+    
+    def get_special_dates(self, data: str, intervals: list[tuple[int, int]]) -> list[list[str, int, int]]:
+        date_format = "\d{2}\/\d{2}\/\d{4}"
+        regex = f"{date_format}\s\-\s{date_format}"
+        occurrences = finditer(regex, data)
+        values = self.get_values_from_special_dates(occurrences, intervals)
+
         return values
     
     def get_week_days(self, data: str) -> list:
