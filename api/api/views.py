@@ -21,16 +21,18 @@ class Search(APIView):
             string = string.strip()
 
         return string
-    
+
     def filter_disciplines(self, request: Request, name: str) -> QuerySet[Discipline]:
+        unicode_name = unidecode(name).casefold()
+
         model_handler = admin.ModelAdmin(Discipline, admin.site)
         model_handler.search_fields = ['unicode_name', 'code']
 
         disciplines = Discipline.objects.all()
-        disciplines, _ = model_handler.get_search_results(request, disciplines, name)
+        disciplines, _ = model_handler.get_search_results(
+            request, disciplines, unicode_name)
 
         return disciplines
-
 
     def get(self, request: Request, *args, **kwargs) -> Response:
         name = self.treat_string(request.GET.get('search', None))
@@ -53,7 +55,7 @@ class Search(APIView):
                     "errors": ERROR_MESSAGE_SEARCH_LENGTH
                 }, status.HTTP_400_BAD_REQUEST)
 
-        disciplines = self.filter_disciplines(request, unidecode(name).casefold())
+        disciplines = self.filter_disciplines(request, name)
 
         filtered_disciplines = filter_disciplines_by_year_and_period(
             year=year, period=period, disciplines=disciplines)
