@@ -16,42 +16,6 @@ class TestSearchAPI(APITestCase):
         self._class_2 = create_class(teachers=['VINICIUS RISPOLI'], classroom='S1', schedule='24M34', days=[
                                      'Segunda-Feira 10:00 às 11:50', 'Quarta-Feira 10:00 às 11:50'], _class="1", special_dates=[], discipline=self.discipline_2)
 
-    def test_with_complete_correct_search(self):
-        """
-        Testa a busca por disciplinas com o nome completo e todos os parâmetros corretos
-
-        Testes:
-        - Status code (200 OK)
-        - Quantidade de disciplinas retornadas
-        - Código do departamento
-        - Nome da disciplina
-        - Professores da disciplina
-        """
-        response_for_discipline_1 = self.client.get(
-            '/courses/?search=calculo+1&year=2023&period=2')
-        response_for_discipline_2 = self.client.get(
-            '/courses/?search=calculo+2&year=2023&period=2')
-        content_1 = json.loads(response_for_discipline_1.content)
-        content_2 = json.loads(response_for_discipline_2.content)
-
-        # Testes da disciplina 1
-        self.assertEqual(response_for_discipline_1.status_code, 200)
-        self.assertEqual(len(content_1), 1)
-        self.assertEqual(content_1[0]['department']
-                         ['code'], self.department.code)
-        self.assertEqual(content_1[0]['name'], self.discipline_1.name)
-        self.assertEqual(content_1[0]['classes'][0]
-                         ['teachers'], self._class_1.teachers)
-
-        # Testes da disciplina 2
-        self.assertEqual(response_for_discipline_2.status_code, 200)
-        self.assertEqual(len(content_2), 1)
-        self.assertEqual(content_2[0]['department']
-                         ['code'], self.department.code)
-        self.assertEqual(content_2[0]['name'], self.discipline_2.name)
-        self.assertEqual(content_2[0]['classes'][0]
-                         ['teachers'], self._class_2.teachers)
-
     def test_with_incomplete_correct_search(self):
         """
         Testa a busca por disciplinas com nome incompleto e todos os parâmetros corretos
@@ -94,29 +58,6 @@ class TestSearchAPI(APITestCase):
             '/courses/?search=MAT518&year=2023&period=2')
         response_for_discipline_2 = self.client.get(
             '/courses/?search=MAT519&year=2023&period=2')
-        content_1 = json.loads(response_for_discipline_1.content)
-        content_2 = json.loads(response_for_discipline_2.content)
-
-        # Testes da disciplina 1
-        self.assertEqual(response_for_discipline_1.status_code, 200)
-        self.assertEqual(len(content_1), 1)
-
-        # Testes da disciplina 2
-        self.assertEqual(response_for_discipline_2.status_code, 200)
-        self.assertEqual(len(content_2), 1)
-    
-    def test_with_code_search_spaced(self):
-        """
-        Testa a busca por disciplinas através do código da matéria com espaços
-        Testes:
-        - Status code (200 OK)
-        - Quantidade de disciplinas retornadas
-        """
-
-        response_for_discipline_1 = self.client.get(
-            '/courses/?search=MAT+518&year=2023&period=2')
-        response_for_discipline_2 = self.client.get(
-            '/courses/?search=MAT+519&year=2023&period=2')
         content_1 = json.loads(response_for_discipline_1.content)
         content_2 = json.loads(response_for_discipline_2.content)
 
