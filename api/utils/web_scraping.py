@@ -2,7 +2,7 @@ from .sessions import URL, HEADERS, create_request_session, get_session_cookie, 
 from bs4 import BeautifulSoup
 from collections import defaultdict
 from typing import List, Optional
-from re import findall
+from re import findall, finditer
 import requests.utils
 import requests
 
@@ -111,18 +111,44 @@ class DisciplineWebScraper:
         
         return teachers
 
-    def get_schedules(self, data: str) -> list:
+    def get_schedules_and_intervals(self, data: str) -> list[list[str], list[tuple[int, int]]]:
         regex = "\d+[MTN]\d+"
-        occurrences = findall(regex, data)
+        occurrences = finditer(regex, data)
+        values = [[], []]
         
-        return occurrences
+        for value in occurrences:
+            values[0].append(value.group())
+            values[1].append((value.start(), value.end()))
+        
+        return values
     
-    def get_special_dates(self, data: str) -> list:
+    def get_special_dates(self, data: str, intervals: list[tuple[int, int]]) -> list[list[str, int, int]]:
         date_format = "\d{2}\/\d{2}\/\d{4}"
-        regex = f"\(({date_format}\s\-\s{date_format})\)"
-        occurrences = findall(regex, data)
+        regex = f"{date_format}\s\-\s{date_format}"
+        occurrences = finditer(regex, data)
+        interval_size = len(intervals)
+        last_included = -1
+        values = []
         
-        return occurrences
+        for value in occurrences:
+            date = value.group()
+            start = None
+            end = None
+            
+            for index, interval in enumerate(intervals):
+                if start is None and value.start() > interval[1] and index + 1 > last_included:
+                    start = index + 1
+                
+                if end is None and value.start() < interval[0]:
+                    end = index
+                    break
+            else:
+                end = interval_size
+            
+            last_included = end
+            values.append([date, start, end])
+        
+        return values
     
     def get_week_days(self, data: str) -> list:
         hours_format = "\d+\:\d+"
@@ -165,8 +191,8 @@ class DisciplineWebScraper:
                 
                 class_code = tables_data[0].get_text().strip()
                 classroom = tables_data[7].get_text().strip()
-                schedule = self.get_schedules(schedule_context)
-                special_dates = self.get_special_dates(schedule_context) 
+                schedules_and_intervals = self.get_schedules_and_intervals(schedule_context)
+                special_dates = self.get_special_dates(schedule_context, schedules_and_intervals[1]) 
                 days = self.get_week_days(schedule_context)
                 teachers = self.get_teachers(teachers_with_workload)
                 
@@ -175,7 +201,7 @@ class DisciplineWebScraper:
                     "class_code": class_code,
                     "teachers": teachers,
                     "classroom": classroom,
-                    "schedule": " ".join(schedule),
+                    "schedule": " ".join(schedules_and_intervals[0]),
                     "special_dates": special_dates,
                     "days": days
                 })
@@ -199,3 +225,4 @@ class DisciplineWebScraper:
         self.make_web_scraping_of_disciplines(response)
 
         return self.disciplines
+    
