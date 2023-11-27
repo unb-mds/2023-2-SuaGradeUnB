@@ -124,20 +124,24 @@ class DisciplineWebScraper:
     
     def get_start_and_end(self, value: Iterator, intervals: list[tuple[int, int]], last_included: int) -> tuple[int, int]:
         interval_size = len(intervals)
-        start = None
-        end = None
+        start_index = None
+        end_index = None
         
         for index, interval in enumerate(intervals):
-            if start is None and value.start() > interval[1] and index + 1 > last_included:
-                start = index + 1
+            start_interval = interval[0]
+            end_interval = interval[1]
+
+            already_included = index + 1 > last_included
+            if start_index is None and value.start() > end_interval and already_included:
+                start_index = index + 1
                 
-            if end is None and value.start() < interval[0]:
-                end = index
+            if end_index is None and value.start() < start_interval:
+                end_index = index
                 break
         else:
-            end = interval_size
+            end_index = interval_size
         
-        return start, end
+        return start_index, end_index
     
     def get_values_from_special_dates(self, occurrences: Iterator, intervals: list[tuple[int, int]]) -> list[list[str, int, int]]:
         last_included = -1
