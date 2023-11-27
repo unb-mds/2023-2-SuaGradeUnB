@@ -29,21 +29,15 @@ def delete_all_departments_using_year_and_period(year: str, period: str) -> None
     """Deleta um departamento de um periodo especifico."""
     Department.objects.filter(year=year, period=period).delete()
 
-def filter_disciplines_by_name(name: str, disciplines: Discipline = Discipline.objects) -> QuerySet:
-    """Filtra as disciplinas pelo nome."""
-    return disciplines.filter(name__unaccent__icontains=name)
-
 def get_best_similarities_by_name(name: str, disciplines: Discipline = Discipline.objects, config="portuguese_unaccent") -> QuerySet:
     """Filtra as disciplinas pelo nome."""
-    vector = SearchVector("name", config=config)
+    vector = SearchVector("unicode_name", config=config)
     query = SearchQuery(name, config=config)
-    rank = SearchRank(vector, query)
     values = disciplines.annotate(
         search=vector,
-        rank=rank,
-        similarity=TrigramStrictWordSimilarity(name, "name")
+        similarity=TrigramStrictWordSimilarity(name, "unicode_name")
     ).filter(
-        Q(search=query) | Q(similarity__gt=0.2)
+        Q(search=query) | Q(similarity__gt=0)
     ).all().order_by("-similarity")
 
     return values
