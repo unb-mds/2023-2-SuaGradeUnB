@@ -54,7 +54,6 @@ class GoogleOAuth2:
         if user_data.get('picture'):
             user.picture_url = user_data['picture']
 
-        if created:
-            user.save()
+        user.save()
 
         return user
