@@ -1,6 +1,10 @@
 import { ClassValueType } from '../contexts/SelectedClassesContext';
+
 import useSelectedClasses from '../hooks/useSelectedClasses';
+
 import ClassInfo from './ClassInfo';
+
+import _ from 'lodash';
 
 interface DisciplineBoxPropsType {
     currentClass: ClassValueType
@@ -15,8 +19,11 @@ export default function DisciplineBox({ currentClass, discipline }: DisciplineBo
     const { selectedClasses, setSelectedClasses } = useSelectedClasses();
 
     function handleDeleteClass() {
-        const newSelectedClasses = selectedClasses;
+        const newSelectedClasses = _.cloneDeep(selectedClasses);
         newSelectedClasses.get(discipline.id)?.delete(currentClass.class.id);
+        if (!newSelectedClasses.get(discipline.id)?.size) {
+            newSelectedClasses.delete(discipline.id);
+        }
         setSelectedClasses(newSelectedClasses);
     }
 

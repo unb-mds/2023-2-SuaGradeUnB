@@ -7,6 +7,8 @@ import { ClassValueType } from '@/app/contexts/SelectedClassesContext';
 import DisciplineOptionForm from './DisciplineOptionForm';
 import ClassInfoBox from './ClassInfoBox';
 
+import _ from 'lodash';
+
 interface AsideSchedulePopUpPropsType {
     content: {
         showContent: boolean,
@@ -41,7 +43,7 @@ export default function AsideSchedulePopUp(props: AsideSchedulePopUpPropsType) {
         const disciplineId = discipline.id;
         const classId = cls.id;
 
-        const newSelectedClasses = selectedClasses;
+        const newSelectedClasses = _.cloneDeep(selectedClasses);
         const disciplineObj = newSelectedClasses.get(disciplineId);
 
         const newClassInfo = {
