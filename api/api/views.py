@@ -7,7 +7,8 @@ from rest_framework import status
 
 MAXIMUM_RETURNED_DISCIPLINES = 8
 ERROR_MESSAGE = "no valid argument found for 'search', 'year' or 'period'"
-
+MINIMUM_SEARCH_LENGTH = 4
+ERROR_MESSAGE_SEARCH_LENGTH = f"search must have at least {MINIMUM_SEARCH_LENGTH} characters"
 
 class Search(APIView):
     def treat_string(self, string: str | None) -> str | None:
@@ -20,11 +21,21 @@ class Search(APIView):
         name = self.treat_string(request.GET.get('search', None))
         year = self.treat_string(request.GET.get('year', None))
         period = self.treat_string(request.GET.get('period', None))
+        
+        name_verified = name is not None and len(name) > 0 
+        year_verified = year is not None and len(year) > 0
+        period_verified = period is not None and len(period) > 0
 
-        if name is None or len(name) == 0 or year is None or len(year) == 0 or period is None or len(period) == 0:
+        if not name_verified or not year_verified or not period_verified:
             return Response(
                 {
                     "errors": ERROR_MESSAGE
+                }, status.HTTP_400_BAD_REQUEST)
+        
+        if len(name) < MINIMUM_SEARCH_LENGTH:
+            return Response(
+                {
+                    "errors": ERROR_MESSAGE_SEARCH_LENGTH
                 }, status.HTTP_400_BAD_REQUEST)
 
         name = name.split()
