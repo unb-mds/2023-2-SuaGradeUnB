@@ -1,7 +1,7 @@
 ---
 hide:
   - navigation
---- 
+---
 
 # Definição de rotas
 
@@ -40,7 +40,8 @@ body = {
     "access": "token",
     "first_name": "name",
     "last_name": "name",
-    "email": "email"
+    "email": "email",
+    "picture": "picture"
 }
 ```
 
@@ -52,7 +53,7 @@ body = {
 }
 ```
 
-## Login 
+## Login
 
 **Método HTTP:** `POST` <br>
 **Rota:** `/users/login`
@@ -132,7 +133,7 @@ body = {
 **Método HTTP:** `GET` <br>
 **Rota:** `/courses/?search=<search>`
 
-Esta rota permite ao usuário pesquisar e encontrar informações detalhadas sobre matérias potenciais que podem se relacionar com o termo de busca *(máximo 5)*. A busca deve ser pelo nome da matéria. 
+Esta rota permite ao usuário pesquisar e encontrar informações detalhadas sobre matérias potenciais que podem se relacionar com o termo de busca *(máximo 5)*. A busca deve ser pelo nome da matéria.
 
 **Response:**
 
@@ -152,7 +153,7 @@ body = {
                     "schedule": "2M34",
                     "days": ["Segunda e Terça - 10:00 a 12:00"],
                     "classroom": "FGA - S1",
-                    "workload": 60, 
+                    "workload": 60,
                     "class": 1
                 }
             ]
@@ -180,7 +181,7 @@ Esta rota permite ao usuário criar uma grade de matérias, selecionando manualm
 
 ```js linenums="1"
 body = {
-    "preference": "M|T|N", 
+    "preference": "M|T|N",
     "courses": [
         {
             "name": "Tópicos Especiais em Engenharia de Software",
