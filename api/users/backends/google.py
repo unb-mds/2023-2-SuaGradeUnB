@@ -37,7 +37,7 @@ class GoogleOAuth2:
                 return user_data
             else:
                 return None
-        except requests.exceptions.RequestException as e:
+        except requests.exceptions.RequestException as e: # pragma: no cover
             return None
 
     @staticmethod

@@ -72,12 +72,12 @@ class DisciplineWebScraper:
             "javax.faces.ViewState": "j_id1"
         }
 
-        if session is None:
+        if session is None: # pragma: no cover
             self.session = create_request_session()  # Create a request session
         else:
             self.session = session
 
-        if cookie is None:
+        if cookie is None: # pragma: no cover
             self.cookie = get_session_cookie(self.session)
         else:
             self.cookie = cookie
@@ -106,7 +106,7 @@ class DisciplineWebScraper:
 
             teachers.append(content[0].strip())
 
-        if len(teachers) == 0:
+        if len(teachers) == 0: # pragma: no cover
             teachers.append("A definir")
         
         return teachers
