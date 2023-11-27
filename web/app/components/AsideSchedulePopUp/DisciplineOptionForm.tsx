@@ -1,4 +1,6 @@
+import useSelectedClasses from '@/app/hooks/useSelectedClasses';
 import searchDiscipline, { DisciplineType } from '@/app/utils/api/searchDiscipline';
+import { errorToast } from '@/app/utils/errorToast';
 
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 
@@ -15,6 +17,7 @@ const defaultFormData = {
 };
 
 export default function DisciplineOptionForm(props: DisciplineOptionFormPropsType) {
+    const { selectedClasses, currentYearPeriod, setCurrentYearPeriod } = useSelectedClasses();
     const [disableDefault, setDisableDefault] = useState(false);
     const [formData, setFormData] = useState(defaultFormData);
 
@@ -25,16 +28,28 @@ export default function DisciplineOptionForm(props: DisciplineOptionFormPropsTyp
         const period = text.split('/')[1] || '';
 
         if (year && period) {
-            setFormData({
-                ...formData,
-                year: year,
-                period: period
-            });
-            setDisableDefault(true);
+            const handleSetYearPeriod = () => {
+                setFormData({
+                    ...formData,
+                    year: year,
+                    period: period
+                });
+                props.setInfos([]);
+                setCurrentYearPeriod(text);
+                setDisableDefault(true);
+            };
+
+            if (currentYearPeriod) {
+                if (currentYearPeriod != text && selectedClasses.size) {
+                    errorToast('Há disciplinas selecionadas de outro período, não pode haver mistura!');
+                } else handleSetYearPeriod();
+            } else handleSetYearPeriod();
         }
     }
 
-    async function handleSearch() {
+    async function handleSearch(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+
         const { search, year, period } = formData;
 
         const textSearch = search.trim();
@@ -60,7 +75,10 @@ export default function DisciplineOptionForm(props: DisciplineOptionFormPropsTyp
         <>
             <div className='flex flex-col items-center gap-1'>
                 <span className='text-xl font-semibold'>Matéria</span>
-                <div className='flex items-center w-80 px-2 bg-white shadow-md rounded-xl'>
+                <form
+                    className='flex items-center w-80 px-2 bg-white shadow-md rounded-xl'
+                    onSubmit={handleSearch}
+                >
                     <input
                         type="text"
                         placeholder='Nome da matéria...'
@@ -72,12 +90,12 @@ export default function DisciplineOptionForm(props: DisciplineOptionFormPropsTyp
                         className='h-14 p-2 w-11/12 rounded-xl focus:outline-none'
                     />
                     <button
-                        onClick={handleSearch}
                         className='material-symbols-rounded'
+                        type='submit'
                     >
                         search
                     </button>
-                </div>
+                </form>
             </div>
             <div className='flex flex-col items-center gap-1'>
                 <span className='text-xl font-semibold'>Ano/Período</span>
