@@ -2,7 +2,7 @@ import useSelectedClasses from '@/app/hooks/useSelectedClasses';
 import searchDiscipline, { DisciplineType } from '@/app/utils/api/searchDiscipline';
 import { errorToast } from '@/app/utils/errorToast';
 
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 
 import toast from 'react-hot-toast';
 
@@ -20,6 +20,8 @@ export default function DisciplineOptionForm(props: DisciplineOptionFormPropsTyp
     const { selectedClasses, currentYearPeriod, setCurrentYearPeriod } = useSelectedClasses();
     const [disableDefault, setDisableDefault] = useState(false);
     const [formData, setFormData] = useState(defaultFormData);
+
+    const inputRef = useRef<HTMLInputElement>(null);
 
     function handleYearAndPeriodChange(event: ChangeEvent<HTMLSelectElement>) {
         const text = event.target.value.trim();
@@ -49,6 +51,10 @@ export default function DisciplineOptionForm(props: DisciplineOptionFormPropsTyp
 
     async function handleSearch(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
+
+        if (inputRef && inputRef.current) {
+            inputRef.current.blur();
+        }
 
         const { search, year, period } = formData;
 
@@ -87,6 +93,7 @@ export default function DisciplineOptionForm(props: DisciplineOptionFormPropsTyp
                             ...formData,
                             search: e.target.value
                         })}
+                        ref={inputRef}
                         className='h-14 p-2 w-11/12 rounded-xl focus:outline-none'
                     />
                     <button
