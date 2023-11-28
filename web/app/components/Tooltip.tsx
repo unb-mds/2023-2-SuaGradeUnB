@@ -3,7 +3,7 @@
 import styles from '@/app/styles/tooltip.module.css';
 
 import useWindowDimensions from '../hooks/useWindowDimensions';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface TooltipPropsType {
     children: React.ReactNode,
@@ -12,6 +12,18 @@ interface TooltipPropsType {
 export default function Tooltip({ children }: TooltipPropsType) {
     const [active, setActive] = useState(false);
     const { width } = useWindowDimensions();
+
+    useEffect(() => {
+        function keyPress(event: KeyboardEvent) {
+            if (event.key === 'Escape') setActive(false);
+        }
+
+        if (active) document.addEventListener('keydown', keyPress);
+
+        return () => {
+            document.removeEventListener('keydown', keyPress);
+        };
+    }, [active]);
 
     const isMobile = () => {
         return width && width <= 768;
