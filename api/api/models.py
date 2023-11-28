@@ -49,7 +49,13 @@ class Class(models.Model):
     days = ArrayField(models.CharField(max_length=64))
     _class = models.CharField(max_length=64)
     discipline = models.ForeignKey(Discipline, on_delete=models.CASCADE, related_name='classes')
-    special_dates = ArrayField(models.CharField(max_length=256), default=list)
+    special_dates = ArrayField(
+        ArrayField(
+            models.CharField(max_length=256),
+            size=3,
+        ),
+        default=list
+    )
 
     def __str__(self):
         return self._class

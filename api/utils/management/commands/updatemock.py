@@ -4,6 +4,7 @@ from random import choice
 from utils import sessions as sns, web_scraping as wbp
 from django.core.management.base import BaseCommand
 from pathlib import Path
+import re
 import json
 import os
 
@@ -26,12 +27,16 @@ class Command(BaseCommand):
             current_year, current_period = sns.get_current_year_and_period()
             departments = wbp.get_list_of_departments()
             department = choice(departments)
-            
+
             with open(current_path / f"mock/sigaa.html", "a") as mock_file:
-                discipline_scraper = wbp.DisciplineWebScraper(department, current_year, current_period)
+                discipline_scraper = wbp.DisciplineWebScraper(
+                    department, current_year, current_period)
                 response = discipline_scraper.get_response_from_disciplines_post_request()
-                mock_file.write(self.response_decode(response))
-            
+
+                striped_response = self.multiple_replace(
+                    self.response_decode(response))
+                mock_file.write(striped_response)
+
             with open(current_path / "mock/infos.json", "a") as info_file:
                 data = {
                     "year": current_year,
@@ -43,6 +48,15 @@ class Command(BaseCommand):
         except Exception as error:
             print('Não foi possível atualizar o mock!')
             print('Error:', error)
+
+    def multiple_replace(self, text):
+        replacement_dict = {
+            '\n': '',
+            '\t': '',
+            '\r': '',
+        }
+        pattern = re.compile('|'.join(map(re.escape, replacement_dict.keys())))
+        return pattern.sub(lambda match: replacement_dict[match.group(0)], text)
 
     def response_decode(self, response: Response) -> str:
         encoding = response.encoding if response.encoding else 'utf-8'
