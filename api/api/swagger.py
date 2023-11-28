@@ -23,7 +23,7 @@ class Errors():
         if check_error:
             message = status_codes._codes[error][0].upper()
             swagger_erros[error] = openapi.Response(message, self.get_schema())
-        else:
+        else: # pragma: no cover
             raise key_error
 
     def retrieve_erros(self) -> dict[openapi.Response]:
@@ -34,7 +34,7 @@ class Errors():
 
             try:
                 self.add_error(swagger_erros, error, key_error)
-            except KeyError:
+            except KeyError: # pragma: no cover
                 raise key_error
 
         return swagger_erros
