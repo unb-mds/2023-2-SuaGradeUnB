@@ -164,17 +164,14 @@ A documentação do projeto pode ser encontrada clicando [aqui](https://unb-mds.
 
 ## 📎 Extra
 
-<div style="text-align:center;">
-    <h3>Story Map e Activity Flow</h3>
-    <iframe width="768" height="432" src="https://miro.com/app/live-embed/uXjVNYnku7s=/?moveToViewport=11496,17156,15407,7832&embedId=621541453304" frameborder="0" scrolling="no" allow="fullscreen; clipboard-read; clipboard-write" allowfullscreen></iframe>
-</div>
+### Story Map e Activity Flow
 
-<div style="text-align:center;">
-    <h3>Arquitetura</h3>
-    <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="768" height="432" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FZhAq8LRcclpWHYi4XnUySw%2FSua-Grade-UnB---System-Design%3Ftype%3Dwhiteboard%26node-id%3D0%253A1%26t%3Db2Iph3i2CGzQmxCx-1" allowfullscreen></iframe>
-</div>
+- Para acessar o Story Map e o Activity Flow, clique [aqui](https://miro.com/app/board/uXjVNYnku7s=/?share_link_id=596015837126).
 
-<div style="text-align:center;">
-    <h3>Protótipo</h3>
-    <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="620" height="1024" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2Fo5Ffh1fWmmQz7KcDGuHrVP%2FSua-grade-UNB%3Ftype%3Ddesign%26amp%253Bamp%253Bt%3DeUlpAv4kmucYSjJQ-1%26amp%253Bamp%253Bscaling%3Dscale-down%26amp%253Bamp%253Bpage-id%3D0%253A1%26amp%253Bamp%253Bstarting-point-node-id%3D24%253A56%26amp%253Bamp%253Bnode-id%3D24-56%26amp%253Bamp%253Bmode%3Ddesign%26node-id%3D24-56%26starting-point-node-id%3D24%253A56%26mode%3Ddesign%26t%3DmVllunNSguBOCgQK-1" allowfullscreen></iframe>
-</div>
+### Arquitetura
+
+- Para acessar a arquitetura do projeto, clique [aqui](https://www.figma.com/file/ZhAq8LRcclpWHYi4XnUySw/Sua-Grade-UnB---System-Design?type=whiteboard&node-id=0%3A1&t=k46HHNk4NotrkTpX-1).
+
+### Protótipo
+
+- Para acessar o protótipo do projeto, clique [aqui](https://www.figma.com/proto/o5Ffh1fWmmQz7KcDGuHrVP/Sua-grade-UNB?type=design&node-id=16-2775&scaling=scale-down&page-id=0%3A1&mode=design&t=L5JwoVdZsjyLBGdb-1).
