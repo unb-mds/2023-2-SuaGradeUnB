@@ -142,13 +142,13 @@ class DisciplineWebScraper:
 
         return end_index is None and value_start_check
 
-    def get_start_index(self, intervals, last_included, value):
+    def get_start_index(self, intervals, last_included, value) -> Optional[int]:
         for index, interval in enumerate(intervals):
             if self.check_start(start_index=index, last_included=last_included, interval=interval, index=index, value=value):
                 return index + 1
         return None
 
-    def get_end_index(self, intervals, value):
+    def get_end_index(self, intervals, value) -> int:
         for index, interval in enumerate(intervals):
             if self.check_end(end_index=index, interval=interval, index=index, value=value):
                 return index
