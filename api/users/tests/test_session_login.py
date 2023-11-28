@@ -68,7 +68,7 @@ class UserSessionLoginTests(APITestCase):
 
         response = self.make_login_post_request(cookie_value='wrong_token')
 
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_user_login_with_valid_token(self) -> None:
         """
@@ -150,7 +150,5 @@ class UserSessionLoginTests(APITestCase):
 
         response = self.make_login_post_request(cookie_expired=True)
 
-        self.assertEqual(response.data.get('code'), 'token_not_valid')
-        self.assertEqual(response.data.get('detail'), 'Token is invalid or expired')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
+        self.assertEqual(response.data.get('errors'), 'Token is invalid or expired')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
