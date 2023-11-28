@@ -4,6 +4,7 @@ from utils.sessions import get_current_year_and_period, get_next_period
 from rest_framework import status, request, response
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from .swagger import Errors
 from api import serializers
 
 MAXIMUM_RETURNED_DISCIPLINES = 5
@@ -30,15 +31,7 @@ class Search(APIView):
         ],
         responses={
             200: openapi.Response('OK', serializers.DisciplineSerializer),
-            400: openapi.Response('BAD_REQUEST', openapi.Schema(
-                type=openapi.TYPE_OBJECT,
-                properties={
-                    'errors': openapi.Schema(
-                        type=openapi.TYPE_STRING,
-                        description='Mensagem de erro'
-                    ),
-                }
-            )),
+            **Errors([400]).retrieve_erros()
         }
     )
     def get(self, request: request.Request, *args, **kwargs) -> response.Response:
