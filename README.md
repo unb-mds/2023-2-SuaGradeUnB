@@ -24,18 +24,18 @@ O projeto é software livre e está sob a licença [MIT](./LICENSE).
 ## 📝 Sumário
 
 - [Sua Grade UnB](#sua-grade-unb)
-  - [📝 Sumário](#📝-sumário)
-  - [👥 Equipe](#👥-equipe)
-  - [✨ Início](#✨-início)
-    - [📋 Pré-requisitos](#📋-pré-requisitos)
-    - [💻 Ambiente](#💻-ambiente)
-    - [📁 Dependências do projeto](#📁-dependências-do-projeto)
-    - [💾 Execução](#💾-execução)
-    - [✅ Autenticação do Google OAuth](#✅-autenticação-do-google-oauth)
-    - [🖱️ Acesso aos serviços](#🖱️-acesso-aos-serviços)
-    - [📍 Migrations](#📍-migrations)
-  - [📚 Documentação](#📚-documentação)
-  - [📎 Extra](#📎-extra)
+  - [📝 Sumário](#-sumário)
+  - [👥 Equipe](#-equipe)
+  - [✨ Início](#-início)
+    - [📋 Pré-requisitos](#-pré-requisitos)
+    - [💻 Ambiente](#-ambiente)
+    - [📁 Dependências do projeto](#-dependências-do-projeto)
+    - [💾 Execução](#-execução)
+    - [✅ Autenticação do Google OAuth](#-autenticação-do-google-oauth)
+    - [🖱️ Acesso aos serviços](#-acesso-aos-serviços)
+    - [📍 Migrations](#-migrations)
+  - [📚 Documentação](#-documentação)
+  - [📎 Extra](#-extra)
 
 ## 👥 Equipe
 
