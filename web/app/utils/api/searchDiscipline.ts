@@ -9,6 +9,7 @@ export type ClassType = {
     classroom: string,
     days: Array<string>,
     schedule: string,
+    special_dates: Array<Array<string>>,
     teachers: Array<string>
 }
 
