@@ -1,4 +1,8 @@
 from utils import db_handler as dbh
+from .models import Discipline
+from unidecode import unidecode
+from django.contrib import admin
+from django.db.models.query import QuerySet
 from rest_framework.decorators import APIView
 from utils.sessions import get_current_year_and_period, get_next_period
 from rest_framework import status, request, response
@@ -7,8 +11,10 @@ from drf_yasg import openapi
 from .swagger import Errors
 from api import serializers
 
-MAXIMUM_RETURNED_DISCIPLINES = 5
+MAXIMUM_RETURNED_DISCIPLINES = 8
 ERROR_MESSAGE = "no valid argument found for 'search', 'year' or 'period'"
+MINIMUM_SEARCH_LENGTH = 4
+ERROR_MESSAGE_SEARCH_LENGTH = f"search must have at least {MINIMUM_SEARCH_LENGTH} characters"
 
 
 class Search(APIView):
@@ -18,6 +24,18 @@ class Search(APIView):
             string = string.strip()
 
         return string
+
+    def filter_disciplines(self, request: request.Request, name: str) -> QuerySet[Discipline]:
+        unicode_name = unidecode(name).casefold()
+
+        model_handler = admin.ModelAdmin(Discipline, admin.site)
+        model_handler.search_fields = ['unicode_name', 'code']
+
+        disciplines = Discipline.objects.all()
+        disciplines, _ = model_handler.get_search_results(
+            request, disciplines, unicode_name)
+
+        return disciplines
 
     @swagger_auto_schema(
         operation_description="Busca disciplinas por nome ou código. O ano e período são obrigatórios.",
@@ -39,23 +57,32 @@ class Search(APIView):
         year = self.treat_string(request.GET.get('year', None))
         period = self.treat_string(request.GET.get('period', None))
 
-        if name is None or len(name) == 0 or year is None or len(year) == 0 or period is None or len(period) == 0:
+        name_verified = name is not None and len(name) > 0
+        year_verified = year is not None and len(year) > 0
+        period_verified = period is not None and len(period) > 0
+
+        if not name_verified or not year_verified or not period_verified:
             return response.Response(
                 {
                     "errors": ERROR_MESSAGE
                 }, status.HTTP_400_BAD_REQUEST)
 
-        name = name.split()
-        disciplines = dbh.filter_disciplines_by_name(name=name[0])
+        if len(name) < MINIMUM_SEARCH_LENGTH:
+            return response.Response(
+                {
+                    "errors": ERROR_MESSAGE_SEARCH_LENGTH
+                }, status.HTTP_400_BAD_REQUEST)
 
-        for term in name[1:]:
-            disciplines &= dbh.filter_disciplines_by_name(name=term)
+        disciplines = self.filter_disciplines(request, name)
+        disciplines = dbh.get_best_similarities_by_name(name, disciplines)
 
         if not disciplines.count():
             disciplines = dbh.filter_disciplines_by_code(code=name[0])
 
             for term in name[1:]:
                 disciplines &= dbh.filter_disciplines_by_code(code=term)
+
+            disciplines = dbh.filter_disciplines_by_code(name)
 
         filtered_disciplines = dbh.filter_disciplines_by_year_and_period(
             year=year, period=period, disciplines=disciplines)
