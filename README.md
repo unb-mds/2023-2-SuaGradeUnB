@@ -1,6 +1,52 @@
-# Sua Grade UnB
+# [Sua Grade UnB](https://suagradeunb.com.br/)
 
-O Sua Grade UnB é um projeto em desenvolvimento da matéria **Métodos de Desenvolvimento de Software**, a qual tem como objetivo auxiliar os alunos da Universidade de Brasília a montarem suas grades horárias de maneira fácil e intuitiva.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![codecov](https://codecov.io/gh/unb-mds/2023-2-Squad11/branch/main/graph/badge.svg?token=ZQZQZQZQZQ)](https://codecov.io/gh/unb-mds/2023-2-Squad11)
+[![GitHub issues](https://img.shields.io/github/issues/unb-mds/2023-2-Squad11)]()
+[![GitHub contributors](https://img.shields.io/github/contributors/unb-mds/2023-2-Squad11)]()
+[![GitHub stars](https://img.shields.io/github/stars/unb-mds/2023-2-Squad11)]()
+[![Hit Counter](https://views.whatilearened.today/views/github/unb-mds/2023-2-Squad11.svg)](https://views.whatilearened.today/views/github/unb-mds/2023-2-Squad11.svg)
+</br>
+
+[![Python version](https://img.shields.io/badge/python-3.11.6-blue)](https://www.python.org/downloads/release/python-3116/)
+[![Django version](https://img.shields.io/badge/django-4.2.5-blue)](https://www.djangoproject.com/download/)
+[![Node version](https://img.shields.io/badge/node-20.9.0-blue)](https://nodejs.org/en/download/)
+[![npm version](https://img.shields.io/badge/npm-10.2.3-blue)](https://nodejs.org/en/download/)
+[![Docker version](https://img.shields.io/badge/docker-24.0.7-blue)](https://docs.docker.com/engine/install/)
+[![Docker Compose version](https://img.shields.io/badge/docker_compose-2.21.0-blue)](https://docs.docker.com/compose/install/)
+
+O Sua Grade UnB é um projeto da matéria **Métodos de Desenvolvimento de Software**, a qual tem como objetivo auxiliar os alunos da Universidade de Brasília a montarem suas grades horárias de maneira fácil e intuitiva.
+
+Com apenas alguns cliques, o aluno poderá montar sua grade horária de acordo com as matérias que deseja cursar. Além disso, o sistema auxiliará o aluno ao resolver os conflitos de horários entre as matérias escolhidas, retornando as melhores opções de horários de acordo com suas preferências.
+
+O projeto é software livre e está sob a licença [MIT](./LICENSE).
+
+## 📝 Sumário
+
+- [Sua Grade UnB](#sua-grade-unb)
+  - [📝 Sumário](#📝-sumário)
+  - [👥 Equipe](#👥-equipe)
+  - [✨ Início](#✨-início)
+    - [📋 Pré-requisitos](#📋-pré-requisitos)
+    - [💻 Ambiente](#💻-ambiente)
+    - [📁 Dependências do projeto](#📁-dependências-do-projeto)
+    - [💾 Execução](#💾-execução)
+    - [✅ Autenticação do Google OAuth](#✅-autenticação-do-google-oauth)
+    - [🖱️ Acesso aos serviços](#🖱️-acesso-aos-serviços)
+    - [📍 Migrations](#📍-migrations)
+  - [📚 Documentação](#📚-documentação)
+  - [📎 Extra](#📎-extra)
+
+## 👥 Equipe
+
+| Nome | GitHub |
+| :--- | :----: |
+| Arthur Ribeiro e Sousa | [@artrsousa1](https://github.com/artrsousa1) |
+| Caio Falcão Habibe Costa | [@CaioHabibe](https://github.com/CaioHabibe) |
+| Caio Felipe Rocha Rodrigues| [@caio-felipee](https://github.com/caio-felipee) |
+| Gabriel Henrique Castelo Costa | [@GabrielCastelo-31](https://github.com/GabrielCastelo-31) |
+| Henrique Camelo Quenino | [@henriquecq](https://github.com/henriquecq) |
+| Mateus Vieira Rocha da Silva | [@mateusvrs](https://github.com/mateusvrs) |
 
 ## ✨ Início
 
@@ -10,7 +56,7 @@ Você pode clonar o repositório do projeto com o seguinte comando:
 git clone https://github.com/unb-mds/2023-2-Squad11.git
 ```
 
-### Dependências globais
+### 📋 Pré-requisitos
 
 Para rodar o projeto, você precisa instalar as dependências globais, que são:
 
@@ -19,7 +65,7 @@ Para rodar o projeto, você precisa instalar as dependências globais, que são:
 - Node v20.9.0 e NPM v10.1.0 (ou superior)
 - Docker Engine v24.0.6 e Docker Compose v2.21.0 (ou superior)
 
-### Ambiente
+### 💻 Ambiente
 
 Para configurar o ambiente, você pode rodar o seguinte script:
 
@@ -27,7 +73,7 @@ Para configurar o ambiente, você pode rodar o seguinte script:
 make config
 ```
 
-### Dependências do projeto
+### 📁 Dependências do projeto
 
 Para instalar as dependências do projeto, você pode rodar os seguintes comando:
 
@@ -42,7 +88,7 @@ source env/bin/activate
 make install
 ```
 
-### Execução
+### 💾 Execução
 
 Para executar o projeto, você pode rodar o seguinte comando:
 
@@ -50,7 +96,7 @@ Para executar o projeto, você pode rodar o seguinte comando:
 docker compose up
 ```
 
-**Observações do Docker:**
+#### Observações do Docker
 
 ```bash
 # Se você quiser rodar em segundo plano
@@ -63,14 +109,72 @@ docker compose up --build
 docker compose down -v
 ```
 
-### Migrations
+### ✅ Autenticação do Google OAuth
+
+Para que o login com o Google funcione, é necessário trocar o `your_client_id` no arquivo `web/.env.local` pelo **Client ID** do projeto no Google Cloud.
+
+1. Crie um projeto no [Google Cloud](https://console.cloud.google.com/).
+2. Vá para a página de [Credenciais](https://console.cloud.google.com/apis/credentials) do projeto.
+3. Clique em **Criar credenciais** e selecione **ID do cliente OAuth**.
+4. Selecione **Aplicativo da Web**.
+5. Adicione `http://localhost:3000` como **Origens JavaScript autorizadas** e **URIs de redirecionamento autorizadas**.
+6. Copie o **Client ID** e cole no arquivo `web/.env.local` no lugar de `your_client_id`.
+
+Após isto:
+
+1. Vá para a página de [OAuth Consent Screen](https://console.cloud.google.com/apis/credentials/consent).
+2. Selecione **Usuários externos** e clique em **Criar**.
+3. Preencha os campos obrigatórios e clique em **Salvar e continuar**.
+4. Na seção **Usuários de Teste** adicione o seu e-mail e clique em **Adicionar**.
+5. Clique em **Salvar e continuar**.
+
+Adicionando serviços:
+
+1. Entre na aba **APIs e Serviços**.
+2. Clique em **Ativar APIs e Serviços**.
+3. Ative os seguintes serviços:
+    - IAM Service Account Credentials API
+    - Identity and Access Management (IAM) API
+
+
+### 🖱️ Acesso aos serviços
+
+| Serviço | URL |
+| :--- | :----: |
+| Frontend | [http://localhost:3000](http://localhost:3000) |
+| Backend | [http://localhost:8000](http://localhost:8000) |
+
+### 📍 Migrations
+
+Migration é um recurso do Django que permite que você altere o modelo de dados do seu projeto. Portanto, sempre que você alterar o modelo de dados, você deve criar uma nova migration.
 
 Para criar possíveis novas migrations, você pode rodar o seguinte comando:
 
 ```bash
-python3 ./api/manage.py makemigrations --settings=core.settings.dev
+# Crie as migrations
+make makemigrations
+
+# Execute as migrations
+make migrate
 ```
 
 ## 📚 Documentação
 
 A documentação do projeto pode ser encontrada clicando [aqui](https://unb-mds.github.io/2023-2-Squad11/).
+
+## 📎 Extra
+
+<div style="text-align:center;">
+    <h3>Story Map e Activity Flow</h3>
+    <iframe width="768" height="432" src="https://miro.com/app/live-embed/uXjVNYnku7s=/?moveToViewport=11496,17156,15407,7832&embedId=621541453304" frameborder="0" scrolling="no" allow="fullscreen; clipboard-read; clipboard-write" allowfullscreen></iframe>
+</div>
+
+<div style="text-align:center;">
+    <h3>Arquitetura</h3>
+    <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="768" height="432" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FZhAq8LRcclpWHYi4XnUySw%2FSua-Grade-UnB---System-Design%3Ftype%3Dwhiteboard%26node-id%3D0%253A1%26t%3Db2Iph3i2CGzQmxCx-1" allowfullscreen></iframe>
+</div>
+
+<div style="text-align:center;">
+    <h3>Protótipo</h3>
+    <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="620" height="1024" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2Fo5Ffh1fWmmQz7KcDGuHrVP%2FSua-grade-UNB%3Ftype%3Ddesign%26amp%253Bamp%253Bt%3DeUlpAv4kmucYSjJQ-1%26amp%253Bamp%253Bscaling%3Dscale-down%26amp%253Bamp%253Bpage-id%3D0%253A1%26amp%253Bamp%253Bstarting-point-node-id%3D24%253A56%26amp%253Bamp%253Bnode-id%3D24-56%26amp%253Bamp%253Bmode%3Ddesign%26node-id%3D24-56%26starting-point-node-id%3D24%253A56%26mode%3Ddesign%26t%3DmVllunNSguBOCgQK-1" allowfullscreen></iframe>
+</div>
