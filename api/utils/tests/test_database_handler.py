@@ -105,6 +105,26 @@ class DatabaseHandlerTest(APITestCase):
 
         self.assertFalse(len(Department.objects.all()))
     
+    def test_filter_disciplines_by_name(self):
+        department = dbh.get_or_create_department(
+            code = 'CFH',
+            year = '2023',
+            period = '2'
+        )
+
+        discipline = dbh.get_or_create_discipline(
+            name = 'Aprendizado de organização de faltas',
+            code = 'CFH1234',
+            department = department
+        )
+
+        disciplines = dbh.filter_disciplines_by_name(
+            name = 'Aprendizado de organização de faltas'
+        )
+
+        self.assertTrue(len(disciplines))
+        self.assertTrue(discipline in disciplines)
+    
     def test_filter_disciplines_by_code(self):
         department = dbh.get_or_create_department(
             code = 'FGA',
@@ -145,37 +165,3 @@ class DatabaseHandlerTest(APITestCase):
 
         self.assertTrue(len(disciplines))
         self.assertTrue(discipline in disciplines)
-
-    def test_get_best_similarities_by_name(self):
-        department = dbh.get_or_create_department(
-            code = 'MAT',
-            year = '2027',
-            period = '1'
-        )
-
-        discipline = dbh.get_or_create_discipline(
-            name = 'Cálculo 1',
-            code = 'MAT0026',
-            department = department
-        )
-        
-        discipline_2 = dbh.get_or_create_discipline(
-            name = 'Cálculo 2',
-            code = 'MAT0027',
-            department = department
-        )
-        
-        discipline_3 = dbh.get_or_create_discipline(
-            name = 'Cálculo 3',
-            code = 'MAT0028',
-            department = department
-        )
-
-        disciplines = dbh.get_best_similarities_by_name(
-            name = 'CALCUL'
-        )
-
-        self.assertTrue(disciplines.count() == 3)
-        self.assertTrue(discipline in disciplines)
-        self.assertTrue(discipline_2 in disciplines)
-        self.assertTrue(discipline_3 in disciplines)

@@ -1,7 +1,6 @@
 from api.models import Discipline, Department, Class
 from django.db.models.query import QuerySet
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank, TrigramStrictWordSimilarity
-from django.db.models import Q
+
 """ Este módulo lida com as operações de banco de dados."""
 
 
@@ -29,18 +28,9 @@ def delete_all_departments_using_year_and_period(year: str, period: str) -> None
     """Deleta um departamento de um periodo especifico."""
     Department.objects.filter(year=year, period=period).delete()
 
-def get_best_similarities_by_name(name: str, disciplines: Discipline = Discipline.objects, config="portuguese_unaccent") -> QuerySet:
+def filter_disciplines_by_name(name: str, disciplines: Discipline = Discipline.objects) -> QuerySet:
     """Filtra as disciplinas pelo nome."""
-    vector = SearchVector("unicode_name", config=config)
-    query = SearchQuery(name, config=config)
-    values = disciplines.annotate(
-        search=vector,
-        similarity=TrigramStrictWordSimilarity(name, "unicode_name")
-    ).filter(
-        Q(search=query) | Q(similarity__gt=0)
-    ).all().order_by("-similarity")
-
-    return values
+    return disciplines.filter(name__unaccent__icontains=name)
 
 def filter_disciplines_by_code(code: str, disciplines: Discipline = Discipline.objects) -> QuerySet:
     """Filtra as disciplinas pelo código."""
