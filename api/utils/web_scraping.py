@@ -74,12 +74,12 @@ class DisciplineWebScraper:
             "javax.faces.ViewState": "j_id1"
         }
 
-        if session is None: # pragma: no cover
+        if session is None:  # pragma: no cover
             self.session = create_request_session()  # Create a request session
         else:
             self.session = session
 
-        if cookie is None: # pragma: no cover
+        if cookie is None:  # pragma: no cover
             self.cookie = get_session_cookie(self.session)
         else:
             self.cookie = cookie
@@ -108,7 +108,7 @@ class DisciplineWebScraper:
 
             teachers.append(content[0].strip())
 
-        if len(teachers) == 0: # pragma: no cover
+        if len(teachers) == 0:  # pragma: no cover
             teachers.append("A definir")
 
         return teachers
@@ -135,24 +135,26 @@ class DisciplineWebScraper:
         return start_index is None and value_start_check and already_included
 
     def check_end(self, *args, **kwargs) -> bool:
-        end_index = kwargs.get("end_index")
-
         start_interval = kwargs.get("interval")[0]
         value_start_check = kwargs.get("value").start() < start_interval
 
-        return end_index is None and value_start_check
+        return value_start_check
 
     def get_start_index(self, intervals, last_included, value) -> Optional[int]:
+        start_index = None
+
         for index, interval in enumerate(intervals):
-            if self.check_start(start_index=index, last_included=last_included, interval=interval, index=index, value=value):
-                return index + 1
-        return None
+            if self.check_start(start_index=start_index, last_included=last_included, interval=interval, index=index, value=value):
+                start_index = index + 1
+
+        return start_index
 
     def get_end_index(self, intervals, value) -> int:
         for index, interval in enumerate(intervals):
-            if self.check_end(end_index=index, interval=interval, index=index, value=value):
+            if self.check_end(interval=interval, index=index, value=value):
                 return index
-        return len(intervals)
+        else:
+            return len(intervals)
 
     def get_start_and_end(self, value: Iterator, intervals: list[tuple[int, int]], last_included: int) -> tuple[int, int]:
         start_index = self.get_start_index(intervals, last_included, value)
