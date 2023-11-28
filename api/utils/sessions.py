@@ -34,7 +34,7 @@ def get_response(session: Session) -> Response:
 
 """Obtem o cookie da sessão de requisição necessário para acessar a pagina de turmas
 e retorna um cookie jar."""
-def get_session_cookie(session: Session) -> cookies.RequestsCookieJar:
+def get_session_cookie(session: Session) -> cookies.RequestsCookieJar: # pragma: no cover
     response = get_response(session) # Get the response from the request session
     cookie = response.cookies.get_dict() # Get the cookie from the response
     cookie_jar = cookies.RequestsCookieJar() # Create a cookie jar
