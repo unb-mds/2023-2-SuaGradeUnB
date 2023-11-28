@@ -1,6 +1,7 @@
 from django.test import TestCase
 from api.models import Department, Discipline, Class
 
+
 class DisciplineModelsTest(TestCase):
     def setUp(self):
         self.department = Department.objects.create(
