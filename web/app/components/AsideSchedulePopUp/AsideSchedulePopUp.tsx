@@ -93,7 +93,7 @@ export default function AsideSchedulePopUp(props: AsideSchedulePopUpPropsType) {
                                         <span className='font-semibold'>{discipline.name} - {discipline.code}</span>
                                     </button>
                                     {discipline.expanded &&
-                                        <div className='flex flex-col gap-2 min-h-full overflow-auto'>
+                                        <div className='flex flex-col gap-2'>
                                             {discipline.classes.map((cls, index) =>
                                                 <ClassInfoBox
                                                     key={index}
