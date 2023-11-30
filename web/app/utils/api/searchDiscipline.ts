@@ -37,6 +37,9 @@ export default async function searchDiscipline(search: string, year: string, per
         const data: Array<DisciplineType> = response.data;
         return data;
     } catch (error: any) {
-        toast.error(error.response.data.detail);
+        const mensagem = error.response.data.errors;
+        if(mensagem === 'search must have at least 4 characters'){
+            toast.error('A busca deve conter pelo menos 4 caracteres');
+        }
     }
 } 
