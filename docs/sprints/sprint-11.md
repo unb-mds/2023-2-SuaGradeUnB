@@ -32,7 +32,7 @@ Local: Gather Town
 
 **Ata:**
 
-Nessa reunião, o time se juntou para discutir sobre as tarefas que seriam realizadas durante a Sprint.
+Nessa reunião, o time se juntou para discutir sobre as tarefas que seriam realizadas durante a Sprint. Bem como para definir o site oficial do projeto, que será o [SuaGradeUnB](https://suagradeunb.com.br). Portanto foi definido que o time de DevOps iria auxiliar o time de front-end na implementação das telas de seleção e pesquisa de matérias. Além disso, o time de DevOps também iria auxiliar o time de back-end na implementação do web-scraping e no ajuste do banco de dados. Por fim, o time de front-end ficou responsável pela implementação das telas de seleção e pesquisa de matérias.
 
 ## Finalização
 

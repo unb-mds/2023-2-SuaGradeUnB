@@ -4,7 +4,7 @@ Período: 11/09/2023 a 20/09/2023
 
 ## Descrição
 
-Nessa _Sprint_ o time teve a redefinição dos horários das reuniões devido a mudança de horário de um dos membros. Além disso, foi definido que o time irá utilizar o _GitHub Projects_ para gerenciar as _issues_ e _milestones_ do projeto. Além disso, todos foram definidos coelhos para estudar as tecnologias que serão utilizadas no projeto, mas de forma específica, ou seja, cada membro estudará a tecnologia que vai utilizar durante o projeto. Por fim, foi definido que o time irá utilizar o _GitHub Projects_ para gerenciar as _issues_ e _milestones_ do projeto.
+Nessa _Sprint_ o time teve a redefinição dos dias das reuniões, mudando para quarta-feira, devido a disponibilidade de horário de um dos membros. Além disso, foi definido que o time irá utilizar o _GitHub Projects_ para gerenciar as _issues_ e _milestones_ do projeto. Além disso, todos foram definidos coelhos para estudar as tecnologias que serão utilizadas no projeto, mas de forma específica, ou seja, cada membro estudará a tecnologia que vai utilizar durante o projeto. Por fim, foi definido que o time irá utilizar o _GitHub Projects_ para gerenciar as _issues_ e _milestones_ do projeto.
 
 ## Objetivos
 

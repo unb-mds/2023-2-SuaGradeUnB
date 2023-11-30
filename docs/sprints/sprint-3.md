@@ -24,7 +24,7 @@ Local: Gather Town
 
 **Ata:**
 
-Nessa reunião, o time _DevOps_ e _Back-end_ apresentou o protótipo da arquitetura do projeto e o time de back-end apresentou as bibliotecas escolhidas para _web-scraping_ e montagem de grade. Além disso, o time decidiu, juntamente com a professora que não haverá desenvolvimento mobile, apenas web, ou seja, o _Front-end_ irá utilizar o _Next.js_ para o desenvolvimento da e no lugar do _Amazon SQS_ para fila e do _EC2 AWS_ para deploy vamos utilizar o _Redis_ com _Heroku_ para subir nossa aplicação no ar. Logo, nossa arquitetura ficou da seguinte forma:
+Nessa reunião, o time _DevOps_ e _Back-end_ apresentou o protótipo da arquitetura do projeto e o time de back-end apresentou as bibliotecas escolhidas para _web-scraping_ e montagem de grade. Além disso, o time decidiu, juntamente com a professora que não haverá desenvolvimento mobile, portanto, o projeto é apenas web, ou seja, o _Front-end_ irá utilizar o _Next.js_ para o desenvolvimento, e no lugar do _Amazon SQS_ para fila e do _EC2 AWS_ para deploy vamos utilizar o _Redis_ com _Heroku_ para subir o referido site. Logo, nossa arquitetura ficou da seguinte forma:
 
 - Design: Figma
 - Framework: Next.js
@@ -51,4 +51,4 @@ O time de DevOps não conseguiu finalizar a implementação do Codecov no GitHub
 
 **Observações:**
 
-Para a próxima _Sprint_ o time de DevOps irá entrar em contato com os proprietários da organização [@unb-mds](https://github.com/unb-mds) conseguir o token do _Codecov_.
+Para a próxima _Sprint_ o time de DevOps entrará em contato com os proprietários da organização [@unb-mds](https://github.com/unb-mds), para que seja fornecido o token do _Codecov_.
