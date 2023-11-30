@@ -1,0 +1,32 @@
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    color: black;
+    border-radius: 6px;
+    font-size: 1rem;
+
+    z-index: 1;
+}
+
+.inside {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: fixed;
+
+    height: 100vh;
+    width: 100vw;
+
+    top: 0;
+    left: 0;
+
+    background-color: hsla(0, 0%, 80%, 0.55)
+}
+
+.tooltip:hover {
+    cursor: pointer;
+}

@@ -50,7 +50,7 @@ export default function SignInSection() {
 
     return (
         <Button
-            className='text-sm hover:bg-slate-100 bg-white text-black'
+            className='text-sm hover:bg-slate-100 bg-white !text-black'
             onClick={() => {
                 if (!user.is_anonymous) router.push('/schedules/home');
                 else signInWithGoogle(router);

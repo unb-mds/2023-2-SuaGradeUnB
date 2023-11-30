@@ -26,7 +26,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} font-sans bg-white`}>
+      <body className={`${poppins.variable} h-screen font-sans bg-white`}>
         <Toaster />
         <UserContextProvider>
           {children}

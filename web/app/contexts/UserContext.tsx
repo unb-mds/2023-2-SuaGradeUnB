@@ -1,9 +1,11 @@
 'use client';
 
 import { createContext, useEffect, useState } from 'react';
-import request from '../utils/request';
+
 import { UserData } from '../components/SignInSection';
+
 import { settings } from '../utils/settings';
+import request from '../utils/request';
 
 export interface User {
     is_anonymous: boolean;
@@ -20,6 +22,8 @@ export const defaultUser: User = {
 export interface UserContextType {
     user: User;
     setUser: React.Dispatch<React.SetStateAction<User>>;
+    isLoading: boolean;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface UserContextProviderProps {
@@ -30,6 +34,7 @@ export const UserContext = createContext({} as UserContextType);
 
 export default function UserContextProvider({ children, ...props }: UserContextProviderProps) {
     const [user, setUser] = useState<User>(defaultUser);
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
         request.post('/users/login/', {}, settings).then(response => {
@@ -41,13 +46,15 @@ export default function UserContextProvider({ children, ...props }: UserContextP
                 email: userData.email,
                 picture_url: userData.picture_url
             });
+            setLoading(false);
         }).catch(error => {
             setUser(defaultUser);
+            setLoading(false);
         });
     }, [setUser]);
 
     return (
-        <UserContext.Provider value={{ user, setUser }}>
+        <UserContext.Provider value={{ user, setUser, isLoading, setLoading }}>
             {children}
         </UserContext.Provider>
     );
