@@ -4,35 +4,36 @@ repo_url: https://github.com/unb-mds/2023-2-Squad11
 nav:
   - Home: index.md
   - Como contribuir?: contributing.md
+  - Como executar o projeto?: executing.md
   - Sprints:
-    - Sprint 0: sprints/sprint-0.md
-    - Sprint 1: sprints/sprint-1.md
-    - Sprint 2: sprints/sprint-2.md
-    - Sprint 3: sprints/sprint-3.md
-    - Sprint 4: sprints/sprint-4.md
-    - Sprint 5: sprints/sprint-5.md
-    - Sprint 6: sprints/sprint-6.md
-    - Sprint 7: sprints/sprint-7.md
-    - Sprint 8: sprints/sprint-8.md
-    - Sprint 9: sprints/sprint-9.md
-    
+      - Sprint 0: sprints/sprint-0.md
+      - Sprint 1: sprints/sprint-1.md
+      - Sprint 2: sprints/sprint-2.md
+      - Sprint 3: sprints/sprint-3.md
+      - Sprint 4: sprints/sprint-4.md
+      - Sprint 5: sprints/sprint-5.md
+      - Sprint 6: sprints/sprint-6.md
+      - Sprint 7: sprints/sprint-7.md
+      - Sprint 8: sprints/sprint-8.md
+      - Sprint 9: sprints/sprint-9.md
+
   - Front-end:
-    - Semana 0: frontend/semana-0.md 
-    - Semana 1: frontend/semana-1.md
-    - Semana 2: frontend/semana-2.md
-    - Semana 3: frontend/semana-3.md
-    - Semana 4: frontend/semana-4.md 
-    - Semana 5: frontend/semana-5.md
-    - Semana 6: frontend/semana-6.md
+      - Semana 0: frontend/semana-0.md
+      - Semana 1: frontend/semana-1.md
+      - Semana 2: frontend/semana-2.md
+      - Semana 3: frontend/semana-3.md
+      - Semana 4: frontend/semana-4.md
+      - Semana 5: frontend/semana-5.md
+      - Semana 6: frontend/semana-6.md
 
   - API: api.md
-    
+
 theme:
   name: material
   features:
-  - navigation.tabs
-  - navigation.tabs.sticky
-  - content.code.copy
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - content.code.copy
 
   palette:
     primary: "indigo"
