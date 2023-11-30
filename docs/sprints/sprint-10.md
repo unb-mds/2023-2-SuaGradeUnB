@@ -20,7 +20,7 @@ Já para o front-end, houve a criação e ajustes das telas cujo sistemas de bac
 
 ### Reunião 1
 
-Data: 04/09/2023
+Data: 15/11/2023
 
 Local: Gather Town
 
