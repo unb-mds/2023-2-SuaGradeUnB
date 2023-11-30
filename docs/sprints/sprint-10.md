@@ -35,8 +35,6 @@ No final da _Sprint_, o time conseguiu realizar, de maneira satisfatória, vári
 Os resultados obtidos foram:
 
 - Implementação do sistema de logout de sessão do Google OAuth
-- Arrumar erro ao ter código de horários compostos em uma matéria
-- Adicionar campo de datas especiais com intervalo de inclusão
 - Melhorar a experiência do usuário ao realizar buscas com melhor eficiência
 - Criar uma API para retornar os períodos disponíveis para criação de grade
 
