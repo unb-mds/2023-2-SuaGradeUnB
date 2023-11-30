@@ -1,4 +1,5 @@
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import useYearPeriod from '@/app/hooks/useYearPeriod';
 import useSelectedClasses from '@/app/hooks/useSelectedClasses';
 
 import { errorToast } from '@/app/utils/errorToast';
@@ -19,6 +20,8 @@ function Form(props: FormPropsType) {
     const { formData, setFormData } = props.form;
     const { disableDefault, handleYearAndPeriodChange } = props;
 
+    const { periods } = useYearPeriod();
+
     return (
         <>
             <div className='flex flex-col items-center gap-1'>
@@ -33,8 +36,7 @@ function Form(props: FormPropsType) {
                     onChange={event => handleYearAndPeriodChange(event)}
                 >
                     <option disabled={disableDefault} value="">Selecione uma opção</option>
-                    <option value="2023/2">2023/2</option>
-                    <option value="2024/1">2024/1</option>
+                    {periods['year/period'].map((item, index) => <option key={index} value={item}>{item}</option>)}
                 </select>
             </div>
         </>

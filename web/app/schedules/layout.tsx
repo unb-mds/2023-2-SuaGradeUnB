@@ -6,6 +6,7 @@ import useUser from '@/app/hooks/useUser';
 
 import SelectedClassesContextProvider from '../contexts/SelectedClassesContext/SelectedClassesContext';
 import ClassesToShowContextProvider from '../contexts/ClassesToShowContext';
+import YearPeriodContextProvider from '../contexts/YearPeriodContext';
 
 import AsideButton from '../components/AsideButton';
 import Protected from '../components/Protected';
@@ -32,11 +33,7 @@ const currentDateObject = new Date(
     })
 );
 
-export default function SchedulesLayout({
-    children,
-}: {
-    children: React.ReactNode
-}) {
+function LayoutJSX({ children }: { children: React.ReactNode }) {
     const { user, isLoading } = useUser();
     const router = useRouter();
     const [currentDate, _] = useState(currentDateObject);
@@ -49,32 +46,47 @@ export default function SchedulesLayout({
     if (isLoading) return <LoadingScreen />;
 
     return (
+        <>
+            <header className='rounded-b-[40px] mb-8 flex flex-col justify-end bg-primary px-6 h-28'>
+                <h1 className='col-span-2 font-semibold text-base text-white'>
+                    Olá, {user.is_anonymous ? 'Anônimo' : user.first_name}!
+                </h1>
+                <p className='mb-5 col-span-2 font-medium text-base text-white'>
+                    {currentWeekDay}, {currentDay} de {currentMonth}
+                </p>
+            </header>
+
+            <main className='pt-5 h-3/5 min-[380px]:h-2/3'>
+                {children}
+            </main>
+
+            <div className="justify-around flex bg-white rounded-full px-6 py-2 w-[275px] absolute m-auto inset-x-px bottom-8 backdrop-blur-sm bg-opacity-50 drop-shadow-lg">
+                <div
+                    className={`bg-primary transition-all duration-300
+                    ${user.is_anonymous ? 'w-[120px]' : 'w-[85px]'} h-[50px]
+                    rounded-full absolute ${user.is_anonymous ? pathPXAnonymous[path as keyof typeof pathPXAnonymous] : pathPX[path]}`}
+                ></div>
+                <AsideButton icon='Home' text='Home' onClick={() => router.push('/schedules/home')} />
+                <AsideButton icon='calendar_month' text='Grades' onClick={() => router.push('/schedules/mygrades')} />
+                {user.is_anonymous ? null : <AsideButton icon='person' text='Perfil' onClick={() => router.push('/schedules/profile')} />}
+            </div>
+        </>
+    );
+}
+
+export default function SchedulesLayout({
+    children,
+}: {
+    children: React.ReactNode
+}) {
+
+    return (
         <Protected>
             <ClassesToShowContextProvider>
                 <SelectedClassesContextProvider>
-                    <header className='rounded-b-[40px] mb-8 flex flex-col justify-end bg-primary px-6 h-28'>
-                        <h1 className='col-span-2 font-semibold text-base text-white'>
-                            Olá, {user.is_anonymous ? 'Anônimo' : user.first_name}!
-                        </h1>
-                        <p className='mb-5 col-span-2 font-medium text-base text-white'>
-                            {currentWeekDay}, {currentDay} de {currentMonth}
-                        </p>
-                    </header>
-
-                    <main className='pt-5 h-3/5 min-[380px]:h-2/3'>
-                        {children}
-                    </main>
-
-                    <div className="justify-around flex bg-white rounded-full px-6 py-2 w-[275px] absolute m-auto inset-x-px bottom-8 backdrop-blur-sm bg-opacity-50 drop-shadow-lg">
-                        <div
-                            className={`bg-primary transition-all duration-300
-                    ${user.is_anonymous ? 'w-[120px]' : 'w-[85px]'} h-[50px]
-                    rounded-full absolute ${user.is_anonymous ? pathPXAnonymous[path as keyof typeof pathPXAnonymous] : pathPX[path]}`}
-                        ></div>
-                        <AsideButton icon='Home' text='Home' onClick={() => router.push('/schedules/home')} />
-                        <AsideButton icon='calendar_month' text='Grades' onClick={() => router.push('/schedules/mygrades')} />
-                        {user.is_anonymous ? null : <AsideButton icon='person' text='Perfil' onClick={() => router.push('/schedules/profile')} />}
-                    </div>
+                    <YearPeriodContextProvider>
+                        <LayoutJSX>{children}</LayoutJSX>
+                    </YearPeriodContextProvider>
                 </SelectedClassesContextProvider>
             </ClassesToShowContextProvider>
         </Protected>

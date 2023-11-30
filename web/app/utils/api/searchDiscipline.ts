@@ -35,13 +35,13 @@ export default async function searchDiscipline(search: string, year: string, per
         });
 
         const data: Array<DisciplineType> = response.data;
-        if(data.length === 0){
+        if (data.length === 0) {
             toast.error('Matéria invalida');
         }
         return data;
     } catch (error: any) {
         const mensagem = error.response.data.errors;
-        if(mensagem === 'search must have at least 4 characters'){
+        if (mensagem === 'search must have at least 4 characters') {
             toast.error('A busca deve conter pelo menos 4 caracteres');
         }
     }
