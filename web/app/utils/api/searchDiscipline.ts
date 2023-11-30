@@ -35,6 +35,9 @@ export default async function searchDiscipline(search: string, year: string, per
         });
 
         const data: Array<DisciplineType> = response.data;
+        if(data.length === 0){
+            toast.error('Matéria invalida');
+        }
         return data;
     } catch (error: any) {
         const mensagem = error.response.data.errors;
