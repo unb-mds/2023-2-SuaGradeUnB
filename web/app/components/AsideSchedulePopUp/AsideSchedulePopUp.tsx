@@ -1,5 +1,6 @@
-import { Dispatch, Fragment, LegacyRef, SetStateAction, useState } from 'react';
+import { Fragment, LegacyRef, useState } from 'react';
 import useSelectedClasses from '@/app/hooks/useSelectedClasses';
+import useShowPopUpContent from '@/app/hooks/useShowPopUpContent';
 
 import { ClassType, DisciplineType } from '@/app/utils/api/searchDiscipline';
 import { ClassValueType } from '@/app/contexts/SelectedClassesContext';
@@ -10,18 +11,13 @@ import ClassInfoBox from './ClassInfoBox';
 import _ from 'lodash';
 
 interface AsideSchedulePopUpPropsType {
-    content: {
-        showContent: boolean,
-        setShowContent: Dispatch<SetStateAction<boolean>>
-    }
     divAddClassRef?: LegacyRef<HTMLDivElement> | undefined
 }
 
 export default function AsideSchedulePopUp(props: AsideSchedulePopUpPropsType) {
+    const { showPopUpContent } = useShowPopUpContent();
     const { selectedClasses, setSelectedClasses } = useSelectedClasses();
     const [searchedDisciplineInfos, setSearchedDisciplineInfos] = useState<Array<DisciplineType>>([]);
-
-    const { showContent } = props.content;
 
     function handleDisciplineToggle(index: number) {
         let newInfo: Array<DisciplineType> = [];
@@ -75,9 +71,9 @@ export default function AsideSchedulePopUp(props: AsideSchedulePopUpPropsType) {
         <div className='flex justify-center'>
             <div
                 ref={props.divAddClassRef}
-                className={`flex flex-col justify-between items-center w-11/12 ${showContent ? 'py-5 h-5/6' : 'h-0'} transition-all duration-500 absolute bottom-0 rounded-t-[40px] bg-snow-secondary z-10`}
+                className={`flex flex-col justify-between items-center w-11/12 ${showPopUpContent ? 'py-5 h-5/6' : 'h-0'} transition-all duration-500 absolute bottom-0 rounded-t-[40px] bg-snow-secondary z-10`}
             >
-                {showContent &&
+                {showPopUpContent &&
                     <section className='flex flex-col items-center gap-5 w-full h-full text-[#333333]'>
                         <DisciplineOptionForm setInfos={setSearchedDisciplineInfos} />
                         <div className='flex flex-col gap-2 w-10/12 overflow-auto h-full'>
