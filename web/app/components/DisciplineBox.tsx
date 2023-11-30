@@ -1,4 +1,4 @@
-import { ClassValueType } from '../contexts/SelectedClassesContext';
+import { ClassValueType } from '../contexts/SelectedClassesContext/types';
 
 import useSelectedClasses from '../hooks/useSelectedClasses';
 

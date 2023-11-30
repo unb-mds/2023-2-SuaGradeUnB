@@ -2,7 +2,7 @@
 
 import { createContext, useState } from 'react';
 
-import { ClassValueType } from './SelectedClassesContext';
+import { ClassValueType } from './SelectedClassesContext/types';
 
 interface ClassesToShowContextType {
     classesToShow: Array<ClassValueType>,

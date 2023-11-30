@@ -17,14 +17,12 @@ export default function Home() {
     const { classesToShow, setClassesToShow } = useClassesToShow();
     const { classesChange, selectedClasses } = useSelectedClasses();
 
-    const divAddClassRef = useRef(null);
-    const buttonAddDisciplineRef = useRef(null);
+    const divAddClassRef = useRef(null), buttonAddDisciplineRef = useRef(null);
 
     useEffect(() => {
         const newClasses = new Array();
-        selectedClasses.forEach((cls) => {
-            cls.forEach(value => newClasses.push(value));
-        });
+        selectedClasses.forEach((cls) => cls.forEach(value => newClasses.push(value)));
+
         setClassesToShow(newClasses);
     }, [classesChange, selectedClasses, setClassesToShow]);
 
@@ -34,10 +32,7 @@ export default function Home() {
                 <AddDisciplineButton buttonAddDisciplineRef={buttonAddDisciplineRef} />
                 <div className={`flex flex-col items-center ${classesToShow.length ? '' : 'justify-center'} gap-5 overflow-auto min-h-full max-h-full pb-2`}>
                     {classesToShow.length ? classesToShow.map((cls, index) =>
-                        <DisciplineBox
-                            key={index}
-                            currentClass={cls} discipline={cls.discipline}
-                        />
+                        <DisciplineBox key={index} currentClass={cls} discipline={cls.discipline} />
                     ) : 'Nenhuma disciplina escolhida no momento'}
                 </div>
 

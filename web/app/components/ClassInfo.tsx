@@ -1,5 +1,7 @@
 import { Fragment } from 'react';
-import { ClassValueType } from '../contexts/SelectedClassesContext';
+
+import { ClassValueType } from '../contexts/SelectedClassesContext/types';
+
 import Tooltip from './Tooltip';
 
 interface ClassInfoPropsType {

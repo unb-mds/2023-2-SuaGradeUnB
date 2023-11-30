@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import useUser from '@/app/hooks/useUser';
 
-import SelectedClassesContextProvider from '../contexts/SelectedClassesContext';
+import SelectedClassesContextProvider from '../contexts/SelectedClassesContext/SelectedClassesContext';
 import ClassesToShowContextProvider from '../contexts/ClassesToShowContext';
 
 import AsideButton from '../components/AsideButton';
