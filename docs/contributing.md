@@ -11,11 +11,19 @@ Para contribuir com o projeto, basta seguir os passos abaixo:
 
 **Encontrando um problema:**
 
-Se você identificar um problema na aplicação, verifique se já existe um problema relacionado. Se não existir, você pode abrir uma nova issue usando um [issue form](https://github.com/unb-mds/2023-2-Squad11/issues/new/choose).
+Se você identificar um problema na aplicação, verifique se já existe um problema relacionado. Se não existir, você pode abrir uma nova issue de **Bug Report** utilizando o [template disponível](https://github.com/unb-mds/2023-2-Squad11/issues/new/choose). Adicione o _label_ de `bug` a issue e siga as instruções contidas no template.
 
 **Resolver um problema:**
 
-Dê uma olhada em nossas [issues](https://github.com/unb-mds/2023-2-Squad11/issues) para encontrar uma que lhe interesse. Você pode refinar a pesquisa usando as `labels` como filtros e, se for a sua primeira issue, tente procurar por `good first issue`. Se encontrar um problema disponível para trabalhar, você é bem-vindo para abrir um PR.
+Dê uma olhada em nossas [issues](https://github.com/unb-mds/2023-2-Squad11/issues) para encontrar uma que lhe interesse. Você pode refinar a pesquisa usando as `labels` como filtros e, se for a sua primeira issue, tente procurar por `good first issue`. Se encontrar um problema disponível para trabalhar, você é bem-vindo para abrir um [Pull Request](#pull-request).
+
+**Encontrando erros na documentação**
+
+Caso você encontre algum erro na documentação, você pode abrir uma nova issue de **Docs repair** utilizando o [template disponível](https://github.com/unb-mds/2023-2-Squad11/issues/new/choose). Adicione o _label_ de `docs` a issue e siga as instruções contidas no template.
+
+**Como propor novas funcionalidades**
+
+Para propor uma melhoria ou nova funcionalidade, você pode abrir uma nova issue de **Feature Request** utilizando o [template disponível](https://github.com/unb-mds/2023-2-Squad11/issues/new/choose) e adcionar o _label_ de `feature request` a issue. Sua sugestão será analisada e, se aprovada, será aberta uma _task_ para a implementação desta nova funcionalidade.
 
 **Como fazer alterações?**
 
@@ -37,7 +45,3 @@ Quando terminar as alterações, crie uma pull request (PR).
 **Seu PR foi aceito!**
 
 Parabéns 🎉. A equipe agradece!
-
-## Como executar o projeto?
-
-> Será adicionado em breve.
