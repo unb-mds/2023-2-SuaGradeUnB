@@ -7,18 +7,19 @@ import dj_database_url
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    ".herokuapp.com"
+    ".herokuapp.com",
+    ".suagradeunb.com.br"
 ]
 
 
 # django-cors-headers
 # https://github.com/adamchainz/django-cors-headers
 
-# CORS_ALLOWED_ORIGINS = [
-#     "https://suagradeunb.com.br",
-#     "https://api.suagradeunb.com.br"
-# ]
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://suagradeunb.com.br",
+    "https://api.suagradeunb.com.br"
+]
+# CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 
