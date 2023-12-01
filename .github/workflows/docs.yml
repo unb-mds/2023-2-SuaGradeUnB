@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   docs:
+    name: mkdocs deploy
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4

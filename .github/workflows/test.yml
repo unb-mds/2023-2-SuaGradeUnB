@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   test:
+    name: api test coverage
     runs-on: ubuntu-latest
 
     steps:

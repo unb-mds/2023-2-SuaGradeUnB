@@ -13,11 +13,11 @@ config-mock:
 	bash scripts/config.sh
 
 entrypoint-chmod:
-	chmod +x ./api/entrypoint.sh
+	chmod +x ./api/config/entrypoint.sh
 
 # Install Dependencies
 install:
-	pip install -r requirements.txt
+	pip install -r ./api/requirements.txt
 	npm install --prefix ./web
 
 
