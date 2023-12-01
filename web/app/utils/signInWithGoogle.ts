@@ -4,7 +4,7 @@ export default function signInWithGoogle(router: AppRouterInstance) {
     const tokenEndpoint = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_URL;
 
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID || '';
-    const redirectUri = 'http://localhost:3000';
+    const redirectUri = process.env.NEXT_PUBLIC_FRONT_END_URL || 'http://localhost:3000';
     const scope = [
         'https://www.googleapis.com/auth/userinfo.email',
         'https://www.googleapis.com/auth/userinfo.profile'
