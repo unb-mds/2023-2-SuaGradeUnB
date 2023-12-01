@@ -23,7 +23,7 @@ Local: Gather Town
 
 **Ata:**
 
-Nessa reunião o time de DevOps apresentou a base do CI/CD do projeto implementado e entregou para o time Back-end o ambiente de desenvolvimento da API preparado com a utilização do Docker. Além disso, o time de Design/Front-end apresentou a paleta de cores, logo escolhidas para o projeto e uma pequena ideia da tipografia que será utilizada.
+Nessa reunião o time de DevOps apresentou a base do CI/CD do projeto implementado, e entregou para o time Back-end o ambiente de desenvolvimento da API, preparado com a utilização do Docker. Além disso, o time de Design/Front-end apresentou a paleta de cores, logo escolhidas para o projeto e uma pequena ideia da tipografia que será utilizada.
 
 ## Finalização
 
@@ -33,4 +33,4 @@ O time de DevOps não conseguiu finalizar a implementação do Codecov no GitHub
 
 **Observações:**
 
-Para a próxima _Sprint_ o time de DevOps irá entrar em contato com os proprietários da organização [@unb-mds](https://github.com/unb-mds) para instalar o aplicativo do Codecov.
+Para a próxima _Sprint_ o time de DevOps irá entrar em contato com os proprietários da organização [@unb-mds](https://github.com/unb-mds), para solicitar-lhe a instalação do aplicativo Codecov.

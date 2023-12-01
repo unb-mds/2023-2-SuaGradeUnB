@@ -4,11 +4,11 @@ Período: 04/10/2023 a 11/10/2023
 
 ## Descrição
 
-Nessa _Sprint_ o time definiu algumas tarefas importantes para realizar na semana. Para o back-end, há o início da definição das rotas de acesso da API, a integração do _Google OAuth_ na autenticação do projeto e criação do protótipo do _web-scraping_.
+Nessa _Sprint_ foram definidas importantes tarefas a serem realizadas durante a semana. Para o back-end, há o início da definição das rotas de acesso da API, a integração do _Google OAuth_ na autenticação do projeto e criação do protótipo do _web-scraping_.
 
 Para o front-end, o início do protótipo de alta fidelidade através da plataforma _Figma_.
 
-Para o DevOps, a busca pelo _CODECOV_TOKEN_ e integrar os testes, inicialização e preparo do ambiente do _front-end_. Também envolve a pesquisa sobre a plataforma _Heroku_ para hospedagem da API do projeto.
+Para o DevOps, a busca pelo _CODECOV_TOKEN_ e integração dos testes, inicialização e preparo do ambiente do _front-end_. Também envolve a pesquisa sobre a plataforma _Heroku_ para hospedagem da API do projeto.
 
 ## Objetivos
 
@@ -18,7 +18,7 @@ Para o DevOps, a busca pelo _CODECOV_TOKEN_ e integrar os testes, inicializaçã
 - Iniciar protótipo de alta fidelidade
 - Buscar _CODECOV_TOKEN_
 - Integrar testes
-- inicialização e preparo do ambiente do _front-end_
+- Inicialização e preparo do ambiente do _front-end_
 - Pesquisar sobre a plataforma _Heroku_ para hospedagem da API do projeto
 
 ## Reuniões

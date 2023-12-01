@@ -4,9 +4,9 @@ Período: 08/11/2023 a 15/11/2023
 
 ## Descrição
 
-Nessa _Sprint_, o time definiu algumas metas importantes. Portanto, as tarefas foram divididas entre os times, considerando um objetivo entregável para cada um. Portanto, para o back-end, houve a criação da API de busca por matéria e seus respectivos testes. A criação de uma matéria envolvia o uso de funções e/ou algoritmos eficientes que garantiam uma busca satisfatória para uma boa experiência de usuário. 
+Nessa _Sprint_, o time definiu algumas metas importantes. Portanto, as tarefas foram divididas entre os times, considerando um objetivo um tanto mais palpável para cada um. Portanto, para o back-end, houve a criação da API de busca por matérias e seus respectivos testes. A criação de uma matéria envolvia o uso de funções e/ou algoritmos eficientes, que garantiam uma busca satisfatória para uma boa experiência de usuário. 
 
-Já para o front-end, houve a criação da tela de registro e de confirmação de login. Além disso, pensando na acessibilidade, houve a discussão sobre fazer um código com textos alternativos para pessoas com deficiência visual. Adicionalmente, por sugestão da organizadora do projeto, houve também a definição de cores mais legíveis independente da tela do usuário, pensando também naqueles que possuem daltonismo.
+Já para o time front-end, houve a criação da tela de registro e de confirmação de login. Além disso, pensando na acessibilidade, houve a discussão sobre fazer um código com textos alternativos para pessoas com deficiência visual. Adicionalmente, por sugestão da organizadora do projeto, houve também a definição de cores mais legíveis independente da tela do usuário, pensando também naqueles que possuem daltonismo.
 
 Já para o DevOps, as suas metas foram realocadas para as outras áreas do projeto, pensando em uma melhor distribuição de tarefas e mais agilidade na entrega de resultados.
 
@@ -29,7 +29,7 @@ Local: Gather Town
 
 **Ata:**
 
-Nessa reunião, o time se juntou para discutir sobre as tarefas que seriam realizadas durante a _Sprint_.
+Nessa reunião, o time se juntou para discutir sobre as tarefas que seriam realizadas durante a _Sprint_. Portanto foi definido que o time de DevOps iria auxiliar o time de front-end na implementação de textos alternativos para pessoas com deficiência visual. Além disso, o time de DevOps também iria auxiliar o time de back-end na implementação da API de busca por matérias e seus respectivos testes. Por fim, o time de front-end ficou responsável pela implementação da tela de registro e de confirmação de login, além de definir cores mais legíveis independente da tela do usuário.
 
 ## Finalização
 

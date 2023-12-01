@@ -4,7 +4,7 @@ Período: 18/10/2023 a 25/10/2023
 
 ## Descrição
 
-Nessa _Sprint_ o time de _Back-end_ ficou responsável por iniciar os testes para autenticação do projeto. Para o time _Front-end_, foi definido que o time ficaria responsável por desenvolver documentação para o projeto desenvolvido por eles. Já o time de _DevOps_ ficou encarregado de finalizar a implementação do _Codecov_ no GitHub Workflow e aprenser sobre deploy no Heroku com Redis e PostgreSQL. 
+Nessa _Sprint_ o time de _Back-end_ ficou responsável por iniciar os testes para autenticação do projeto, bem como testar as funcionalidades já implementadas seja do _web-scraping_, seja do _Google OAuth_. Para o time _Front-end_, foi definido que o time ficaria responsável por desenvolver a documentação do projeto por eles desenvolvido. Já o time _DevOps_ ficou encarregado de finalizar a implementação do _Codecov_ no GitHub Workflow, e estudar sobre deploy no Heroku com Redis e PostgreSQL. 
 
 ## Objetivos
 
