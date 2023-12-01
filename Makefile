@@ -17,7 +17,7 @@ entrypoint-chmod:
 
 # Install Dependencies
 install:
-	pip install -r requirements.txt
+	pip install -r ./api/requirements.txt
 	npm install --prefix ./web
 
 

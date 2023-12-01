@@ -3,16 +3,18 @@ hide:
   - navigation
 ---
 
-## 📝 Sumário
+# Como executar o projeto?
 
-- [✨ Início](#inicio)
-  - [📋 Pré-requisitos](#pre-requisitos)
-  - [💻 Ambiente](#ambiente)
-  - [📁 Dependências do projeto](#dependencias-do-projeto)
-  - [💾 Execução](#execucao)
-  - [✅ Autenticação do Google OAuth](#autenticacao-do-google-oauth)
-  - [🖱️ Acesso aos serviços](#acesso-aos-servicos)
-  - [📍 Migrations](#migrations)
+## 👥 Equipe
+
+| Nome | GitHub |
+| :--- | :----: |
+| Arthur Ribeiro e Sousa | [@artrsousa1](https://github.com/artrsousa1) |
+| Caio Falcão Habibe Costa | [@CaioHabibe](https://github.com/CaioHabibe) |
+| Caio Felipe Rocha Rodrigues| [@caio-felipee](https://github.com/caio-felipee) |
+| Gabriel Henrique Castelo Costa | [@GabrielCastelo-31](https://github.com/GabrielCastelo-31) |
+| Henrique Camelo Quenino | [@henriquecq](https://github.com/henriquecq) |
+| Mateus Vieira Rocha da Silva | [@mateusvrs](https://github.com/mateusvrs) |
 
 ## ✨ Início
 
@@ -26,11 +28,10 @@ git clone https://github.com/unb-mds/2023-2-Squad11.git
 
 Para rodar o projeto, você precisa instalar as dependências globais, que são:
 
-- [GNU Make 4.3 (ou superior)](https://www.incredibuild.com/integrations/gnu-make)
-- [Python v3.11.6 e Pip v22.0.2 (ou superior)](https://www.python.org/downloads/release/python-3116/)
-- [Django v4.2.5 (ou superior)](https://www.djangoproject.com/download/)
-- [Node v20.9.0](https://nodejs.org/en/download/) e [NPM v10.1.0 (ou superior)](https://nodejs.org/en/download/)
-- [Docker Engine v24.0.6](<(https://docs.docker.com/engine/install/)>) [ e Docker Compose v2.21.0 (ou superior)](https://docs.docker.com/compose/install/)
+- GNU Make 4.3 (ou superior)
+- Python v3.11.6 e Pip v22.0.2 (ou superior)
+- Node v20.9.0 e NPM v10.1.0 (ou superior)
+- Docker Engine v24.0.6 e Docker Compose v2.21.0 (ou superior)
 
 ### 💻 Ambiente
 
@@ -46,10 +47,10 @@ Para instalar as dependências do projeto, você pode rodar os seguintes comando
 
 ```bash
 # Crie um ambiente virtual Python
-python3 -m venv env
+python3 -m venv api/env
 
 # Ative o ambiente virtual
-source env/bin/activate
+source api/env/bin/activate
 
 # Instale os pacotes do Python e Node
 make install
@@ -76,19 +77,6 @@ docker compose up --build
 docker compose down -v
 ```
 
-**Você também pode executar os comandos acima utilizando o make:**
-
-```bash
-# Se você quiser rodar em segundo plano
-make start
-
-# Se alterações foram feitas no Dockerfile ou no docker-compose.yml
-make start-b
-
-# Se for necessário deletar os volumes
-make stop-v
-```
-
 ### ✅ Autenticação do Google OAuth
 
 Para que o login com o Google funcione, é necessário trocar o `your_client_id` no arquivo `web/.env.local` pelo **Client ID** do projeto no Google Cloud.
@@ -113,15 +101,15 @@ Adicionando serviços:
 1. Entre na aba **APIs e Serviços**.
 2. Clique em **Ativar APIs e Serviços**.
 3. Ative os seguintes serviços:
-   - IAM Service Account Credentials API
-   - Identity and Access Management (IAM) API
+    - IAM Service Account Credentials API
+    - Identity and Access Management (IAM) API
 
 ### 🖱️ Acesso aos serviços
 
-| Serviço  |                      URL                       |
-| :------- | :--------------------------------------------: |
+| Serviço | URL |
+| :--- | :----: |
 | Frontend | [http://localhost:3000](http://localhost:3000) |
-| Backend  | [http://localhost:8000](http://localhost:8000) |
+| Backend | [http://localhost:8000](http://localhost:8000) |
 
 ### 📍 Migrations
 

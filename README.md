@@ -2,9 +2,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![codecov](https://codecov.io/gh/unb-mds/2023-2-Squad11/branch/main/graph/badge.svg?token=ZQZQZQZQZQ)](https://codecov.io/gh/unb-mds/2023-2-Squad11)
-[![GitHub issues](https://img.shields.io/github/issues/unb-mds/2023-2-Squad11)]()
-[![GitHub contributors](https://img.shields.io/github/contributors/unb-mds/2023-2-Squad11)]()
-[![GitHub stars](https://img.shields.io/github/stars/unb-mds/2023-2-Squad11)]()
+[![GitHub issues](https://img.shields.io/github/issues/unb-mds/2023-2-Squad11)](https://img.shields.io/github/issues/unb-mds/2023-2-Squad11)
+[![GitHub contributors](https://img.shields.io/github/contributors/unb-mds/2023-2-Squad11)](https://img.shields.io/github/contributors/unb-mds/2023-2-Squad11)
+[![GitHub stars](https://img.shields.io/github/stars/unb-mds/2023-2-Squad11)](https://img.shields.io/github/stars/unb-mds/2023-2-Squad11)
 [![Hit Counter](https://views.whatilearened.today/views/github/unb-mds/2023-2-Squad11.svg)](https://views.whatilearened.today/views/github/unb-mds/2023-2-Squad11.svg)
 </br>
 
@@ -31,11 +31,15 @@ O projeto é software livre e está sob a licença [MIT](./LICENSE).
     - [💻 Ambiente](#-ambiente)
     - [📁 Dependências do projeto](#-dependências-do-projeto)
     - [💾 Execução](#-execução)
+      - [Observações do Docker](#observações-do-docker)
     - [✅ Autenticação do Google OAuth](#-autenticação-do-google-oauth)
-    - [🖱️ Acesso aos serviços](#-acesso-aos-serviços)
+    - [🖱️ Acesso aos serviços](#️-acesso-aos-serviços)
     - [📍 Migrations](#-migrations)
   - [📚 Documentação](#-documentação)
   - [📎 Extra](#-extra)
+    - [Story Map e Activity Flow](#story-map-e-activity-flow)
+    - [Arquitetura](#arquitetura)
+    - [Protótipo](#protótipo)
 
 ## 👥 Equipe
 
@@ -79,10 +83,10 @@ Para instalar as dependências do projeto, você pode rodar os seguintes comando
 
 ```bash
 # Crie um ambiente virtual Python
-python3 -m venv env
+python3 -m venv api/env
 
 # Ative o ambiente virtual
-source env/bin/activate
+source api/env/bin/activate
 
 # Instale os pacotes do Python e Node
 make install
@@ -135,7 +139,6 @@ Adicionando serviços:
 3. Ative os seguintes serviços:
     - IAM Service Account Credentials API
     - Identity and Access Management (IAM) API
-
 
 ### 🖱️ Acesso aos serviços
 
