@@ -9,7 +9,7 @@ interface AsideButtonPropsType {
 
 export default function AsideButton({ icon, text, onClick }: AsideButtonPropsType) {
     return (
-        <Button onClick={onClick} className='z-10 flex-col !p-0 !gap-1 !shadow-none'>
+        <Button onClick={onClick} className='z-10 flex-col !p-0 !gap-1 !shadow-none !text-black'>
             <span className="material-symbols-rounded">
                 {icon}
             </span>
