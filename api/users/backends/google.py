@@ -42,8 +42,10 @@ class GoogleOAuth2:
 
     @staticmethod
     def do_auth(user_data: dict) -> User | None:
-        user, created = User.objects.get_or_create(
-            email=user_data['email'])
+        user, _ = User.objects.get_or_create(
+            email=user_data['email'],
+            username=user_data['email']
+        )
 
         if user_data.get('given_name'):
             user.first_name = user_data['given_name']
