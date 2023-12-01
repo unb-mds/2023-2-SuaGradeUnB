@@ -13,7 +13,7 @@ config-mock:
 	bash scripts/config.sh
 
 entrypoint-chmod:
-	chmod +x ./api/entrypoint.sh
+	chmod +x ./api/config/entrypoint.sh
 
 # Install Dependencies
 install:
