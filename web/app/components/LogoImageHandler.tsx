@@ -6,10 +6,12 @@ import logoImage from '../../public/logo.png';
 
 import useWindowDimensions from '../hooks/useWindowDimensions';
 
+const MIN_HEIGHT = 720;
+
 export default function LogoImageHandler() {
     const { height } = useWindowDimensions();
 
-    if (height && height <= 675) return null;
+    if (height && height <= MIN_HEIGHT) return null;
 
     return (
         <Image
