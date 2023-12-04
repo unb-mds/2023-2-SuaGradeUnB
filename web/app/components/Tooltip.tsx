@@ -37,7 +37,7 @@ export default function Tooltip({ children }: TooltipPropsType) {
                 question_mark
             </span>
             <span className={`${active ? 'visible' : 'invisible'} ${styles.inside} ${styles.tooltiptext} p-2`}>
-                <div className='relative flex flex-col gap-1 justify-center items-center w-4/5 rounded-md p-5 bg-snow-primary'>
+                <div className='relative flex flex-col gap-1 justify-center items-center rounded-md p-5 bg-snow-primary'>
                     {children}
                     <button
                         onClick={() => setActive(false)}
