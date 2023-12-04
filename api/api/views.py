@@ -127,19 +127,31 @@ class YearPeriod(APIView):
 
 
 class Schedule(APIView):
+    @swagger_auto_schema(
+        operation_description="Gera uma lista de horários válidos para as turmas enviadas.",
+        manual_parameters=[
+            openapi.Parameter('classes', openapi.IN_QUERY,
+                              description="Lista de ids de turmas", type=openapi.TYPE_ARRAY, items=openapi.Items(type=openapi.TYPE_INTEGER)),
+            openapi.Parameter('preference', openapi.IN_QUERY,
+                              description="Lista de preferências (manhã/tarde/noite)", type=openapi.TYPE_ARRAY, items=openapi.Items(type=openapi.TYPE_INTEGER)),
+        ],
+        responses={
+            200: openapi.Response('OK', serializers.ClassSerializerSchedule),
+            **Errors([400]).retrieve_erros(),
+        }
+    )
     def post(self, request: request.Request, *args, **kwargs) -> response.Response:
         """
         View para gerar horários.
         Funcionamento: Recebe uma lista de ids de classes e uma lista de preferências
         e verifica se as classes e preferências são válidas.
         Caso sejam válidas, gera os horários e retorna uma lista de horários.
-
         """
-        classes_id = request.data.get('classes', None) # Recebe a lista de ids de classes
-        preference = request.data.get('preference', None) # Recebe a lista de preferências
+
+        classes_id = request.data.get('classes', None)
+        preference = request.data.get('preference', None)
         preference_valid = preference is not None and isinstance(preference, list) and all(
             isinstance(x, int) for x in preference) and len(preference) == 3
-        # Verifica se a preferência é uma lista de 3 inteiros
 
         if preference is not None and not preference_valid:
             """Retorna um erro caso a preferência não seja uma lista de 3 inteiros"""
@@ -155,8 +167,8 @@ class Schedule(APIView):
                     "errors": "classes is required"
                 }, status.HTTP_400_BAD_REQUEST)
 
-        schedule_generator = ScheduleGenerator(classes_id, preference) # Cria um objeto ScheduleGenerator
-        schedules = schedule_generator.generate() # Gera os horários
+        schedule_generator = ScheduleGenerator(classes_id, preference)
+        schedules = schedule_generator.generate()
 
         if schedules is None:
             return response.Response(

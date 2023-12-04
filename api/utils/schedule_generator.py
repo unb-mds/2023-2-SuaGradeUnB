@@ -19,14 +19,10 @@ def check(function):
 
 
 class ScheduleGenerator:
-    """Classe que representa um gerador de horários.
-    Atributos:
-
-    """
+    """Classe que representa um gerador de horários."""
+    available_letters = "MTN"
 
     def __init__(self, classes_id: list[int], preference: list = None):
-        """Construtor da classe ScheduleGenerator
-        """
         self.schedule_info = defaultdict(lambda: None)
         self.preference = preference
         self.generated = False
@@ -57,27 +53,29 @@ class ScheduleGenerator:
     def is_valid(self) -> bool:
         return self.valid
 
-    # [3,2,1]
-    def get_priority(self, days: list, turn: list[str], letter: str):
+    def _get_priority(self, days: list, turn: list[str], letter: str):
         """
         Calcula a prioridade de uma disciplina ser escolhida para a grade de horários.
         Quanto mais cedo for o horário, maior será a prioridade, independemente do turno.
         Quanto mais aulas na semana a disciplina tiver, maior será a prioridade.
         """
-        letters = "MTN"
         turn_priority = 5 * (len(turn)) - sum(map(int, turn))
         days_quantity = len(days)
 
-        priority = (self.preference[letters.find(
-            letter)]) * (turn_priority + days_quantity)
+        priority = self.preference[self.available_letters.find(
+            letter)] * (turn_priority + days_quantity)
+
         return priority
 
     def _add_schedule_code(self, schedules: str) -> None:
         if self.schedule_info[schedules] is not None:
             return
 
-        regex = "[MTN]"
+        regex = f"[{self.available_letters}]"
         schedules_list = schedules.split()
+
+        """Cria um dicionário com a prioridade e os horários
+        em produto cartesianode uma disciplina"""
         schedules_dict = {
             "priority": 0,
             "times": set()
@@ -86,14 +84,16 @@ class ScheduleGenerator:
         for schedule in schedules_list:
             match = search(regex, schedule)
             schedule = list(schedule)
+
             days = schedule[:match.start()]
             turn = schedule[match.start() + 1:]
             letter = match.group()
 
             values = [days, [letter], turn]
             code_product = product(*values)
+
             if self.preference is not None:
-                schedules_dict["priority"] += self.get_priority(
+                schedules_dict["priority"] += self._get_priority(
                     days, turn, letter)
 
             schedules_dict["times"] = schedules_dict["times"].union(
@@ -114,12 +114,10 @@ class ScheduleGenerator:
 
         for class_id in schedule:
             _class = self.classes[class_id]
+
             schedule_code = self.schedule_info[_class.schedule]["times"]
-            """Variável que contém o produto cartesiano dos horários"""
             codes_counter += len(schedule_code)
-            """Contador do tamanho do conjunto de produtos cartesianos"""
             schedule_codes = schedule_codes.union(schedule_code)
-            """Faz a união dos produtos cartesianos com o horário pretendido"""
 
             if codes_counter > len(schedule_codes):
                 """Caso o contador seja maior do que a união dos produtos cartesianos com o horário pretendido,
@@ -155,4 +153,5 @@ class ScheduleGenerator:
     def sort_by_priority(self):
         self.schedules.sort(key=lambda priority: sum(map(
             lambda _class: self.schedule_info[_class.schedule]["priority"], priority)), reverse=True)
+
         return self.schedules
