@@ -15,7 +15,8 @@
     "next": "14.0.2",
     "react": "^18",
     "react-dom": "^18",
-    "react-hot-toast": "^2.4.1"
+    "react-hot-toast": "^2.4.1",
+    "sharp": "^0.33.0"
   },
   "devDependencies": {
     "@types/node": "^20",
