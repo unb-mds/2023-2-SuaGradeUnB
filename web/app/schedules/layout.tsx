@@ -4,13 +4,13 @@ import { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import useUser from '@/app/hooks/useUser';
 
-import SelectedClassesContextProvider from '../contexts/SelectedClassesContext/SelectedClassesContext';
-import ClassesToShowContextProvider from '../contexts/ClassesToShowContext';
-import YearPeriodContextProvider from '../contexts/YearPeriodContext';
-
 import AsideButton from '../components/AsideButton';
 import Protected from '../components/Protected';
 import { LoadingScreen } from '../components/LoadingScreen';
+
+import homeIcon from '@/public/icons/home.jpg';
+import scheduleIcon from '@/public/icons/schedule.jpg';
+import profileIcon from '@/public/icons/profile.jpg';
 
 
 const days = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
@@ -47,7 +47,7 @@ function LayoutJSX({ children }: { children: React.ReactNode }) {
 
     return (
         <>
-            <header className='rounded-b-[40px] mb-8 flex flex-col justify-end bg-primary px-6 h-28'>
+            <header className='rounded-b-[40px] mb-8 flex flex-col justify-end bg-primary px-6 h-24'>
                 <h1 className='col-span-2 font-semibold text-base text-white'>
                     Olá, {user.is_anonymous ? 'Anônimo' : user.first_name}!
                 </h1>
@@ -56,7 +56,7 @@ function LayoutJSX({ children }: { children: React.ReactNode }) {
                 </p>
             </header>
 
-            <main className='pt-5 h-3/5 min-[380px]:h-2/3'>
+            <main className='pt-3 h-[calc(100%-17.75rem)]'>
                 {children}
             </main>
 
@@ -66,9 +66,9 @@ function LayoutJSX({ children }: { children: React.ReactNode }) {
                     ${user.is_anonymous ? 'w-[120px]' : 'w-[85px]'} h-[50px]
                     rounded-full absolute ${user.is_anonymous ? pathPXAnonymous[path as keyof typeof pathPXAnonymous] : pathPX[path]}`}
                 ></div>
-                <AsideButton icon='Home' text='Home' onClick={() => router.push('/schedules/home')} />
-                <AsideButton icon='calendar_month' text='Grades' onClick={() => router.push('/schedules/mygrades')} />
-                {user.is_anonymous ? null : <AsideButton icon='person' text='Perfil' onClick={() => router.push('/schedules/profile')} />}
+                <AsideButton image={homeIcon} text='Home' onClick={() => router.push('/schedules/home')} />
+                <AsideButton image={scheduleIcon} text='Grades' onClick={() => router.push('/schedules/mygrades')} />
+                {user.is_anonymous ? null : <AsideButton image={profileIcon} text='Perfil' onClick={() => router.push('/schedules/profile')} />}
             </div>
         </>
     );
@@ -82,13 +82,9 @@ export default function SchedulesLayout({
 
     return (
         <Protected>
-            <ClassesToShowContextProvider>
-                <SelectedClassesContextProvider>
-                    <YearPeriodContextProvider>
-                        <LayoutJSX>{children}</LayoutJSX>
-                    </YearPeriodContextProvider>
-                </SelectedClassesContextProvider>
-            </ClassesToShowContextProvider>
+            <LayoutJSX>
+                {children}
+            </LayoutJSX>
         </Protected>
     );
 }

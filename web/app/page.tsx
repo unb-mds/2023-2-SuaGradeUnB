@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import logoImage from '../public/logo.svg';
+import logoImage from '../public/logo.png';
 
 import SignInSection from './components/SignInSection';
 

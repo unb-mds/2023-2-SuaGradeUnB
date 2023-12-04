@@ -1,18 +1,21 @@
+import Image, { StaticImageData } from 'next/image';
+
 import Button from './Button';
 
 interface AsideButtonPropsType {
-    icon: string;
+    image: StaticImageData;
     text: string;
     onClick?: () => void;
 }
 
 
-export default function AsideButton({ icon, text, onClick }: AsideButtonPropsType) {
+export default function AsideButton({ image, text, onClick }: AsideButtonPropsType) {
     return (
         <Button onClick={onClick} className='z-10 flex-col !p-0 !gap-1 !shadow-none !text-black'>
-            <span className="material-symbols-rounded">
-                {icon}
-            </span>
+            <Image
+                width={20} height={20}
+                src={image} alt={`ícone da página ${text}`}
+            />
             <span>
                 {text}
             </span>

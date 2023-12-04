@@ -8,7 +8,7 @@ import signInWithGoogle from '../utils/signInWithGoogle';
 import registerWithGoogle from '../utils/api/registerWithGoogle';
 import retrieveAccessToken from '../utils/retrieveAccessToken';
 
-import googleLogoImage from '../../public/google.svg';
+import googleLogoImage from '../../public/google.jpg';
 
 import Image from 'next/image';
 import Button from './Button';
