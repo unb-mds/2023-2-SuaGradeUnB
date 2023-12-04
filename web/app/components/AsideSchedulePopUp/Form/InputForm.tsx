@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 
 import searchDiscipline, { DisciplineType } from '@/app/utils/api/searchDiscipline';
 
-import { FormData, FormType, InputFormPropsType } from './types';
+import { FormData, FormType, InputFormPropsType } from '../types/types';
 
 interface FormPropsType {
     form: FormType,

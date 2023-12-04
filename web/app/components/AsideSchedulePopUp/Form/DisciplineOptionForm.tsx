@@ -4,7 +4,7 @@ import useSelectedClasses from '@/app/hooks/useSelectedClasses';
 
 import { errorToast } from '@/app/utils/errorToast';
 
-import { DisciplineOptionFormPropsType, FormType, defaultFormData } from './types';
+import { DisciplineOptionFormPropsType, FormType, defaultFormData } from '../types/types';
 import { DisciplineType } from '@/app/utils/api/searchDiscipline';
 
 import InputForm from './InputForm';
