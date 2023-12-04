@@ -125,36 +125,49 @@ class YearPeriod(APIView):
 
         return response.Response(data, status.HTTP_200_OK)
 
+
 class Schedule(APIView):
     def post(self, request: request.Request, *args, **kwargs) -> response.Response:
-        classes_id = request.data.get('classes', None)
-        preference = request.data.get('preference', None)
-        preference_valid = preference is not None and isinstance(preference, list) and all(isinstance(x, int) for x in preference) and len(preference) == 3
-        
+        """
+        View para gerar horários.
+        Funcionamento: Recebe uma lista de ids de classes e uma lista de preferências
+        e verifica se as classes e preferências são válidas.
+        Caso sejam válidas, gera os horários e retorna uma lista de horários.
+
+        """
+        classes_id = request.data.get('classes', None) # Recebe a lista de ids de classes
+        preference = request.data.get('preference', None) # Recebe a lista de preferências
+        preference_valid = preference is not None and isinstance(preference, list) and all(
+            isinstance(x, int) for x in preference) and len(preference) == 3
+        # Verifica se a preferência é uma lista de 3 inteiros
+
         if preference is not None and not preference_valid:
+            """Retorna um erro caso a preferência não seja uma lista de 3 inteiros"""
             return response.Response(
                 {
                     "errors": "preference must be a list of 3 integers"
                 }, status.HTTP_400_BAD_REQUEST)
 
         if classes_id is None:
+            """Retorna um erro caso a lista de ids de classes não seja enviada"""
             return response.Response(
                 {
                     "errors": "classes is required"
                 }, status.HTTP_400_BAD_REQUEST)
 
-        schedule_generator = ScheduleGenerator(classes_id, preference)
-        schedules = schedule_generator.generate()
+        schedule_generator = ScheduleGenerator(classes_id, preference) # Cria um objeto ScheduleGenerator
+        schedules = schedule_generator.generate() # Gera os horários
 
         if schedules is None:
             return response.Response(
                 {
                     "errors": "classes must be a list of valid classes id."
                 }, status.HTTP_400_BAD_REQUEST)
-        
+
         data = []
-        
+
         for schedule in schedules:
-            data.append(list(map(lambda x: serializers.ClassSerializerSchedule(x).data, schedule)))
+            data.append(
+                list(map(lambda x: serializers.ClassSerializerSchedule(x).data, schedule)))
 
         return response.Response(data, status.HTTP_200_OK)
