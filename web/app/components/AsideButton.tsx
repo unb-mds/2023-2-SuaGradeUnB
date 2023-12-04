@@ -4,21 +4,19 @@ import Button from './Button';
 
 interface AsideButtonPropsType {
     image: StaticImageData;
-    text: string;
+    pageName: string;
+    innerRef?: (node: any) => void;
     onClick?: () => void;
 }
 
 
-export default function AsideButton({ image, text, onClick }: AsideButtonPropsType) {
+export default function AsideButton({ image, pageName, innerRef, onClick }: AsideButtonPropsType) {
     return (
-        <Button onClick={onClick} className='z-10 flex-col w-full !pb-0 !gap-1 !shadow-none !text-black'>
+        <Button innerRef={innerRef} onClick={onClick} className='z-10 flex-col w-full !gap-1 !pb-2 !shadow-none !text-black' name={pageName}>
             <Image
                 width={25} height={25}
-                src={image} alt={`ícone da página ${text}`}
+                src={image} alt={`ícone da página ${pageName}`}
             />
-            <span>
-                {text}
-            </span>
         </Button>
     );
 }
