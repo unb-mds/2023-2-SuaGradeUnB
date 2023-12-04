@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 
 import { ClassValueType } from '../contexts/SelectedClassesContext/types';
 
-import Tooltip from './Tooltip';
+import Tooltip from './AsideSchedulePopUp/Tooltip';
 
 interface ClassInfoPropsType {
     currentClass: ClassValueType
