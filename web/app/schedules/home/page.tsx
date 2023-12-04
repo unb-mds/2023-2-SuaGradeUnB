@@ -12,6 +12,7 @@ import AddDisciplineButton from './components/AddDisciplineButton';
 import ClickOutsideHandler from './handlers/ClickOutsideHandler';
 
 import ShowPopUpContentContextProvider from '@/app/contexts/ShowPopUpContentContext';
+import AsideButton from '@/app/components/AsideButton';
 
 export default function Home() {
     const { classesToShow, setClassesToShow } = useClassesToShow();

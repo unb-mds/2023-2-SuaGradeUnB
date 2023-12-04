@@ -3,6 +3,8 @@
 import { usePathname, useRouter } from 'next/navigation';
 import useUser from '@/app/hooks/useUser';
 import { useCallback, useState } from 'react';
+import Button from '../components/Button';
+import Image from 'next/image';
 
 import AsideButton from '../components/AsideButton';
 import Protected from '../components/Protected';
@@ -10,6 +12,7 @@ import { LoadingScreen } from '../components/LoadingScreen';
 import InfoHeader from '../components/InfoHeader';
 
 import homeIcon from '@/public/icons/home.jpg';
+import logoIcon from '@/public/icons/logotipo.jpg';
 import scheduleIcon from '@/public/icons/schedule.jpg';
 import profileIcon from '@/public/icons/profile.jpg';
 import useWindowDimensions from '../hooks/useWindowDimensions';
@@ -20,6 +23,21 @@ function calculatePositionOfBlob(node: any, width: number, footerWidth: number) 
     const intWidth = Math.round(infos.width);
 
     return { x: intX, width: intWidth };
+}
+
+function LogoReturnButton() {
+    const router = useRouter();
+    const { user } = useUser();
+
+    return (
+        user.is_anonymous && 
+        <Button onClick={() => router.replace('/')} className="absolute top-0 right-3 !shadow-none !p-0 ">
+            <Image
+                width={100} height={100}
+                src={logoIcon} alt='ícone do logotipo'
+            />
+        </Button>
+    );
 }
 
 function AsideButtonsJSX() {
@@ -40,6 +58,7 @@ function AsideButtonsJSX() {
     }, [path, width, footerWidth]);
 
     return (
+
         <div ref={onFooterRefChange} className="flex justify-around bg-white rounded-t-[25px] px-6 py-3 max-w-md  absolute m-auto inset-x-px bottom-0 backdrop-blur-sm bg-opacity-50 drop-shadow-lg">
             <div style={{
                 width: currentBlobDimensions.width,
@@ -64,6 +83,7 @@ function LayoutJSX({ children }: { children: React.ReactNode }) {
             <main className={`${breakHeighPoint ? 'pt-3 h-[calc(100%-15.75rem)]' : 'pt-7 h-[calc(100%-9.75rem)]'}`}>
                 {children}
             </main>
+            <LogoReturnButton />
             <AsideButtonsJSX />
         </>
     );
