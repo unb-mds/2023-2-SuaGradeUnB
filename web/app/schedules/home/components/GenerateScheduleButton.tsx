@@ -15,7 +15,7 @@ export default function GenerateScheduleButton() {
             <Button
                 disabled={classesToShow.length === 0}
                 onClick={() => router.replace('/schedules/mygrades')}
-                className='absolute bottom-28 w-52 h-10 font-semibold bg-primary disabled:opacity-70'
+                className='absolute bottom-20 w-52 h-10 font-semibold bg-primary disabled:opacity-70'
             >
                 Gerar Grade
             </Button>
