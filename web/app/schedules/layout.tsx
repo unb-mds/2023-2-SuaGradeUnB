@@ -12,6 +12,7 @@ import { LoadingScreen } from '../components/LoadingScreen';
 import InfoHeader from '../components/InfoHeader';
 
 import homeIcon from '@/public/icons/home.jpg';
+import infoIcon from '@/public/icons/info.jpg';
 import logoIcon from '@/public/icons/logotipo.jpg';
 import scheduleIcon from '@/public/icons/schedule.jpg';
 import profileIcon from '@/public/icons/profile.jpg';
@@ -30,7 +31,7 @@ function LogoReturnButton() {
     const { user } = useUser();
 
     return (
-        user.is_anonymous && 
+        user.is_anonymous &&
         <Button onClick={() => router.replace('/')} className="absolute top-0 right-3 !shadow-none !p-0 ">
             <Image
                 width={100} height={100}
@@ -67,6 +68,7 @@ function AsideButtonsJSX() {
             <AsideButton innerRef={onRefChange} pageName='home' image={homeIcon} onClick={() => router.push('/schedules/home')} />
             <AsideButton innerRef={onRefChange} pageName='mygrades' image={scheduleIcon} onClick={() => router.push('/schedules/mygrades')} />
             {user.is_anonymous ? null : <AsideButton innerRef={onRefChange} pageName='profile' image={profileIcon} onClick={() => router.push('/schedules/profile')} />}
+            <AsideButton innerRef={onRefChange} pageName='info' image={infoIcon} onClick={() => router.push('/schedules/info')} />
         </div>
     );
 }
