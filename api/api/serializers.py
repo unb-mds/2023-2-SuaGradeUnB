@@ -17,3 +17,15 @@ class DisciplineSerializer(ModelSerializer):
     class Meta:
         model = Discipline
         fields = '__all__'
+
+class DisciplineSerializerSchedule(ModelSerializer):
+    class Meta:
+        model = Discipline
+        fields = '__all__'
+
+class ClassSerializerSchedule(ModelSerializer):
+    discipline = DisciplineSerializerSchedule()
+    
+    class Meta:
+        model = Class
+        fields = '__all__'
