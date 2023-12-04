@@ -15,7 +15,7 @@ export default function AddDisciplineButton(props: AddDisciplineButtonPropsType)
             <Button
                 innerRef={props.buttonAddDisciplineRef}
                 onClick={() => setShowPopUpContent(!showPopUpContent)}
-                className='absolute top-24 font-semibold bg-secondary'
+                className='absolute top-20 font-semibold bg-secondary'
             >
                 Adicionar matéria
             </Button>
