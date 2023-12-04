@@ -24,14 +24,14 @@ function Form(props: FormPropsType) {
 
     return (
         <>
-            <div className='flex flex-col items-center gap-1'>
+            <div className='flex flex-col items-center gap-1 w-full max-w-md'>
                 <span className='text-xl font-semibold'>Matéria</span>
                 <InputForm form={{ formData, setFormData }} setInfos={props.setInfos} />
             </div>
-            <div className='flex flex-col items-center gap-1'>
+            <div className='flex flex-col items-center gap-1 w-full max-w-md'>
                 <span className='text-xl font-semibold'>Ano/Período</span>
                 <select
-                    className='bg-white shadow-md h-14 w-80 p-2 rounded-xl'
+                    className='bg-white shadow-md h-14 w-11/12 p-2 rounded-xl'
                     value={`${formData.year}/${formData.period}`}
                     onChange={event => handleYearAndPeriodChange(event)}
                 >
