@@ -28,16 +28,16 @@ function LayoutJSX({ children }: { children: React.ReactNode }) {
             <main className={`${breakHeighPoint ? 'pt-3 h-[calc(100%-15.75rem)]' : 'pt-7 h-[calc(100%-9.75rem)]'}`}>
                 {children}
             </main>
-            <div className="flex justify-around bg-blue-500 rounded-t-[40px] px-6 py-2 max-w-xl absolute m-auto inset-x-px bottom-0 backdrop-blur-sm bg-opacity-50 drop-shadow-lg">
-                <section className='grid grid-cols-3 px-6 absolute w-full'>
+            <div className="flex justify-around bg-white rounded-t-[25px] px-6 py-3 max-w-md  absolute m-auto inset-x-px bottom-0 backdrop-blur-sm bg-opacity-50 drop-shadow-lg">
+                <section className={`grid grid-cols-${user.is_anonymous ? '2' : '3'} px-6 absolute w-full`}>
                     <div className={
-                        `h-[50px] rounded-full bg-primary transition-all duration-300
+                        `h-[49px] rounded-full bg-primary transition-all duration-300
                         ${path === 'home' ? 'col-start-1' : (path === 'mygrades' ? 'col-start-2' : 'col-start-3')}
                     `}></div>
                 </section>
-                <AsideButton image={homeIcon} text='Home' onClick={() => router.push('/schedules/home')} />
-                <AsideButton image={scheduleIcon} text='Grades' onClick={() => router.push('/schedules/mygrades')} />
-                {user.is_anonymous ? null : <AsideButton image={profileIcon} text='Perfil' onClick={() => router.push('/schedules/profile')} />}
+                <AsideButton image={homeIcon} text='' onClick={() => router.push('/schedules/home')} />
+                <AsideButton image={scheduleIcon} text='' onClick={() => router.push('/schedules/mygrades')} />
+                {user.is_anonymous ? null : <AsideButton image={profileIcon} text='' onClick={() => router.push('/schedules/profile')} />}
             </div>
         </>
     );
