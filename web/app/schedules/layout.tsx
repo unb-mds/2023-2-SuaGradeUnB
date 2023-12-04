@@ -29,7 +29,7 @@ function LayoutJSX({ children }: { children: React.ReactNode }) {
                 {children}
             </main>
             <div className="flex justify-around bg-white rounded-t-[25px] px-6 py-3 max-w-md  absolute m-auto inset-x-px bottom-0 backdrop-blur-sm bg-opacity-50 drop-shadow-lg">
-                <section className={`grid grid-cols-${user.is_anonymous ? '2' : '3'} px-6 absolute w-full`}>
+                <section className={`grid px-6 absolute w-full ${user.is_anonymous ? 'grid-cols-2' : 'grid-cols-3'}`}>
                     <div className={
                         `h-[49px] rounded-full bg-primary transition-all duration-300
                         ${path === 'home' ? 'col-start-1' : (path === 'mygrades' ? 'col-start-2' : 'col-start-3')}
