@@ -5,10 +5,10 @@ import useShowPopUpContent from '@/app/hooks/useShowPopUpContent';
 import { ClassType, DisciplineType } from '@/app/utils/api/searchDiscipline';
 import { ClassValueType } from '@/app/contexts/SelectedClassesContext/types';
 
-import DisciplineOptionForm from './DisciplineOptionForm';
+import DisciplineOptionForm from './Form/DisciplineOptionForm';
 import DisciplineFragment from './DisciplineFragment';
 
-import { AsideSchedulePopUpJSXPropsType, AsideSchedulePopUpPropsType, CheckDisciplineObjPropsType } from './types';
+import { AsideSchedulePopUpJSXPropsType, AsideSchedulePopUpPropsType, CheckDisciplineObjPropsType } from './types/types';
 
 import _ from 'lodash';
 

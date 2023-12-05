@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, useEffect, useState } from 'react';
 import retrieveYearAndPeriod, { YearPeriodType } from '../utils/api/retrieveYearAndPeriod';
 

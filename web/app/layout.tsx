@@ -4,6 +4,9 @@ import { Poppins } from 'next/font/google';
 import './globals.css';
 
 import UserContextProvider from './contexts/UserContext';
+import YearPeriodContextProvider from './contexts/YearPeriodContext';
+import ClassesToShowContextProvider from './contexts/ClassesToShowContext';
+import SelectedClassesContextProvider from './contexts/SelectedClassesContext/SelectedClassesContext';
 
 import { Toaster } from 'react-hot-toast';
 
@@ -29,7 +32,13 @@ export default function RootLayout({
       <body className={`${poppins.variable} h-screen font-sans bg-white`}>
         <Toaster />
         <UserContextProvider>
-          {children}
+          <YearPeriodContextProvider>
+            <ClassesToShowContextProvider>
+              <SelectedClassesContextProvider>
+                {children}
+              </SelectedClassesContextProvider>
+            </ClassesToShowContextProvider>
+          </YearPeriodContextProvider>
         </UserContextProvider>
       </body>
     </html>

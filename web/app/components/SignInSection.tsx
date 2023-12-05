@@ -8,7 +8,7 @@ import signInWithGoogle from '../utils/signInWithGoogle';
 import registerWithGoogle from '../utils/api/registerWithGoogle';
 import retrieveAccessToken from '../utils/retrieveAccessToken';
 
-import googleLogoImage from '../../public/google.svg';
+import googleLogoImage from '../../public/google.jpg';
 
 import Image from 'next/image';
 import Button from './Button';
@@ -50,7 +50,7 @@ export default function SignInSection() {
 
     return (
         <Button
-            className='text-sm hover:bg-slate-100 bg-white !text-black'
+            className='text-sm flat:text-center hover:bg-slate-100 bg-white !text-black'
             onClick={() => {
                 if (!user.is_anonymous) router.push('/schedules/home');
                 else signInWithGoogle(router);
