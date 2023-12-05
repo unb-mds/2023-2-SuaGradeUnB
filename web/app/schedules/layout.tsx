@@ -12,6 +12,7 @@ import { LoadingScreen } from '../components/LoadingScreen';
 import InfoHeader from '../components/InfoHeader';
 
 import homeIcon from '@/public/icons/home.jpg';
+import infoIcon from '@/public/icons/info.jpg';
 import logoIcon from '@/public/icons/logotipo.jpg';
 import scheduleIcon from '@/public/icons/schedule.jpg';
 import profileIcon from '@/public/icons/profile.jpg';
@@ -90,6 +91,7 @@ function AsideButtonsJSX() {
             <AsideButton innerRef={onRefChange} pageName='home' image={homeIcon} onClick={() => router.push('/schedules/home')} />
             <AsideButton innerRef={onRefChange} pageName='mygrades' image={scheduleIcon} onClick={() => router.push('/schedules/mygrades')} />
             {user.is_anonymous ? null : <AsideButton innerRef={onRefChange} pageName='profile' image={profileIcon} onClick={() => router.push('/schedules/profile')} />}
+            <AsideButton innerRef={onRefChange} pageName='info' image={infoIcon} onClick={() => router.push('/schedules/info')} />
         </div>
     );
 }
