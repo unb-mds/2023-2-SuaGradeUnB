@@ -30,12 +30,12 @@ const Team = () => {
             <div className="grid grid-cols-3 gap-5">
                 <CollaboratorImage name="Arthur Ribeiro" src="https://github.com/artrsousa1.png" />
                 <CollaboratorImage name="Caio Habibe" src="https://github.com/CaioHabibe.png" />
-                <CollaboratorImage name="Caio Felipe" src="https://github.com/caio-felipee.png" />
+                <CollaboratorImage name="Caio Rodrigues" src="https://github.com/caio-felipee.png" />
             </div>
             <div className="grid grid-cols-3 gap-5">
                 <CollaboratorImage name="Gabriel Castelo" src="https://github.com/GabrielCastelo-31.png" />
                 <CollaboratorImage name="Henrique Camelo" src="https://github.com/henriquecq.png" />
-                <CollaboratorImage name="Mateus Viera" src="https://github.com/mateusvrs.png" />
+                <CollaboratorImage name="Mateus Vieira" src="https://github.com/mateusvrs.png" />
             </div>
         </div>
     );
@@ -56,16 +56,9 @@ export default function Info() {
                     </p>
                     <h2 className="text-3xl font-semibold pt-5 pb-5">Como utilizar?</h2>
                     <p className="text-justify">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum nemo repellat voluptas culpa qui ullam dolorem laudantium aliquam dolorum,
-                        ex est nulla labore expedita repellendus ab harum sequi doloribus fugiat.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum nemo repellat voluptas culpa qui ullam dolorem laudantium aliquam dolorum,
-                        ex est nulla labore expedita repellendus ab harum sequi doloribus fugiat.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum nemo repellat voluptas culpa qui ullam dolorem laudantium aliquam dolorum,
-                        ex est nulla labore expedita repellendus ab harum sequi doloribus fugiat.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum nemo repellat voluptas culpa qui ullam dolorem laudantium aliquam dolorum,
-                        ex est nulla labore expedita repellendus ab harum sequi doloribus fugiat.
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum nemo repellat voluptas culpa qui ullam dolorem laudantium aliquam dolorum,
-                        ex est nulla labore expedita repellendus ab harum sequi doloribus fugiat.
+                    <p className="pb-5">Na página inicial, clique no botão <b>Buscar Matéria</b> para selecionar as disciplinas desejadas para a sua grade. Escolha o ano/período e insira o nome da disciplina para poder optar por turmas potenciais na criação da grade, permitindo a escolha de até quatro turmas para cada disciplina.</p>
+                    <p className="pb-5">Após fazer suas escolhas, clique no botão <b>Gerar Grade</b> e defina a prioridade dos turnos que melhor se adequam à sua rotina. Em seguida, basta escolher a grade mais adequada entre as opções geradas para realizar o download e/ou salvar as disciplinas escolhidas.</p>
+                    <p>Compartilhe suas experiências e sugestões. O aplicativo está em constante desenvolvimento, e seu feedback é valioso para aprimorar a experiência de todos os usuários.</p>
                     </p>
                     <h2 className="text-3xl font-semibold  pt-5 pb-5">Como contribuir?</h2>
                     <p className="text-justify">
