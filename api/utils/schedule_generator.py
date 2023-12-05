@@ -4,6 +4,8 @@ from .db_handler import get_class_by_id
 from re import search
 from api.models import Class
 
+MAXIMUM_DISCIPLINES = 11
+MAXIMUM_CLASSES_FOR_DISCIPLINE = 4
 
 def check(function):
     """
@@ -26,10 +28,11 @@ class ScheduleGenerator:
         self.schedule_info = defaultdict(lambda: None)
         self.preference = preference
         self.generated = False
-        self._get_and_validate_classes(classes_id=classes_id)
+        self._get_and_validate_classes(classes_id=set(classes_id))
         self._make_disciplines_list()
+        self._validate_parameters_length()
 
-    def _get_and_validate_classes(self, classes_id: list[int]) -> None:
+    def _get_and_validate_classes(self, classes_id: set[int]) -> None:
         self.disciplines = defaultdict(list)
         self.classes = dict()
         self.schedules = []
@@ -48,7 +51,20 @@ class ScheduleGenerator:
                 self._add_schedule_code(_class.schedule)
             except Class.DoesNotExist:
                 self.valid = False
-                return
+                raise ValueError(f"class with id {class_id} does not exist.")
+    
+    @check
+    def _validate_parameters_length(self) -> None:
+        if len(self.disciplines) > MAXIMUM_DISCIPLINES:
+            self.valid = False
+
+        for classes in self.disciplines.values():
+            if len(classes) > MAXIMUM_CLASSES_FOR_DISCIPLINE:
+                self.valid = False
+                break
+        
+        if not self.valid:
+            raise ValueError(f"you can only send {MAXIMUM_DISCIPLINES} disciplines and {MAXIMUM_CLASSES_FOR_DISCIPLINE} classes for each discipline.")
 
     def is_valid(self) -> bool:
         return self.valid
@@ -145,7 +161,6 @@ class ScheduleGenerator:
 
         for schedule in possible_schedules:
             if self._is_valid_schedule(schedule):
-                print("valid", schedule)
                 self._add_schedule(schedule)
 
         return self.sort_by_priority()

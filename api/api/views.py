@@ -16,7 +16,7 @@ MAXIMUM_RETURNED_DISCIPLINES = 8
 ERROR_MESSAGE = "no valid argument found for 'search', 'year' or 'period'"
 MINIMUM_SEARCH_LENGTH = 4
 ERROR_MESSAGE_SEARCH_LENGTH = f"search must have at least {MINIMUM_SEARCH_LENGTH} characters"
-
+MAXIMUM_RETURNED_SCHEDULES = 5
 
 class Search(APIView):
 
@@ -167,18 +167,19 @@ class Schedule(APIView):
                     "errors": "classes is required"
                 }, status.HTTP_400_BAD_REQUEST)
 
-        schedule_generator = ScheduleGenerator(classes_id, preference)
-        schedules = schedule_generator.generate()
-
-        if schedules is None:
+        try:
+            schedule_generator = ScheduleGenerator(classes_id, preference)
+            schedules = schedule_generator.generate()
+        except Exception as error:
+            """Retorna um erro caso ocorra algum erro ao criar o gerador de horários"""
             return response.Response(
                 {
-                    "errors": "classes must be a list of valid classes id."
+                    "errors": str(error)
                 }, status.HTTP_400_BAD_REQUEST)
 
         data = []
 
-        for schedule in schedules:
+        for schedule in schedules[:MAXIMUM_RETURNED_SCHEDULES]:
             data.append(
                 list(map(lambda x: serializers.ClassSerializerSchedule(x).data, schedule)))
 
