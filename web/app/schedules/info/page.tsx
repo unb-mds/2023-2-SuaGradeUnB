@@ -5,78 +5,37 @@ import useUser from '@/app/hooks/useUser';
 import Image from 'next/image';
 import Link from 'next/link';
 
+function CollaboratorImage({ name, src }: { name: string, src: string }) {
+    return (
+        <div className="flex flex-col items-center justify-end text-center">
+            {name}
+            <br />
+            <Link target='_blank' href={src.split('.png')[0]}>
+                <Image
+                    src={src}
+                    alt={`Foto ${name}`}
+                    width={100}
+                    height={100}
+                    className="rounded-full"
+                />
+            </Link>
+        </div>
+
+    );
+}
+
 const Team = () => {
     return (
         <div className="flex flex-col gap-5">
-            <div className="flex gap-5">
-                <div className="text-center">
-                    Arthur Ribeiro
-                    <br/>
-                    <Image
-                        src="https://github.com/artrsousa1.png"
-                        alt="Foto Arthur"
-                        width={100}
-                        height={100}
-                        className="rounded-full"
-                    />
-                </div>
-                <div className="text-center">
-                    Caio Habibe
-                    <br/>
-                    <Image
-                        src="https://github.com/CaioHabibe.png"
-                        alt="Foto Caio Habibe"
-                        width={100}
-                        height={100}
-                        className="rounded-full"
-                    />
-                </div>
-                <div className="text-center">
-                    Caio Felipe
-                    <br/>
-                    <Image
-                        src="https://github.com/caio-felipee.png"
-                        alt="Foto Caio Felipe"
-                        width={100}
-                        height={100}
-                        className="rounded-full"
-                    />
-                </div>
+            <div className="grid grid-cols-3 gap-5">
+                <CollaboratorImage name="Arthur Ribeiro" src="https://github.com/artrsousa1.png" />
+                <CollaboratorImage name="Caio Habibe" src="https://github.com/CaioHabibe.png" />
+                <CollaboratorImage name="Caio Felipe" src="https://github.com/caio-felipee.png" />
             </div>
-            <div className="flex gap-5">
-                <div className="text-center">
-                    Gabriel Castelo
-                    <br/>
-                    <Image
-                        src="https://github.com/GabrielCastelo-31.png"
-                        alt="Foto Gabriel"
-                        width={100}
-                        height={100}
-                        className="rounded-full"
-                    />
-                </div>
-                <div className="text-center">
-                    Henrique Camelo
-                    <br/>
-                    <Image
-                        src="https://github.com/henriquecq.png"
-                        alt="Foto Henrique"
-                        width={100}
-                        height={100}
-                        className="rounded-full"
-                    />
-                </div>
-                <div className="text-center">
-                    Mateus Vieira
-                    <br/>
-                    <Image
-                        src="https://github.com/mateusvrs.png"
-                        alt="Foto Mateus"
-                        width={100}
-                        height={100}
-                        className="rounded-full"
-                    />
-                </div>
+            <div className="grid grid-cols-3 gap-5">
+                <CollaboratorImage name="Gabriel Castelo" src="https://github.com/GabrielCastelo-31.png" />
+                <CollaboratorImage name="Henrique Camelo" src="https://github.com/henriquecq.png" />
+                <CollaboratorImage name="Mateus Viera" src="https://github.com/mateusvrs.png" />
             </div>
         </div>
     );
