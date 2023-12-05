@@ -152,6 +152,8 @@ class Schedule(APIView):
         preference = request.data.get('preference', None)
         preference_valid = preference is not None and isinstance(preference, list) and all(
             isinstance(x, int) for x in preference) and len(preference) == 3
+        classes_valid = classes_id is not None and isinstance(
+            classes_id, list) and all(isinstance(x, int) for x in classes_id) and len(classes_id) > 0
 
         if preference is not None and not preference_valid:
             """Retorna um erro caso a preferência não seja uma lista de 3 inteiros"""
@@ -160,11 +162,11 @@ class Schedule(APIView):
                     "errors": "preference must be a list of 3 integers"
                 }, status.HTTP_400_BAD_REQUEST)
 
-        if classes_id is None:
+        if not classes_valid:
             """Retorna um erro caso a lista de ids de classes não seja enviada"""
             return response.Response(
                 {
-                    "errors": "classes is required"
+                    "errors": "classes is required and must be a list of integers with at least one element"
                 }, status.HTTP_400_BAD_REQUEST)
 
         try:
