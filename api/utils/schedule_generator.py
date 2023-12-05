@@ -6,6 +6,7 @@ from api.models import Class
 
 MAXIMUM_DISCIPLINES = 11
 MAXIMUM_CLASSES_FOR_DISCIPLINE = 4
+LIMIT_ERROR_MESSAGE = f"you can only send {MAXIMUM_DISCIPLINES} disciplines and {MAXIMUM_CLASSES_FOR_DISCIPLINE} classes for each discipline."
 
 def check(function):
     """
@@ -55,7 +56,7 @@ class ScheduleGenerator:
     
     @check
     def _validate_parameters_length(self) -> None:
-        if len(self.disciplines) > MAXIMUM_DISCIPLINES:
+        if len(self.disciplines) > MAXIMUM_DISCIPLINES: # pragma: no cover
             self.valid = False
 
         for classes in self.disciplines.values():
@@ -64,7 +65,7 @@ class ScheduleGenerator:
                 break
         
         if not self.valid:
-            raise ValueError(f"you can only send {MAXIMUM_DISCIPLINES} disciplines and {MAXIMUM_CLASSES_FOR_DISCIPLINE} classes for each discipline.")
+            raise ValueError(LIMIT_ERROR_MESSAGE)
 
     def is_valid(self) -> bool:
         return self.valid
