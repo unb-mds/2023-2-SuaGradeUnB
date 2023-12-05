@@ -1,7 +1,3 @@
-'use client';
-
-import useUser from '@/app/hooks/useUser';
-
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -88,7 +84,6 @@ function Collaborators() {
 }
 
 export default function Info() {
-    const { user } = useUser();
 
     return (
         <div className="overflow-auto m-auto min-h-full max-h-full px-8 max-w-4xl">
