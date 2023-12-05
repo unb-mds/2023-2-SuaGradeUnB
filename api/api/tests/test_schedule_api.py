@@ -60,7 +60,7 @@ class TestScheduleAPI(APITestCase):
         classes_ids = [self.class_1.id, self.class_2.id, self.class_3.id, self.class_4.id]
         random_id = randint(1, 10000)
         
-        while(random_id in classes_ids):
+        while(random_id in classes_ids): # pragma: no cover
             random_id = randint(1, 10000)
         
         body = json.dumps({
