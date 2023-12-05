@@ -5,17 +5,6 @@ hide:
 
 # Como executar o projeto?
 
-## 👥 Equipe
-
-| Nome | GitHub |
-| :--- | :----: |
-| Arthur Ribeiro e Sousa | [@artrsousa1](https://github.com/artrsousa1) |
-| Caio Falcão Habibe Costa | [@CaioHabibe](https://github.com/CaioHabibe) |
-| Caio Felipe Rocha Rodrigues| [@caio-felipee](https://github.com/caio-felipee) |
-| Gabriel Henrique Castelo Costa | [@GabrielCastelo-31](https://github.com/GabrielCastelo-31) |
-| Henrique Camelo Quenino | [@henriquecq](https://github.com/henriquecq) |
-| Mateus Vieira Rocha da Silva | [@mateusvrs](https://github.com/mateusvrs) |
-
 ## ✨ Início
 
 Você pode clonar o repositório do projeto com o seguinte comando:
@@ -101,15 +90,15 @@ Adicionando serviços:
 1. Entre na aba **APIs e Serviços**.
 2. Clique em **Ativar APIs e Serviços**.
 3. Ative os seguintes serviços:
-    - IAM Service Account Credentials API
-    - Identity and Access Management (IAM) API
+   - IAM Service Account Credentials API
+   - Identity and Access Management (IAM) API
 
 ### 🖱️ Acesso aos serviços
 
-| Serviço | URL |
-| :--- | :----: |
+| Serviço  |                      URL                       |
+| :------- | :--------------------------------------------: |
 | Frontend | [http://localhost:3000](http://localhost:3000) |
-| Backend | [http://localhost:8000](http://localhost:8000) |
+| Backend  | [http://localhost:8000](http://localhost:8000) |
 
 ### 📍 Migrations
 
