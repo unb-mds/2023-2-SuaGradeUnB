@@ -8,6 +8,7 @@ MAXIMUM_DISCIPLINES = 11
 MAXIMUM_CLASSES_FOR_DISCIPLINE = 4
 LIMIT_ERROR_MESSAGE = f"you can only send {MAXIMUM_DISCIPLINES} disciplines and {MAXIMUM_CLASSES_FOR_DISCIPLINE} classes for each discipline."
 
+
 def check(function):
     """
     Decorator para verificar se a classe é válida antes de executar a função
@@ -53,17 +54,17 @@ class ScheduleGenerator:
             except Class.DoesNotExist:
                 self.valid = False
                 raise ValueError(f"class with id {class_id} does not exist.")
-    
+
     @check
     def _validate_parameters_length(self) -> None:
-        if len(self.disciplines) > MAXIMUM_DISCIPLINES: # pragma: no cover
+        if len(self.disciplines) > MAXIMUM_DISCIPLINES:  # pragma: no cover
             self.valid = False
 
         for classes in self.disciplines.values():
             if len(classes) > MAXIMUM_CLASSES_FOR_DISCIPLINE:
                 self.valid = False
                 break
-        
+
         if not self.valid:
             raise ValueError(LIMIT_ERROR_MESSAGE)
 
@@ -73,7 +74,7 @@ class ScheduleGenerator:
     def _get_priority(self, days: list, turn: list[str], letter: str):
         """
         Calcula a prioridade de uma disciplina ser escolhida para a grade de horários.
-        Quanto mais cedo for o horário, maior será a prioridade, independemente do turno.
+        Quanto mais cedo for o horário, maior será a prioridade, independentemente do turno.
         Quanto mais aulas na semana a disciplina tiver, maior será a prioridade.
         """
         turn_priority = 5 * (len(turn)) - sum(map(int, turn))
