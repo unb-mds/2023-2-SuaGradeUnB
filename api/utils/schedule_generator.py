@@ -4,10 +4,13 @@ from .db_handler import get_class_by_id
 from re import search
 from api.models import Class
 
-MAXIMUM_DISCIPLINES = 11
 MAXIMUM_CLASSES_FOR_DISCIPLINE = 4
-LIMIT_ERROR_MESSAGE = f"you can only send {MAXIMUM_DISCIPLINES} disciplines and {MAXIMUM_CLASSES_FOR_DISCIPLINE} classes for each discipline."
+MINIMUM_PREFERENCE_RANGE = 1
+MAXIMUM_PREFERENCE_RANGE = 3
+MAXIMUM_DISCIPLINES = 11
 
+LIMIT_ERROR_MESSAGE = f"you can only send {MAXIMUM_DISCIPLINES} disciplines and {MAXIMUM_CLASSES_FOR_DISCIPLINE} classes for each discipline."
+PREFERENCE_RANGE_ERROR = f"preference must be a list of integers with range [{MINIMUM_PREFERENCE_RANGE}, {MAXIMUM_PREFERENCE_RANGE}]"
 
 def check(function):
     """
@@ -30,15 +33,22 @@ class ScheduleGenerator:
         self.schedule_info = defaultdict(lambda: None)
         self.preference = preference
         self.generated = False
+        self._validate_preference()
         self._get_and_validate_classes(classes_id=set(classes_id))
         self._make_disciplines_list()
         self._validate_parameters_length()
+    
+    def _validate_preference(self) -> None:
+        self.valid = self.preference is None or all(isinstance(x, int) and MINIMUM_PREFERENCE_RANGE <= x <= MAXIMUM_PREFERENCE_RANGE for x in self.preference)
+        
+        if not self.valid:
+            raise ValueError(PREFERENCE_RANGE_ERROR)
 
+    @check
     def _get_and_validate_classes(self, classes_id: set[int]) -> None:
         self.disciplines = defaultdict(list)
         self.classes = dict()
         self.schedules = []
-        self.valid = True
 
         if not len(classes_id):
             self.valid = False
