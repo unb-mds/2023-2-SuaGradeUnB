@@ -1,6 +1,6 @@
 from rest_framework.test import APITestCase
 from utils import db_handler as dbh
-from utils.schedule_generator import ScheduleGenerator, LIMIT_ERROR_MESSAGE
+from utils.schedule_generator import ScheduleGenerator, LIMIT_ERROR_MESSAGE, PREFERENCE_RANGE_ERROR
 from random import randint
 
 class TestSchedule(APITestCase):
@@ -144,4 +144,13 @@ class TestSchedule(APITestCase):
         
         schedules = schedule_generator.generate()
         self.assertEqual(len(schedules), 4)
-            
+    
+    def test_with_invalid_preference(self):
+        """
+        Testa a geração de horários com preferência inválida
+        """
+        
+        try:
+            schedule_generator = ScheduleGenerator(classes_id=[self.class_1.id], preference=[1, 2, '3'])
+        except Exception as error:
+            self.assertEqual(str(error), PREFERENCE_RANGE_ERROR)
