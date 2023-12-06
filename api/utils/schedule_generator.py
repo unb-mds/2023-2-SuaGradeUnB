@@ -93,7 +93,7 @@ class ScheduleGenerator:
         schedules_list = schedules.split()
 
         """Cria um dicionário com a prioridade e os horários
-        em produto cartesianode uma disciplina"""
+        em produto cartesiano de uma disciplina"""
         schedules_dict = {
             "priority": 0,
             "times": set()
