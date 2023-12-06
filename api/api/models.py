@@ -1,9 +1,8 @@
 from django.db import models
 from unidecode import unidecode
 from django.contrib.postgres.fields import ArrayField
-from django.contrib.postgres.fields import JSONField
+from users.models import User
 
-from api.users.models import User
 
 class Department(models.Model):
     """Classe que representa um departamento.
@@ -72,8 +71,9 @@ class Class(models.Model):
 class Schedule(models.Model):
     """Classe que representa um horário.
     """
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='schedules')
-    classes = JSONField(default=list)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='schedules')
+    classes = models.JSONField(default=list)
 
     def __str__(self):
-        return str(self.classes)
+        return self.classes
