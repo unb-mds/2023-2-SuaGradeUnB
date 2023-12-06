@@ -18,6 +18,7 @@ MINIMUM_SEARCH_LENGTH = 4
 ERROR_MESSAGE_SEARCH_LENGTH = f"search must have at least {MINIMUM_SEARCH_LENGTH} characters"
 MAXIMUM_RETURNED_SCHEDULES = 5
 
+
 class Search(APIView):
 
     def treat_string(self, string: str | None) -> str | None:
@@ -128,16 +129,34 @@ class YearPeriod(APIView):
 
 class Schedule(APIView):
     @swagger_auto_schema(
-        operation_description="Gera uma lista de horários válidos para as turmas enviadas.",
-        manual_parameters=[
-            openapi.Parameter('classes', openapi.IN_QUERY,
-                              description="Lista de ids de turmas", type=openapi.TYPE_ARRAY, items=openapi.Items(type=openapi.TYPE_INTEGER)),
-            openapi.Parameter('preference', openapi.IN_QUERY,
-                              description="Lista de preferências (manhã/tarde/noite)", type=openapi.TYPE_ARRAY, items=openapi.Items(type=openapi.TYPE_INTEGER)),
-        ],
-        responses={
-            200: openapi.Response('OK', serializers.ClassSerializerSchedule),
-            **Errors([400]).retrieve_erros(),
+        operation_description="Gera possíveis horários de acordo com as aulas escolhidas com preferência de turno",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            title="body",
+            required=['classes'],
+            properties={   
+                'classes': openapi.Schema(
+                    description="Lista de ids de aulas escolhidas",
+                    type=openapi.TYPE_ARRAY,
+                    items=openapi.Schema(
+                        description="Id da aula",
+                        type=openapi.TYPE_INTEGER
+                    )
+                ),
+                'preference': openapi.Schema(
+                    description="Lista de preferências (manhã, tarde, noite)",
+                    type=openapi.TYPE_ARRAY,
+                    items=openapi.Schema(
+                        description="Define o peso de cada turno",
+                        type=openapi.TYPE_INTEGER,
+                        enum=[1, 2, 3]
+                    )
+                )
+            }
+        ),
+        responses = {
+            200: openapi.Response('OK', serializers.ClassSerializerSchedule(many=True)),
+            **Errors([400]).retrieve_erros()
         }
     )
     def post(self, request: request.Request, *args, **kwargs) -> response.Response:
