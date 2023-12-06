@@ -125,10 +125,12 @@ class YearPeriod(APIView):
 
         return response.Response(data, status.HTTP_200_OK)
 
-class SaveSchedule(APIView):
-    permissions_classes = [IsAuthenticated]
-    def post(self,request:request.Request,*args,**kwargs) -> response.Response:
-        data = request.data
 
+class SaveSchedule(APIView):
+
+    permissions_classes = [IsAuthenticated]
+
+    def post(self, request: request.Request, *args, **kwargs) -> response.Response:
+        data = request.data
 
         return response.Response(status.HTTP_200_OK)
