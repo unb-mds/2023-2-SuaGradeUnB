@@ -10,6 +10,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from .swagger import Errors
 from api import serializers
+from rest_framework.permissions import IsAuthenticated
 
 MAXIMUM_RETURNED_DISCIPLINES = 8
 ERROR_MESSAGE = "no valid argument found for 'search', 'year' or 'period'"
@@ -123,3 +124,11 @@ class YearPeriod(APIView):
         }
 
         return response.Response(data, status.HTTP_200_OK)
+
+class SaveSchedule(APIView):
+    permissions_classes = [IsAuthenticated]
+    def post(self,request:request.Request,*args,**kwargs) -> response.Response:
+        data = request.data
+
+
+        return response.Response(status.HTTP_200_OK)

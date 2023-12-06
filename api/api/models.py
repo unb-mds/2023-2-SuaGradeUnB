@@ -1,6 +1,9 @@
 from django.db import models
 from unidecode import unidecode
 from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.fields import JSONField
+
+from api.users.models import User
 
 class Department(models.Model):
     """Classe que representa um departamento.
@@ -15,6 +18,7 @@ class Department(models.Model):
     def __str__(self):
         return self.code
 
+
 class Discipline(models.Model):
     """Classe que representa uma disciplina.
     name:str -> Nome da disciplina
@@ -25,14 +29,16 @@ class Discipline(models.Model):
     name = models.CharField(max_length=128)
     unicode_name = models.CharField(max_length=128, default='')
     code = models.CharField(max_length=64)
-    department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='disciplines')
+    department = models.ForeignKey(
+        Department, on_delete=models.CASCADE, related_name='disciplines')
 
     def __str__(self):
         return self.name
-    
+
     def save(self, *args, **kwargs):
         self.unicode_name = unidecode(self.name).casefold()
         super(Discipline, self).save(*args, **kwargs)
+
 
 class Class(models.Model):
     """Classe que representa uma turma.
@@ -48,7 +54,9 @@ class Class(models.Model):
     schedule = models.CharField(max_length=512)
     days = ArrayField(models.CharField(max_length=64))
     _class = models.CharField(max_length=64)
-    discipline = models.ForeignKey(Discipline, on_delete=models.CASCADE, related_name='classes')
+    discipline = models.ForeignKey(
+        Discipline, on_delete=models.CASCADE, related_name='classes')
+
     special_dates = ArrayField(
         ArrayField(
             models.CharField(max_length=256),
@@ -59,3 +67,13 @@ class Class(models.Model):
 
     def __str__(self):
         return self._class
+
+
+class Schedule(models.Model):
+    """Classe que representa um horário.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='schedules')
+    classes = JSONField(default=list)
+
+    def __str__(self):
+        return str(self.classes)
