@@ -50,3 +50,6 @@ def filter_disciplines_by_year_and_period(year: str, period: str, disciplines: D
     """Filtra as disciplinas pelo ano e período."""
     return disciplines.filter(department__year=year, department__period=period)
 
+def get_class_by_id(id: int, classes: Class = Class.objects) -> Class:
+    """Filtra as turmas pelo id."""
+    return classes.get(id=id)
