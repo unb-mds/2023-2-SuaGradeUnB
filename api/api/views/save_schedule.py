@@ -100,18 +100,22 @@ def check_class_key_existence(key: str, **kwargs):
         raise ValueError(f"the class must have the {key} key")
 
 
-def validate_class(**kwargs) -> response.Response | None:
+def check_if_discipline(key: str, **kwargs):
     _class = kwargs.get('_class')
+
+    if key == 'discipline':
+        if not isinstance(_class[key], dict):
+            raise ValueError("the discipline must be a object structure")
+
+        check_disciplines(key, **kwargs)
+
+
+def validate_class(**kwargs) -> response.Response | None:
     expected_keys = kwargs.get('expected_keys')
 
     for key in expected_keys:
         check_class_key_existence(key, **kwargs)
-
-        if key == 'discipline':
-            if not isinstance(_class[key], dict):
-                raise ValueError("the discipline must be a object structure")
-
-            check_disciplines(key, **kwargs)
+        check_if_discipline(key, **kwargs)
 
 
 def validate_request_body_structure(body: list[dict] | None) -> bool:
