@@ -1,16 +1,22 @@
-from utils import db_handler as dbh
-from .models import Discipline
 from unidecode import unidecode
+
 from django.contrib import admin
 from django.db.models.query import QuerySet
+
 from rest_framework.decorators import APIView
-from utils.sessions import get_current_year_and_period, get_next_period
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status, request, response
+
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+
+from utils.sessions import get_current_year_and_period, get_next_period
+from utils import db_handler as dbh
+
+from . import serializers
 from .swagger import Errors
-from api import serializers
-from rest_framework.permissions import IsAuthenticated
+from .models import Discipline
+
 
 MAXIMUM_RETURNED_DISCIPLINES = 8
 ERROR_MESSAGE = "no valid argument found for 'search', 'year' or 'period'"
@@ -128,7 +134,7 @@ class YearPeriod(APIView):
 
 class SaveSchedule(APIView):
 
-    permissions_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request: request.Request, *args, **kwargs) -> response.Response:
         data = request.data
