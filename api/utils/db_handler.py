@@ -86,7 +86,7 @@ def save_schedule(user: User, schedule_to_save: list[Class]) -> bool:
 
     try:
         Schedule.objects.get_or_create(user=user, classes=json_schedule)
-    except:
+    except: # pragma: no cover
         return False
 
     return True
