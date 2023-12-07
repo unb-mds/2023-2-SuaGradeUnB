@@ -15,13 +15,13 @@ class ClassSerializer(ModelSerializer):
 
 
 class DisciplineSerializerSchedule(ModelSerializer):
+    department = DepartmentSerializer()
     class Meta:
         model = Discipline
         fields = '__all__'
 
 
 class DisciplineSerializer(DisciplineSerializerSchedule):
-    department = DepartmentSerializer()
     classes = ClassSerializer(many=True)
 
 
