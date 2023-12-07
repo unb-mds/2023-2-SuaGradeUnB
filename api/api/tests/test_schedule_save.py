@@ -10,10 +10,12 @@ from api.models import Class
 
 from users.models import User
 
+from api.tests.test_error_request_body_schedule_save import ErrorRequestBodyScheduleSave
+
 import json
 
 
-class TestScheduleSaveAPI(APITestCase):
+class TestScheduleSaveAPI(APITestCase, ErrorRequestBodyScheduleSave):
 
     def setDepartmentInfos(self):
         self.department_infos = [
