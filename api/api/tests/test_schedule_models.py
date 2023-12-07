@@ -45,7 +45,4 @@ class ScheduleModelsTest(TestCase):
         """
         Testa se o método __str__ de Schedule retorna o json correto
         """
-        self.assertEqual(str(self.schedule), json.dumps([
-            {'class': 1},
-            {'class': 2},
-        ]))
+        self.assertEqual(str(self.schedule), f'Class: {self.schedule.id} - User: {self.user.email}')

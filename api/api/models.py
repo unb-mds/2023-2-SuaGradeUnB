@@ -70,10 +70,12 @@ class Class(models.Model):
 
 class Schedule(models.Model):
     """Classe que representa um horário.
+    user:User -> Usuário do horário
+    classes:list -> Lista de turmas do horário
     """
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='schedules')
     classes = models.JSONField(default=list)
 
     def __str__(self):
-        return self.classes
+        return f'Class: {self.id} - User: {self.user.email}'
