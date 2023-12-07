@@ -38,16 +38,13 @@ class SaveSchedule(APIView):
         unique_year_period = set()
         current_db_classes_ids = []
 
-        classes_viability = check_classes_viability(
+        classes_not_viability = check_classes_viability(
             classes,
             unique_year_period,
             current_db_classes_ids
         )
-        if classes_viability:
-            return classes_viability
-
-        if len(unique_year_period) > 1:
-            return handle_400_error("all classes must have the same year and period")
+        if classes_not_viability:
+            return classes_not_viability
 
         try:
             valid_schedule = validate_received_schedule(current_db_classes_ids)
@@ -77,20 +74,30 @@ def check_department_key_existence(department_keys: list[str], **kwargs):
                 f"the department must have the {department_key} key")
 
 
-def check_disciplines(key, **kwargs):
+def check_department(discipline_key: str, **kwargs):
     _class = kwargs.get('_class')
-    discipline_keys = kwargs.get('expected_discipline_keys')
     department_keys = kwargs.get('expected_department_keys')
+
+    if discipline_key == 'department':
+        if not isinstance(_class['discipline']['department'], dict):
+            raise ValueError("the department must be a object structure")
+
+        check_department_key_existence(department_keys, **kwargs)
+
+
+def check_disciplines(key, **kwargs):
+    discipline_keys = kwargs.get('expected_discipline_keys')
 
     for discipline_key in discipline_keys:
         check_discipline_key_existence(key, discipline_key, **kwargs)
+        check_department(discipline_key, **kwargs)
 
-        if discipline_key == 'department':
-            if not isinstance(_class['discipline']['department'], dict):
-                raise ValueError(
-                    "the department must be a object structure")
 
-            check_department_key_existence(department_keys, **kwargs)
+def check_class_key_existence(key: str, **kwargs):
+    _class = kwargs.get('_class')
+
+    if key not in _class.keys():
+        raise ValueError(f"the class must have the {key} key")
 
 
 def validate_class(**kwargs) -> response.Response | None:
@@ -98,8 +105,7 @@ def validate_class(**kwargs) -> response.Response | None:
     expected_keys = kwargs.get('expected_keys')
 
     for key in expected_keys:
-        if key not in _class.keys():
-            raise ValueError(f"the class must have the {key} key")
+        check_class_key_existence(key, **kwargs)
 
         if key == 'discipline':
             if not isinstance(_class[key], dict):
@@ -146,6 +152,9 @@ def check_classes_viability(classes: list[dict], unique_year_period: set, curren
             return handle_400_error(error_msg)
 
         current_db_classes_ids.append(db_class.id)
+
+    if len(unique_year_period) > 1:
+        return handle_400_error("all classes must have the same year and period")
 
 
 def retrieve_year_period_from_class(_class: dict) -> tuple:
