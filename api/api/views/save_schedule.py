@@ -30,6 +30,10 @@ class SaveSchedule(APIView):
     def post(self, request: request.Request, *args, **kwargs) -> response.Response:
         classes = request.data
 
+        valid_request_body_structure = validate_request_body_structure(classes)
+        if valid_request_body_structure:
+            return valid_request_body_structure
+
         unique_year_period = set()
         current_db_classes_ids = []
 
@@ -54,6 +58,57 @@ class SaveSchedule(APIView):
         answer = dbh.save_schedule(user, valid_schedule)
 
         return response.Response(status=status.HTTP_201_CREATED) if answer else handle_400_error("error while saving schedule")
+
+
+def validate_class(**kwargs) -> response.Response | None:
+    _class = kwargs.get('_class')
+    expected_keys = kwargs.get('expected_keys')
+    expected_discipline_keys = kwargs.get('expected_discipline_keys')
+    expected_department_keys = kwargs.get('expected_department_keys')
+
+    for key in expected_keys:
+        if key not in _class.keys():
+            return handle_400_error(f"the class must have the {key} key")
+
+        if key == 'discipline':
+            if not isinstance(_class[key], dict):
+                return handle_400_error("the discipline must be a object structure")
+
+            for discipline_key in expected_discipline_keys:
+                if discipline_key not in _class[key].keys():
+                    return handle_400_error(f"the discipline must have the {discipline_key} key")
+
+                if discipline_key == 'department':
+                    if not isinstance(_class['discipline']['department'], dict):
+                        return handle_400_error("the department must be a object structure")
+
+                    for department_key in expected_department_keys:
+                        if department_key not in _class['discipline']['department'].keys():
+                            return handle_400_error(f"the department must have the {department_key} key")
+
+
+def validate_request_body_structure(body: list[dict] | None) -> bool:
+    if not body:
+        return handle_400_error("the request body must not be empty")
+
+    if not isinstance(body, list):
+        return handle_400_error("the request body must be a list of classes")
+
+    for _class in body:
+        if not isinstance(_class, dict):
+            return handle_400_error("each class must be a object structure")
+
+        expected_keys = ['discipline', 'schedule', 'days',
+                         'special_dates', 'classroom', 'teachers']
+        expected_discipline_keys = ['name', 'code', 'department']
+        expected_department_keys = ['year', 'period']
+        args = {
+            '_class': _class,
+            'expected_keys': expected_keys,
+            'expected_discipline_keys': expected_discipline_keys,
+            'expected_department_keys': expected_department_keys
+        }
+        return validate_class(**args)
 
 
 def check_classes_viability(classes: list[dict], unique_year_period: set, current_db_classes_ids: list[int]):
