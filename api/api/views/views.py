@@ -4,7 +4,6 @@ from django.contrib import admin
 from django.db.models.query import QuerySet
 
 from rest_framework.decorators import APIView
-from rest_framework.permissions import IsAuthenticated
 from rest_framework import status, request, response
 
 from drf_yasg.utils import swagger_auto_schema
@@ -14,9 +13,9 @@ from utils.sessions import get_current_year_and_period, get_next_period
 from utils.schedule_generator import ScheduleGenerator
 from utils import db_handler as dbh
 
-from . import serializers
-from .swagger import Errors
-from .models import Discipline
+from .. import serializers
+from ..swagger import Errors
+from ..models import Discipline
 
 
 MAXIMUM_RETURNED_DISCIPLINES = 8
@@ -48,6 +47,7 @@ class Search(APIView):
 
     @swagger_auto_schema(
         operation_description="Busca disciplinas por nome ou código. O ano e período são obrigatórios.",
+        security=[],
         manual_parameters=[
             openapi.Parameter('search', openapi.IN_QUERY,
                               description="Termo de pesquisa (Nome/Código)", type=openapi.TYPE_STRING),
@@ -105,6 +105,7 @@ class YearPeriod(APIView):
 
     @swagger_auto_schema(
         operation_description="Retorna o ano e período atual, e o próximo ano e período letivos válidos para pesquisa.",
+        security=[],
         responses={
             200: openapi.Response('OK', openapi.Schema(
                 type=openapi.TYPE_OBJECT,
@@ -134,19 +135,10 @@ class YearPeriod(APIView):
         return response.Response(data, status.HTTP_200_OK)
 
 
-class SaveSchedule(APIView):
-
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request: request.Request, *args, **kwargs) -> response.Response:
-        data = request.data
-
-        return response.Response(status.HTTP_200_OK)
-
-
 class Schedule(APIView):
     @swagger_auto_schema(
         operation_description="Gera possíveis horários de acordo com as aulas escolhidas com preferência de turno",
+        security=[],
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             title="body",

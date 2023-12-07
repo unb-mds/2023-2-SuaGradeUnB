@@ -1,6 +1,6 @@
 from rest_framework.test import APITestCase
 from utils.db_handler import get_or_create_department, get_or_create_discipline, create_class
-from api.views import ERROR_MESSAGE, ERROR_MESSAGE_SEARCH_LENGTH
+from api.views.views import ERROR_MESSAGE, ERROR_MESSAGE_SEARCH_LENGTH
 import json
 
 class TestSearchAPI(APITestCase):
