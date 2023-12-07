@@ -1,75 +1,115 @@
 'use client';
 
-import { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import useUser from '@/app/hooks/useUser';
-
-import SelectedClassesContextProvider from '../contexts/SelectedClassesContext/SelectedClassesContext';
-import ClassesToShowContextProvider from '../contexts/ClassesToShowContext';
-import YearPeriodContextProvider from '../contexts/YearPeriodContext';
+import { useCallback, useState } from 'react';
+import Button from '../components/Button';
+import Image from 'next/image';
 
 import AsideButton from '../components/AsideButton';
 import Protected from '../components/Protected';
 import { LoadingScreen } from '../components/LoadingScreen';
+import InfoHeader from '../components/InfoHeader';
 
+import homeIcon from '@/public/icons/home.jpg';
+import infoIcon from '@/public/icons/info.jpg';
+import logoIcon from '@/public/icons/logotipo.jpg';
+import scheduleIcon from '@/public/icons/schedule.jpg';
+import profileIcon from '@/public/icons/profile.jpg';
+import useWindowDimensions from '../hooks/useWindowDimensions';
 
-const days = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+function calculatePositionOfBlob(node: any, width: number, footerWidth: number) {
+    const infos = node.getBoundingClientRect();
+    const intX = Math.round(infos.x - ((width - footerWidth) / 2));
+    const intWidth = Math.round(infos.width);
 
-const pathPX = {
-    'home': 'left-[18px]',
-    'mygrades': 'left-[99px]',
-    'profile': 'left-[175px]',
-};
+    return { x: intX, width: intWidth };
+}
 
-const pathPXAnonymous = {
-    'home': 'left-[18px]',
-    'mygrades': 'left-[132px]'
-};
+function LogoReturnButton() {
+    const router = useRouter();
+    const { user } = useUser();
 
-const currentDateObject = new Date(
-    new Date().toLocaleString('en', {
-        timeZone: 'America/Sao_Paulo'
-    })
-);
+    return (
+        user.is_anonymous &&
+        <Button onClick={() => router.replace('/')} className="absolute top-0 right-3 !shadow-none !p-0 ">
+            <Image
+                width={100} height={100}
+                src={logoIcon} alt='ícone do logotipo'
+            />
+        </Button>
+    );
+}
+
+function footerRefCallback(node: any, width: number | undefined, setFooterWidth: (width: number) => void) {
+    if (width && node) {
+        const intWidth = Math.round(node.getBoundingClientRect().width);
+        setFooterWidth(intWidth);
+    }
+}
+
+interface AsideRefCallbackPropsType {
+    node: any,
+    path: string,
+    width: number | undefined,
+    footerWidth: number,
+    setCurrentBlobDimensions: (position: { x: number, width: number }) => void
+}
+
+function asideRefCallback(props: AsideRefCallbackPropsType) {
+    const { node, path, width, footerWidth } = props;
+    if (width && node && node.name === path) {
+        const position = calculatePositionOfBlob(node, width, footerWidth);
+        props.setCurrentBlobDimensions(position);
+    }
+}
+
+function AsideButtonsJSX() {
+    const { user } = useUser();
+
+    const { width } = useWindowDimensions();
+    const [footerWidth, setFooterWidth] = useState(0);
+    const onFooterRefChange = useCallback((node: any) => {
+        footerRefCallback(node, width, setFooterWidth);
+    }, [width]);
+
+    const router = useRouter();
+    const path = usePathname().split('/')[2];
+
+    const [currentBlobDimensions, setCurrentBlobDimensions] = useState({ x: 0, width: 0 });
+    const onRefChange = useCallback((node: any) => {
+        const props = { node, path, width, footerWidth, setCurrentBlobDimensions };
+        asideRefCallback(props);
+    }, [path, width, footerWidth]);
+
+    return (
+        <div ref={onFooterRefChange} className="flex justify-around bg-white rounded-t-[25px] px-6 py-3 max-w-md  absolute m-auto inset-x-px bottom-0 backdrop-blur-sm bg-opacity-50 drop-shadow-lg">
+            <div style={{
+                width: currentBlobDimensions.width,
+                left: currentBlobDimensions.x
+            }} className='h-[49px] rounded-full bg-primary transition-all duration-500 absolute'></div>
+            <AsideButton innerRef={onRefChange} pageName='home' image={homeIcon} onClick={() => router.push('/schedules/home')} />
+            <AsideButton innerRef={onRefChange} pageName='mygrades' image={scheduleIcon} onClick={() => router.push('/schedules/mygrades')} />
+            {user.is_anonymous ? null : <AsideButton innerRef={onRefChange} pageName='profile' image={profileIcon} onClick={() => router.push('/schedules/profile')} />}
+            <AsideButton innerRef={onRefChange} pageName='info' image={infoIcon} onClick={() => router.push('/schedules/info')} />
+        </div>
+    );
+}
 
 function LayoutJSX({ children }: { children: React.ReactNode }) {
-    const { user, isLoading } = useUser();
-    const router = useRouter();
-    const [currentDate, _] = useState(currentDateObject);
-    const path = usePathname().split('/')[2] as keyof typeof pathPX;
-
-    const currentDay = currentDate.getDate().toString();
-    const currentMonth = months[currentDate.getMonth()];
-    const currentWeekDay = days[currentDate.getDay()];
+    const { breakHeighPoint } = useWindowDimensions();
+    const { isLoading } = useUser();
 
     if (isLoading) return <LoadingScreen />;
 
     return (
         <>
-            <header className='rounded-b-[40px] mb-8 flex flex-col justify-end bg-primary px-6 h-28'>
-                <h1 className='col-span-2 font-semibold text-base text-white'>
-                    Olá, {user.is_anonymous ? 'Anônimo' : user.first_name}!
-                </h1>
-                <p className='mb-5 col-span-2 font-medium text-base text-white'>
-                    {currentWeekDay}, {currentDay} de {currentMonth}
-                </p>
-            </header>
-
-            <main className='pt-5 h-3/5 min-[380px]:h-2/3'>
+            <InfoHeader />
+            <main className={`${breakHeighPoint ? 'pt-3 h-[calc(100%-15.75rem)]' : 'pt-7 h-[calc(100%-9.75rem)]'}`}>
                 {children}
             </main>
-
-            <div className="justify-around flex bg-white rounded-full px-6 py-2 w-[275px] absolute m-auto inset-x-px bottom-8 backdrop-blur-sm bg-opacity-50 drop-shadow-lg">
-                <div
-                    className={`bg-primary transition-all duration-300
-                    ${user.is_anonymous ? 'w-[120px]' : 'w-[85px]'} h-[50px]
-                    rounded-full absolute ${user.is_anonymous ? pathPXAnonymous[path as keyof typeof pathPXAnonymous] : pathPX[path]}`}
-                ></div>
-                <AsideButton icon='Home' text='Home' onClick={() => router.push('/schedules/home')} />
-                <AsideButton icon='calendar_month' text='Grades' onClick={() => router.push('/schedules/mygrades')} />
-                {user.is_anonymous ? null : <AsideButton icon='person' text='Perfil' onClick={() => router.push('/schedules/profile')} />}
-            </div>
+            <LogoReturnButton />
+            <AsideButtonsJSX />
         </>
     );
 }
@@ -82,13 +122,9 @@ export default function SchedulesLayout({
 
     return (
         <Protected>
-            <ClassesToShowContextProvider>
-                <SelectedClassesContextProvider>
-                    <YearPeriodContextProvider>
-                        <LayoutJSX>{children}</LayoutJSX>
-                    </YearPeriodContextProvider>
-                </SelectedClassesContextProvider>
-            </ClassesToShowContextProvider>
+            <LayoutJSX>
+                {children}
+            </LayoutJSX>
         </Protected>
     );
 }

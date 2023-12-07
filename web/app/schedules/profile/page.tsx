@@ -4,8 +4,10 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import useUser from '@/app/hooks/useUser';
+import useClassesToShow from '@/app/hooks/useClassesToShow';
+import useSelectedClasses from '@/app/hooks/useSelectedClasses';
 
-import LogoImage from '@/public/logo.svg';
+import LogoImage from '@/public/logo.png';
 import defaultProfile from '@/public/profile.svg';
 
 import Button from '@/app/components/Button';
@@ -14,6 +16,9 @@ import signInWithGoogle from '@/app/utils/signInWithGoogle';
 import handleLogout from '@/app/utils/api/logout';
 
 export default function Profile() {
+    const { setClassesToShow } = useClassesToShow();
+    const { setSelectedClasses } = useSelectedClasses();
+
     const userContext = useUser();
     const { user } = userContext;
     const router = useRouter();
@@ -39,9 +44,11 @@ export default function Profile() {
                 <Button onClick={() => signInWithGoogle(router)} className='!shadow-none'>
                     Trocar de conta
                 </Button>
-                <Button onClick={() => handleLogout({
-                    userContext, router
-                })} className='!shadow-none text-white'>
+                <Button onClick={() => {
+                    setClassesToShow(new Array());
+                    setSelectedClasses(new Map());
+                    handleLogout({ userContext, router });
+                }} className='!shadow-none text-white'>
                     Sair
                 </Button>
             </div>

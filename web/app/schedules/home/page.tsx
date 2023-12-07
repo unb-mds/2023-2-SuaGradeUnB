@@ -30,7 +30,7 @@ export default function Home() {
         <ShowPopUpContentContextProvider>
             <ClickOutsideHandler refs={{ divAddClassRef, buttonAddDisciplineRef }}>
                 <AddDisciplineButton buttonAddDisciplineRef={buttonAddDisciplineRef} />
-                <div className={`flex flex-col items-center ${classesToShow.length ? '' : 'justify-center'} gap-5 overflow-auto min-h-full max-h-full pb-2`}>
+                <div className={`flex flex-col items-center ${classesToShow.length ? '' : 'justify-center text-center'} gap-5 overflow-auto min-h-full max-h-full pb-2`}>
                     {classesToShow.length ? classesToShow.map((cls, index) =>
                         <DisciplineBox key={index} currentClass={cls} discipline={cls.discipline} />
                     ) : 'Nenhuma disciplina escolhida no momento'}

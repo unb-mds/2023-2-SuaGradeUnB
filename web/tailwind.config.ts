@@ -23,6 +23,11 @@ const config: Config = {
           primary: '#F6F6F6',
           secondary: '#E9E9E9',
         }
+      },
+      screens: {
+        flat: {
+          raw: '(max-height: 365px)'
+        }
       }
     },
   },

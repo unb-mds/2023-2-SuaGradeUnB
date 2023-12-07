@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 
 import searchDiscipline, { DisciplineType } from '@/app/utils/api/searchDiscipline';
 
-import { FormData, FormType, InputFormPropsType } from './types';
+import { FormData, FormType, InputFormPropsType } from '../types/types';
 
 interface FormPropsType {
     form: FormType,
@@ -17,14 +17,14 @@ function Form(props: FormPropsType) {
     const { handleSearch, inputRef } = props;
 
     return (
-        <form className='flex items-center w-80 px-2 bg-white shadow-md rounded-xl' onSubmit={handleSearch}>
+        <form className='flex items-center w-11/12 px-2 bg-white shadow-md rounded-xl' onSubmit={handleSearch}>
             <input
                 type="text"
                 placeholder='Nome da matéria...'
                 value={formData.search}
                 onChange={(e) => setFormData({ ...formData, search: e.target.value })}
                 ref={inputRef}
-                className='h-14 p-2 w-11/12 rounded-xl focus:outline-none'
+                className='h-14 p-2 w-full rounded-xl focus:outline-none'
             />
             <button className='material-symbols-rounded' type='submit' >search</button>
         </form>

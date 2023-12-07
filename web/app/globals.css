@@ -4,8 +4,40 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --main-green: hsl(149, 80%, 38%);
+  --main-white: hsl(0, 0%, 96%);
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--main-white);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--main-green);
+  border-radius: 5px;
+}
+
+body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--main-green) var(--main-white);
+}
+
+body::-moz-scrollbar-thumb {
+  background-color: var(--main-green);
+  border-radius: 5px;
+}
+
+body::-moz-scrollbar-track {
+  background-color: var(--main-white);
 }
