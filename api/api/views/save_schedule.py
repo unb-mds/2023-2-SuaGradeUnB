@@ -10,6 +10,7 @@ from rest_framework import status, request, response
 
 from api.models import Class
 from api.swagger import Errors
+from api.views.utils import handle_400_error
 from api import serializers
 
 
@@ -109,13 +110,6 @@ def retrieve_important_params_from_class(_class: dict) -> dict:
     }
 
     return key_args
-
-
-def handle_400_error(error_msg: str) -> response.Response:
-    return response.Response(
-        {
-            "errors": error_msg
-        }, status.HTTP_400_BAD_REQUEST)
 
 
 def validate_received_schedule(classes_id: list[int]) -> list[Class]:

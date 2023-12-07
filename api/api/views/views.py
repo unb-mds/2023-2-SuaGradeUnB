@@ -13,9 +13,10 @@ from utils.sessions import get_current_year_and_period, get_next_period
 from utils.schedule_generator import ScheduleGenerator
 from utils import db_handler as dbh
 
-from .. import serializers
-from ..swagger import Errors
-from ..models import Discipline
+from api import serializers
+from api.swagger import Errors
+from api.models import Discipline
+from api.views.utils import handle_400_error
 
 
 MAXIMUM_RETURNED_DISCIPLINES = 8
@@ -45,6 +46,20 @@ class Search(APIView):
 
         return disciplines
 
+    def retrieve_disciplines_by_similarity(self, request: request.Request, name: str) -> QuerySet[Discipline]:
+        disciplines = self.filter_disciplines(request, name)
+        disciplines = dbh.get_best_similarities_by_name(name, disciplines)
+
+        if not disciplines.count():
+            disciplines = dbh.filter_disciplines_by_code(code=name[0])
+
+            for term in name[1:]:
+                disciplines &= dbh.filter_disciplines_by_code(code=term)
+
+            disciplines = dbh.filter_disciplines_by_code(name)
+
+        return disciplines
+
     @swagger_auto_schema(
         operation_description="Busca disciplinas por nome ou código. O ano e período são obrigatórios.",
         security=[],
@@ -71,27 +86,12 @@ class Search(APIView):
         period_verified = period is not None and len(period) > 0
 
         if not name_verified or not year_verified or not period_verified:
-            return response.Response(
-                {
-                    "errors": ERROR_MESSAGE
-                }, status.HTTP_400_BAD_REQUEST)
+            return handle_400_error(ERROR_MESSAGE)
 
         if len(name) < MINIMUM_SEARCH_LENGTH:
-            return response.Response(
-                {
-                    "errors": ERROR_MESSAGE_SEARCH_LENGTH
-                }, status.HTTP_400_BAD_REQUEST)
+            return handle_400_error(ERROR_MESSAGE_SEARCH_LENGTH)
 
-        disciplines = self.filter_disciplines(request, name)
-        disciplines = dbh.get_best_similarities_by_name(name, disciplines)
-
-        if not disciplines.count():
-            disciplines = dbh.filter_disciplines_by_code(code=name[0])
-
-            for term in name[1:]:
-                disciplines &= dbh.filter_disciplines_by_code(code=term)
-
-            disciplines = dbh.filter_disciplines_by_code(name)
+        disciplines = self.retrieve_disciplines_by_similarity(request, name)
 
         filtered_disciplines = dbh.filter_disciplines_by_year_and_period(
             year=year, period=period, disciplines=disciplines)
