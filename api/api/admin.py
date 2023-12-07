@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Department, Discipline, Class
+from .models import Department, Discipline, Class, Schedule
 
 
 @admin.register(Department)
@@ -21,3 +21,9 @@ class ClassAdmin(admin.ModelAdmin):
     list_display = ['discipline', 'classroom', 'schedule']
     search_fields = ['discipline__name']
     ordering = ['discipline__name']
+
+
+@admin.register(Schedule)
+class ScheduleAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user']
+    ordering = ['id']
