@@ -32,19 +32,13 @@ class SaveSchedule(APIView):
         unique_year_period = set()
         current_db_classes_ids = []
 
-        for _class in classes:
-            key_args = retrieve_important_params_from_class(_class)
-
-            year_period = retrieve_year_period_from_class(_class)
-            unique_year_period.add(year_period)
-
-            db_class = dbh.get_class_by_params(**key_args)
-            if not db_class:
-                code = retrieve_discipline_code_from_class(_class)
-                error_msg = f"the class {code} does not exists with this params"
-                return handle_400_error(error_msg)
-
-            current_db_classes_ids.append(db_class.id)
+        classes_viability = check_classes_viability(
+            classes,
+            unique_year_period,
+            current_db_classes_ids
+        )
+        if classes_viability:
+            return classes_viability
 
         if len(unique_year_period) > 1:
             return handle_400_error("all classes must have the same year and period")
@@ -58,10 +52,23 @@ class SaveSchedule(APIView):
         user = request.user
         answer = dbh.save_schedule(user, valid_schedule)
 
-        if not answer: # pragma: no cover
-            return handle_400_error("error while saving schedule")
+        return response.Response(status=status.HTTP_201_CREATED) if answer else handle_400_error("error while saving schedule")
 
-        return response.Response(status=status.HTTP_201_CREATED)
+
+def check_classes_viability(classes: list[dict], unique_year_period: set, current_db_classes_ids: list[int]):
+    for _class in classes:
+        key_args = retrieve_important_params_from_class(_class)
+
+        year_period = retrieve_year_period_from_class(_class)
+        unique_year_period.add(year_period)
+
+        db_class = dbh.get_class_by_params(**key_args)
+        if not db_class:
+            code = retrieve_discipline_code_from_class(_class)
+            error_msg = f"the class {code} does not exists with this params"
+            return handle_400_error(error_msg)
+
+        current_db_classes_ids.append(db_class.id)
 
 
 def retrieve_year_period_from_class(_class: dict) -> tuple:
