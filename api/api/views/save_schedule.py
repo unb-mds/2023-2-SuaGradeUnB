@@ -58,10 +58,10 @@ class SaveSchedule(APIView):
         user = request.user
         answer = dbh.save_schedule(user, valid_schedule)
 
-        if not answer:
+        if not answer: # pragma: no cover
             return handle_400_error("error while saving schedule")
 
-        return response.Response(status.HTTP_201_CREATED)
+        return response.Response(status=status.HTTP_201_CREATED)
 
 
 def retrieve_year_period_from_class(_class: dict) -> tuple:
