@@ -16,6 +16,7 @@ class ClassSerializer(ModelSerializer):
 
 class DisciplineSerializerSchedule(ModelSerializer):
     department = DepartmentSerializer()
+
     class Meta:
         model = Discipline
         fields = '__all__'
