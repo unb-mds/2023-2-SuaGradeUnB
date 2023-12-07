@@ -30,9 +30,10 @@ class SaveSchedule(APIView):
     def post(self, request: request.Request, *args, **kwargs) -> response.Response:
         classes = request.data
 
-        valid_request_body_structure = validate_request_body_structure(classes)
-        if valid_request_body_structure:
-            return valid_request_body_structure
+        try:
+            validate_request_body_structure(classes)
+        except ValueError as e:
+            return handle_400_error(e.args[0])
 
         unique_year_period = set()
         current_db_classes_ids = []
@@ -60,43 +61,63 @@ class SaveSchedule(APIView):
         return response.Response(status=status.HTTP_201_CREATED) if answer else handle_400_error("error while saving schedule")
 
 
+def check_discipline_key_existence(key: str, discipline_key: str, **kwargs):
+    _class = kwargs.get('_class')
+
+    if discipline_key not in _class[key].keys():
+        raise ValueError(f"the discipline must have the {discipline_key} key")
+
+
+def check_department_key_existence(department_keys: list[str], **kwargs):
+    _class = kwargs.get('_class')
+
+    for department_key in department_keys:
+        if department_key not in _class['discipline']['department'].keys():
+            raise ValueError(
+                f"the department must have the {department_key} key")
+
+
+def check_disciplines(key, **kwargs):
+    _class = kwargs.get('_class')
+    discipline_keys = kwargs.get('expected_discipline_keys')
+    department_keys = kwargs.get('expected_department_keys')
+
+    for discipline_key in discipline_keys:
+        check_discipline_key_existence(key, discipline_key, **kwargs)
+
+        if discipline_key == 'department':
+            if not isinstance(_class['discipline']['department'], dict):
+                raise ValueError(
+                    "the department must be a object structure")
+
+            check_department_key_existence(department_keys, **kwargs)
+
+
 def validate_class(**kwargs) -> response.Response | None:
     _class = kwargs.get('_class')
     expected_keys = kwargs.get('expected_keys')
-    expected_discipline_keys = kwargs.get('expected_discipline_keys')
-    expected_department_keys = kwargs.get('expected_department_keys')
 
     for key in expected_keys:
         if key not in _class.keys():
-            return handle_400_error(f"the class must have the {key} key")
+            raise ValueError(f"the class must have the {key} key")
 
         if key == 'discipline':
             if not isinstance(_class[key], dict):
-                return handle_400_error("the discipline must be a object structure")
+                raise ValueError("the discipline must be a object structure")
 
-            for discipline_key in expected_discipline_keys:
-                if discipline_key not in _class[key].keys():
-                    return handle_400_error(f"the discipline must have the {discipline_key} key")
-
-                if discipline_key == 'department':
-                    if not isinstance(_class['discipline']['department'], dict):
-                        return handle_400_error("the department must be a object structure")
-
-                    for department_key in expected_department_keys:
-                        if department_key not in _class['discipline']['department'].keys():
-                            return handle_400_error(f"the department must have the {department_key} key")
+            check_disciplines(key, **kwargs)
 
 
 def validate_request_body_structure(body: list[dict] | None) -> bool:
     if not body:
-        return handle_400_error("the request body must not be empty")
+        raise ValueError("the request body must not be empty")
 
     if not isinstance(body, list):
-        return handle_400_error("the request body must be a list of classes")
+        raise ValueError("the request body must be a list of classes")
 
     for _class in body:
         if not isinstance(_class, dict):
-            return handle_400_error("each class must be a object structure")
+            raise ValueError("each class must be a object structure")
 
         expected_keys = ['discipline', 'schedule', 'days',
                          'special_dates', 'classroom', 'teachers']
@@ -108,7 +129,7 @@ def validate_request_body_structure(body: list[dict] | None) -> bool:
             'expected_discipline_keys': expected_discipline_keys,
             'expected_department_keys': expected_department_keys
         }
-        return validate_class(**args)
+        validate_class(**args)
 
 
 def check_classes_viability(classes: list[dict], unique_year_period: set, current_db_classes_ids: list[int]):
