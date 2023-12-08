@@ -13,7 +13,7 @@ import InfoHeader from '../components/InfoHeader';
 
 import homeIcon from '@/public/icons/home.jpg';
 import infoIcon from '@/public/icons/info.jpg';
-import logoIcon from '@/public/icons/logotipo.jpg';
+import googleIcon from '@/public/icons/google.jpg';
 import scheduleIcon from '@/public/icons/schedule.jpg';
 import profileIcon from '@/public/icons/profile.jpg';
 import useWindowDimensions from '../hooks/useWindowDimensions';
@@ -32,11 +32,13 @@ function LogoReturnButton() {
 
     return (
         user.is_anonymous &&
-        <Button onClick={() => router.replace('/')} className="absolute top-0 right-3 !shadow-none !p-0 ">
-            <Image
-                width={100} height={100}
-                src={logoIcon} alt='ícone do logotipo'
-            />
+        <Button onClick={() => router.replace('/')} className="absolute top-4 right-6 !shadow-none !p-0 ">
+            <div className="bg-white flex justify-center items-center rounded-full w-12 h-12">
+                <Image 
+                    width={35} height={35}
+                    src={googleIcon} alt='ícone do logotipo google'
+                />
+            </div>
         </Button>
     );
 }
