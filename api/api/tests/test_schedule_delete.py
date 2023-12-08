@@ -38,7 +38,7 @@ class TestGetSchedules(APITestCase):
         self.content_type = 'application/json'
 
         self.schedules = self.client.post(
-            reverse('api:schedule'), body, content_type=self.content_type).data
+            reverse('api:generate-schedules'), body, content_type=self.content_type).data
         
         self.schedule_json = json.dumps(self.schedules[0])
         
@@ -48,12 +48,12 @@ class TestGetSchedules(APITestCase):
         
         
     def save_schedule(self):
-        self.client.post(reverse('api:save-schedule'),
+        self.client.post(reverse('api:schedules'),
                         self.schedule_json, content_type=self.content_type, headers=self.headers)
     
     def get_user_schedules(self):
         return self.client.get(
-            reverse('api:get-schedules'), headers=self.headers)
+            reverse('api:schedules'), headers=self.headers)
 
     def test_delete_non_existent_schedule(self):
         """

@@ -34,18 +34,18 @@ class TestGetSchedules(APITestCase):
         tokens = TokenObtainPairSerializer.get_token(self.user)
         self.access_token = tokens.access_token
 
-        self.url = reverse('api:get-schedules')
+        self.url = reverse('api:schedules')
         self.content_type = 'application/json'
 
         self.schedules = self.client.post(
-            reverse('api:schedule'), body, content_type=self.content_type).data
+            reverse('api:generate-schedules'), body, content_type=self.content_type).data
         
         self.schedule_json = json.dumps(self.schedules[0])
         
         self.headers = {
             'Authorization': 'Bearer ' + str(self.access_token)
         }
-        self.client.post(reverse('api:save-schedule'),
+        self.client.post(self.url,
                         self.schedule_json, content_type=self.content_type, headers=self.headers)
 
     def test_get_schedules(self):
