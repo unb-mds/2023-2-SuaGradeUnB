@@ -14,7 +14,7 @@ export default async function generateSchedule(classes_id: Array<number>, prefer
     };
     if (preference) body.preference = preference;
 
-    const response = await request.post('/courses/schedule/', body, settings);
+    const response = await request.post('/courses/schedules/generate/', body, settings);
 
     return response;
 }
