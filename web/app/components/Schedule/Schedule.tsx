@@ -53,6 +53,8 @@ export default function Schedule({ schedules, preview, ...props }: ScheduleProps
 
         if (schedules) {
             schedules.forEach((schedule) => {
+                const uniqueTeachers = new Set(schedule.teachers);
+                schedule.teachers = Array.from(uniqueTeachers);
                 addClassToSchedule(schedule);
             });
             setCurrentSchedule(baseSchedule);
