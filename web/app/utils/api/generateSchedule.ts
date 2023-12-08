@@ -1,5 +1,3 @@
-import { AxiosResponse } from 'axios';
-
 import request from '../request';
 import { settings } from '../settings';
 
