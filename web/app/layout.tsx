@@ -7,6 +7,8 @@ import UserContextProvider from './contexts/UserContext';
 import YearPeriodContextProvider from './contexts/YearPeriodContext';
 import ClassesToShowContextProvider from './contexts/ClassesToShowContext';
 import SelectedClassesContextProvider from './contexts/SelectedClassesContext/SelectedClassesContext';
+import SchedulesContextProvider from './contexts/SchedulesContext';
+import ModalContextProvider from './contexts/ModalContext';
 
 import { Toaster } from 'react-hot-toast';
 
@@ -35,7 +37,11 @@ export default function RootLayout({
           <YearPeriodContextProvider>
             <ClassesToShowContextProvider>
               <SelectedClassesContextProvider>
-                {children}
+                <ModalContextProvider>
+                  <SchedulesContextProvider>
+                    {children}
+                  </SchedulesContextProvider>
+                </ModalContextProvider>
               </SelectedClassesContextProvider>
             </ClassesToShowContextProvider>
           </YearPeriodContextProvider>
