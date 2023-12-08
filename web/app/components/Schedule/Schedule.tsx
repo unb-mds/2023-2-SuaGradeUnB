@@ -4,7 +4,7 @@ import { ScheduleClassType } from '@/app/contexts/SchedulesContext';
 import { HTMLProps, useEffect, useState } from 'react';
 
 interface SchedulePropsType extends HTMLProps<HTMLDivElement> {
-    schedules: Array<ScheduleClassType>;
+    schedules?: Array<ScheduleClassType>;
     preview?: boolean;
 }
 
@@ -52,11 +52,7 @@ export default function Schedule({ schedules, preview, ...props }: ScheduleProps
         }
 
         if (schedules) {
-            schedules.forEach((schedule) => {
-                const uniqueTeachers = new Set(schedule.teachers);
-                schedule.teachers = Array.from(uniqueTeachers);
-                addClassToSchedule(schedule);
-            });
+            schedules.forEach((schedule) => addClassToSchedule(schedule));
             setCurrentSchedule(baseSchedule);
         }
     }, [schedules]);
@@ -99,7 +95,7 @@ export default function Schedule({ schedules, preview, ...props }: ScheduleProps
             {!preview &&
                 <div className='flex flex-col w-max pl-10 pb-5'>
                     <ul className='list-disc'>
-                        {schedules.map((schedule, index) => {
+                        {schedules && schedules.map((schedule, index) => {
                             return (
                                 <div className='p-1' key={index}>
                                     <li>
