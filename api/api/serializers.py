@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from api.models import Department, Discipline, Class
+from api.models import Department, Discipline, Class, Schedule
 
 
 class DepartmentSerializer(ModelSerializer):
@@ -28,3 +28,8 @@ class DisciplineSerializer(DisciplineSerializerSchedule):
 
 class ClassSerializerSchedule(ClassSerializer):
     discipline = DisciplineSerializerSchedule()
+
+class ScheduleSerializer(ModelSerializer):
+    class Meta:
+        model = Schedule
+        exclude = ['user']

@@ -90,3 +90,7 @@ def save_schedule(user: User, schedule_to_save: list[Class]) -> bool:
         return False
 
     return True
+
+def get_schedules(user: User) -> QuerySet:
+    """Retorna as grades horárias de um usuário."""
+    return Schedule.objects.filter(user=user).all()

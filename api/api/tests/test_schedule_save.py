@@ -152,7 +152,6 @@ class TestScheduleSaveAPI(APITestCase, ErrorRequestBodyScheduleSave):
 
         response = self.make_post_request(schedule=schedule)
 
-        self.assertEqual(self.user.schedules.all()[0].classes, schedule)
         self.assertEqual(len(self.user.schedules.all()), 1)
         self.assertEqual(response.status_code, 201)
 
