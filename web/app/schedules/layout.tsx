@@ -43,13 +43,36 @@ function LogoReturnButton() {
     );
 }
 
+function footerRefCallback(node: any, width: number | undefined, setFooterWidth: (width: number) => void) {
+    if (width && node) {
+        const intWidth = Math.round(node.getBoundingClientRect().width);
+        setFooterWidth(intWidth);
+    }
+}
+
+interface AsideRefCallbackPropsType {
+    node: any,
+    path: string,
+    width: number | undefined,
+    footerWidth: number,
+    setCurrentBlobDimensions: (position: { x: number, width: number }) => void
+}
+
+function asideRefCallback(props: AsideRefCallbackPropsType) {
+    const { node, path, width, footerWidth } = props;
+    if (width && node && node.name === path) {
+        const position = calculatePositionOfBlob(node, width, footerWidth);
+        props.setCurrentBlobDimensions(position);
+    }
+}
+
 function AsideButtonsJSX() {
     const { user } = useUser();
 
     const { width } = useWindowDimensions();
     const [footerWidth, setFooterWidth] = useState(0);
     const onFooterRefChange = useCallback((node: any) => {
-        if (width && node) setFooterWidth(Math.round(node.getBoundingClientRect().width));
+        footerRefCallback(node, width, setFooterWidth);
     }, [width]);
 
     const router = useRouter();
@@ -57,11 +80,11 @@ function AsideButtonsJSX() {
 
     const [currentBlobDimensions, setCurrentBlobDimensions] = useState({ x: 0, width: 0 });
     const onRefChange = useCallback((node: any) => {
-        if (width && node && node.name === path) setCurrentBlobDimensions(calculatePositionOfBlob(node, width, footerWidth));
+        const props = { node, path, width, footerWidth, setCurrentBlobDimensions };
+        asideRefCallback(props);
     }, [path, width, footerWidth]);
 
     return (
-
         <div ref={onFooterRefChange} className="flex justify-around bg-white rounded-t-[25px] px-6 py-3 max-w-md  absolute m-auto inset-x-px bottom-0 backdrop-blur-sm bg-opacity-50 drop-shadow-lg">
             <div style={{
                 width: currentBlobDimensions.width,

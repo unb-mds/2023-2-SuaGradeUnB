@@ -179,3 +179,32 @@ class DatabaseHandlerTest(APITestCase):
         self.assertTrue(discipline in disciplines)
         self.assertTrue(discipline_2 in disciplines)
         self.assertTrue(discipline_3 in disciplines)
+        
+    def test_get_class_by_id(self):
+        department = dbh.get_or_create_department(
+            code = 'MAT',
+            year = '2027',
+            period = '1'
+        )
+
+        discipline = dbh.get_or_create_discipline(
+            name = 'Cálculo 1',
+            code = 'MAT0026',
+            department = department
+        )
+
+        _class = dbh.create_class(
+            teachers = ['Luiza Yoko'],
+            classroom = 'S9',
+            schedule = '46M34',
+            days = ['Quarta-Feira 10:00 às 11:50', 'Sexta-Feira 10:00 às 11:50'],
+            _class = "1",
+            special_dates=[],
+            discipline = discipline
+        )
+
+        class_from_db = dbh.get_class_by_id(
+            id = _class.id
+        )
+
+        self.assertTrue(class_from_db == _class)

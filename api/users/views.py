@@ -20,6 +20,7 @@ class Register(TokenObtainPairView):
             "Set-Cookie": "refresh=<refresh-token>; Secure; HttpOnly; SameSite=Lax; Expires=<expires-date>"
         }
         """,
+        security=[],
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
@@ -135,6 +136,7 @@ class RefreshJWTView(HandlePostErrorMixin, HandleRefreshMixin, TokenRefreshView)
             "Set-Cookie": "refresh=<refresh-token>; Secure; HttpOnly; SameSite=Lax; Expires=<expires-date>"
         }
         """,
+        security=[],
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
         ),
@@ -167,6 +169,7 @@ class BlacklistJWTView(HandlePostErrorMixin, HandleRefreshMixin, TokenBlacklistV
                 Cookie: "refresh=<refresh-token>"
             }
             """,
+        security=[],
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
         ),
