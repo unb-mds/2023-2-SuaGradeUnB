@@ -63,7 +63,7 @@ export default function Schedule({ schedules }: {
                     <div className="w-40"></div>
                     <div className="flex">
                         {days.map((day, index) =>
-                            <div key={index} className="text-center w-24 m-[2px]">
+                            <div key={index} className="text-center w-28 m-[2px]">
                                 {day}
                             </div>
                         )}
@@ -77,7 +77,7 @@ export default function Schedule({ schedules }: {
                             </div>
                             <div className="flex">
                                 {days.map((day, dayIndex) =>
-                                    <div key={dayIndex} className="flex rounded-md border border-black justify-center items-center w-24 h-8 m-[2px]">
+                                    <div key={dayIndex} className="flex rounded-xl border border-[#9B9898] justify-center items-center w-28 h-8 m-[2px]">
                                         {currentSchedule[dayIndex] &&
                                             currentSchedule[dayIndex][timeIndex] &&
                                             currentSchedule[dayIndex][timeIndex].discipline.code}
