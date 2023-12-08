@@ -2,7 +2,7 @@ from django.db import models
 from unidecode import unidecode
 from django.contrib.postgres.fields import ArrayField
 from users.models import User
-
+from django.utils import timezone
 
 class Department(models.Model):
     """Classe que representa um departamento.
@@ -76,6 +76,7 @@ class Schedule(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='schedules')
     classes = models.JSONField(default=list)
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f'Class: {self.id} - User: {self.user.email}'
