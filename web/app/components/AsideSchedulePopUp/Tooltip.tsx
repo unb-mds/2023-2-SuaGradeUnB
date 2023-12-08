@@ -9,6 +9,10 @@ interface TooltipPropsType {
     children: React.ReactNode,
 };
 
+export const isMobile = (width?: number) => {
+    return width && width <= 768;
+};
+
 export default function Tooltip({ children }: TooltipPropsType) {
     const [active, setActive] = useState(false);
     const { width } = useWindowDimensions();
@@ -25,10 +29,6 @@ export default function Tooltip({ children }: TooltipPropsType) {
         };
     }, [active]);
 
-    const isMobile = () => {
-        return width && width <= 768;
-    };
-
     return (
         <div className={styles.tooltip}>
             <span
@@ -41,7 +41,7 @@ export default function Tooltip({ children }: TooltipPropsType) {
                     {children}
                     <button
                         onClick={() => setActive(false)}
-                        className={`absolute right-2 ${isMobile() ? 'bottom-2' : 'top-2'} material-symbols-rounded`}
+                        className={`absolute right-2 ${isMobile(width) ? 'bottom-2' : 'top-2'} material-symbols-rounded`}
                     >
                         close
                     </button>
