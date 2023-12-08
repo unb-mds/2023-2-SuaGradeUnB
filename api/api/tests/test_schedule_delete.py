@@ -9,7 +9,7 @@ from users.models import User
 import json
 
 
-class TestGetSchedules(APITestCase):
+class TestDeleteSchedules(APITestCase):
     def setUp(self):
         self.department = dbh.get_or_create_department('518', '2023', '2')
         self.discipline = dbh.get_or_create_discipline(
