@@ -28,7 +28,7 @@ const Team = () => {
                 <CollaboratorImage name="Caio Habibe" src="https://github.com/CaioHabibe.png" />
                 <CollaboratorImage name="Caio Rodrigues" src="https://github.com/caio-felipee.png" />
             </div>
-            <div className="grid grid-cols-3 pb-10 gap-5">
+        <div className="grid grid-cols-3 pb-10 gap-5">
                 <CollaboratorImage name="Gabriel Castelo" src="https://github.com/GabrielCastelo-31.png" />
                 <CollaboratorImage name="Henrique Camelo" src="https://github.com/henriquecq.png" />
                 <CollaboratorImage name="Mateus Vieira" src="https://github.com/mateusvrs.png" />
