@@ -22,6 +22,7 @@ const config: Config = {
         snow: {
           primary: '#F6F6F6',
           secondary: '#E9E9E9',
+          tertiary: '#D9D9D9',
         }
       },
       screens: {
