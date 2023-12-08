@@ -2,6 +2,10 @@ import { useRef } from 'react';
 
 import toast from 'react-hot-toast';
 
+import Image from 'next/image';
+
+import searchIcon from '@/public/icons/search.jpg';
+
 import searchDiscipline, { DisciplineType } from '@/app/utils/api/searchDiscipline';
 
 import { FormData, FormType, InputFormPropsType } from '../types/types';
@@ -26,7 +30,12 @@ function Form(props: FormPropsType) {
                 ref={inputRef}
                 className='h-14 p-2 w-full rounded-xl focus:outline-none'
             />
-            <button className='material-symbols-rounded' type='submit' >search</button>
+            <button type='submit' >
+                <Image 
+                    width={30} height={30}
+                    src={searchIcon} alt='ícone do logotipo google'
+                />
+            </button>
         </form>
     );
 }
