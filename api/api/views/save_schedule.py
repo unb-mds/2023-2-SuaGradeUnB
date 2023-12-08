@@ -4,8 +4,6 @@ from utils import db_handler as dbh
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
 from rest_framework import status, request, response
 
 from api.models import Class
@@ -14,10 +12,7 @@ from api.views.utils import handle_400_error
 from api import serializers
 
 
-class SaveSchedule(APIView):
-
-    permission_classes = [IsAuthenticated]
-
+class SaveSchedule():
     @swagger_auto_schema(
         operation_description="Salva uma grade horária para o usuário logado.",
         request_body=serializers.ClassSerializerSchedule(many=True),
