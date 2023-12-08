@@ -3,7 +3,6 @@
 import { createContext, useEffect, useState } from 'react';
 
 import { ClassType } from '../utils/api/searchDiscipline';
-import { set } from 'lodash';
 
 export interface ScheduleClassType extends ClassType {
     discipline: {
@@ -34,19 +33,18 @@ export default function SchedulesContextProvider({ children }: {
 
     useEffect(() => {
         const localJSON = JSON.parse(localStorage.getItem('schedules') || '[]');
-        const localSchedules: SchedulesType = localJSON;
-        setLocalDefaultSchedules(localSchedules);
+        const localSchedulesFromJSON: SchedulesType = localJSON;
+        setLocalDefaultSchedules(localSchedulesFromJSON);
     }, []);
 
     const setLocalSchedules = (newSchedules: Array<ScheduleClassType>) => {
-        setLocalDefaultSchedules([
-            ...localSchedules,
-            newSchedules,
-        ]);
         localStorage.setItem('schedules', JSON.stringify([
-            ...localSchedules,
             ...newSchedules,
+            ...localSchedules,
         ]));
+        const localJSON = JSON.parse(localStorage.getItem('schedules') || '[]');
+        const localSchedulesFromJSON: SchedulesType = localJSON;
+        setLocalDefaultSchedules(localSchedulesFromJSON);
     };
 
     return (

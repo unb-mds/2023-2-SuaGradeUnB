@@ -15,7 +15,7 @@ import { errorToast } from '@/app/utils/errorToast';
 export default function GenerateScheduleButton() {
     const router = useRouter();
 
-    const { localSchedules, setLocalSchedules } = useSchedules();
+    const { setLocalSchedules } = useSchedules();
     const { selectedClasses } = useSelectedClasses();
     const { classesToShow } = useClassesToShow();
 
