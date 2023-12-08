@@ -7,6 +7,8 @@ import useSchedules from '@/app/hooks/useSchedules';
 
 import Button from '@/app/components/Button';
 
+import { ScheduleClassType } from '@/app/contexts/SchedulesContext';
+
 import generateSchedule from '@/app/utils/api/generateSchedule';
 import { errorToast } from '@/app/utils/errorToast';
 
@@ -30,10 +32,7 @@ export default function GenerateScheduleButton() {
                     });
                     const response = await generateSchedule(classes_id);
                     if (response.status === 200) {
-                        setLocalSchedules([
-                            ...localSchedules,
-                            response.data,
-                        ]);
+                        setLocalSchedules(response.data as Array<ScheduleClassType>);
                         router.replace('/schedules/mygrades');
                     } else errorToast('Não foi possível gerar as grades, tente novamente mais tarde!');
                 }}
