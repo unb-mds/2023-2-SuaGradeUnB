@@ -1,25 +1,19 @@
 'use client';
 
-import Modal from '@/app/components/Modal/Modal';
-import Schedule from '@/app/components/Schedule/Schedule';
-
-import useModal from '@/app/hooks/useModal';
 import useSchedules from '@/app/hooks/useSchedules';
 
-import useUser from '@/app/hooks/useUser';
+import SchedulePreview from '@/app/components/SchedulePreview/SchedulePreview';
 
 export default function MyGrades() {
     const { localSchedules } = useSchedules();
-    const { activeModel } = useModal();
-    const { user } = useUser();
 
     return (
-        <>
-            {activeModel &&
-                <Modal>
-                    <Schedule schedules={localSchedules[0]} />
-                </Modal>
-            }
-        </>
+        <div className='overflow-auto min-h-full max-h-full px-3'>
+            <div className='flex flex-wrap justify-center items-center gap-10 w-11/12 mx-auto'>
+                {localSchedules.map((schedule, index) =>
+                    schedule && <SchedulePreview key={index} index={index} schedule={schedule} />
+                )}
+            </div>
+        </div>
     );
 }

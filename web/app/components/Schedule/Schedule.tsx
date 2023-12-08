@@ -1,11 +1,14 @@
 'use client';
 
 import { ScheduleClassType } from '@/app/contexts/SchedulesContext';
-import { useEffect, useState } from 'react';
+import { HTMLProps, useEffect, useState } from 'react';
 
-export default function Schedule({ schedules }: {
-    schedules: Array<ScheduleClassType>
-}) {
+interface SchedulePropsType extends HTMLProps<HTMLDivElement> {
+    schedules: Array<ScheduleClassType>;
+    preview?: boolean;
+}
+
+export default function Schedule({ schedules, preview, ...props }: SchedulePropsType) {
     const [currentSchedule, setCurrentSchedule] = useState<Array<Array<ScheduleClassType>>>(new Array(6).fill(new Array(15).fill(null)));
 
     const days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
@@ -57,7 +60,10 @@ export default function Schedule({ schedules }: {
     }, [schedules]);
 
     return (
-        <div>
+        <div
+            className={`${preview ? 'scale-[.3]' : ''}`}
+            onClick={props.onClick}
+        >
             <div className='p-5 m-auto w-max'>
                 <div className="flex justify-end">
                     <div className="w-40"></div>
@@ -88,29 +94,31 @@ export default function Schedule({ schedules }: {
                     )}
                 </div>
             </div>
-            <div className='flex flex-col w-max pl-10 pb-5'>
-                <ul className='list-disc'>
-                    {schedules.map((schedule, index) => {
-                        return (
-                            <div className='p-1' key={index}>
-                                <li>
-                                    <span className='font-semibold'>{schedule.discipline.code}</span> - {schedule.discipline.name} - ({schedule.classroom})
-                                </li>
-                                <span className='font-semibold'>PROFESSORES:</span>
-                                <ul className='list-inside'>
-                                    {schedule.teachers.map((teacher, index) => {
-                                        return (
-                                            <li key={index}>
-                                                {teacher}
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
-                            </div>
-                        );
-                    })}
-                </ul>
-            </div>
+            {!preview &&
+                <div className='flex flex-col w-max pl-10 pb-5'>
+                    <ul className='list-disc'>
+                        {schedules.map((schedule, index) => {
+                            return (
+                                <div className='p-1' key={index}>
+                                    <li>
+                                        <span className='font-semibold'>{schedule.discipline.code}</span> - {schedule.discipline.name} - ({schedule.classroom})
+                                    </li>
+                                    <span className='font-semibold'>PROFESSORES:</span>
+                                    <ul className='list-inside'>
+                                        {schedule.teachers.map((teacher, index) => {
+                                            return (
+                                                <li key={index}>
+                                                    {teacher}
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                </div>
+                            );
+                        })}
+                    </ul>
+                </div>
+            }
         </div>
     );
 }
