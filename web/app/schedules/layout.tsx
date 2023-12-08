@@ -100,12 +100,19 @@ function LayoutJSX({ children }: { children: React.ReactNode }) {
     const { breakHeighPoint } = useWindowDimensions();
     const { isLoading } = useUser();
 
+    const path = usePathname().split('/')[2];
+
     if (isLoading) return <LoadingScreen />;
 
     return (
         <>
             <InfoHeader />
-            <main className={`${breakHeighPoint ? 'pt-3 h-[calc(100%-15.75rem)]' : 'pt-7 h-[calc(100%-9.75rem)]'}`}>
+            <main className={`
+                ${path != 'home' ? 'h-[calc(100%-12.75rem)]' :breakHeighPoint ?
+                    'pt-3 h-[calc(100%-15.75rem)]' :
+                    'pt-7 h-[calc(100%-9.75rem)]'
+                }
+            `}>
                 {children}
             </main>
             <LogoReturnButton />
