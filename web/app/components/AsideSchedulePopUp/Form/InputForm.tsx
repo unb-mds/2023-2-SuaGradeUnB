@@ -33,7 +33,7 @@ function Form(props: FormPropsType) {
             <button type='submit' >
                 <Image 
                     width={30} height={30}
-                    src={searchIcon} alt='ícone do logotipo google'
+                    src={searchIcon} alt='ícone de pesquisa'
                 />
             </button>
         </form>
