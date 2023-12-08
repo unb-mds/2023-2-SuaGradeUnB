@@ -15,15 +15,15 @@ export default function MyGrades() {
                 <div className='flex flex-wrap justify-center items-center gap-10 w-11/12 mx-auto'>
                     {localSchedules.length ?
                         localSchedules.map((schedule, index) =>
-                            schedule && <SchedulePreview key={index} index={index} schedule={schedule} />
+                            schedule && <SchedulePreview key={index} index={index} localSchedule={schedule} />
                         ) : null
                     }
                 </div>
-                {cloudSchedules.length ? <h1 className='text-center pb-5 pt-16'>Grades nuvem</h1> : null}
+                {cloudSchedules.length ? <h1 className={`text-center pb-5 ${localSchedules.length ? 'pt-16' : ''}`}>Grades nuvem</h1> : null}
                 <div className='flex flex-wrap justify-center items-center gap-10 w-11/12 mx-auto'>
                     {cloudSchedules.length ?
                         cloudSchedules.map((schedule, index) =>
-                            schedule && <SchedulePreview key={index} index={index} schedule={schedule} />
+                            schedule && <SchedulePreview key={index} index={index} cloudSchedule={schedule} isCloud />
                         ) : null
                     }
                 </div>

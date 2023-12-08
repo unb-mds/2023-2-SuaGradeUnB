@@ -6,6 +6,9 @@ import { UserData } from '../components/SignInSection';
 
 import { settings } from '../utils/settings';
 import request from '../utils/request';
+import getSchedules from '../utils/api/getSchedules';
+import { errorToast } from '../utils/errorToast';
+import useSchedules from '../hooks/useSchedules';
 
 export interface User {
     is_anonymous: boolean;
@@ -36,6 +39,8 @@ export default function UserContextProvider({ children, ...props }: UserContextP
     const [user, setUser] = useState<User>(defaultUser);
     const [isLoading, setLoading] = useState(true);
 
+    const { setCloudSchedules } = useSchedules();
+
     useEffect(() => {
         request.post('/users/login/', {}, settings).then(response => {
             const userData: UserData = response.data;
@@ -46,12 +51,24 @@ export default function UserContextProvider({ children, ...props }: UserContextP
                 email: userData.email,
                 picture_url: userData.picture_url
             });
+            getSchedules(userData.access).then(response => {
+                if (response.status == 200) {
+                    const data: Array<any> = response.data;
+                    data.forEach((schedule, index) => {
+                        data[index].classes = JSON.parse(schedule.classes);
+                    });
+                    setCloudSchedules(data);
+                }
+            }).catch(error => {
+                errorToast('Não foi possível carregar suas grades na nuvem.');
+            });
             setLoading(false);
+
         }).catch(error => {
             setUser(defaultUser);
             setLoading(false);
         });
-    }, [setUser]);
+    }, [setUser, setCloudSchedules]);
 
     return (
         <UserContext.Provider value={{ user, setUser, isLoading, setLoading }}>

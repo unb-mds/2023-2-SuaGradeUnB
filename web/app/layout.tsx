@@ -32,17 +32,17 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.variable} h-screen font-sans bg-white`}>
         <Toaster />
-        <UserContextProvider>
-          <YearPeriodContextProvider>
-            <ClassesToShowContextProvider>
-              <SelectedClassesContextProvider>
-                  <SchedulesContextProvider>
-                    {children}
-                  </SchedulesContextProvider>
-              </SelectedClassesContextProvider>
-            </ClassesToShowContextProvider>
-          </YearPeriodContextProvider>
-        </UserContextProvider>
+        <SchedulesContextProvider>
+          <UserContextProvider>
+            <YearPeriodContextProvider>
+              <ClassesToShowContextProvider>
+                <SelectedClassesContextProvider>
+                  {children}
+                </SelectedClassesContextProvider>
+              </ClassesToShowContextProvider>
+            </YearPeriodContextProvider>
+          </UserContextProvider>
+        </SchedulesContextProvider>
       </body>
     </html>
   );

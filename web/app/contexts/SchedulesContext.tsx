@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 
 import { ClassType } from '../utils/api/searchDiscipline';
 
@@ -14,13 +14,20 @@ export interface ScheduleClassType extends ClassType {
     }
 };
 
+export interface CloudScheduleType {
+    id: number;
+    created_at: string;
+    classes: Array<ScheduleClassType>;
+};
+
 type SchedulesType = Array<Array<ScheduleClassType>>;
+type SchedulesCloudType = Array<CloudScheduleType>;
 
 interface SchedulesContextType {
     localSchedules: SchedulesType;
     setLocalSchedules: (newSchedules: Array<ScheduleClassType> | Array<Array<ScheduleClassType>>, add?: boolean) => void;
-    cloudSchedules: SchedulesType;
-    setCloudSchedules: React.Dispatch<React.SetStateAction<SchedulesType>>;
+    cloudSchedules: SchedulesCloudType;
+    setCloudSchedules: (newSchedules: SchedulesCloudType) => void;
 }
 
 export const SchedulesContext = createContext<SchedulesContextType>({} as SchedulesContextType);
@@ -29,7 +36,7 @@ export default function SchedulesContextProvider({ children }: {
     children: React.ReactNode;
 }) {
     const [localSchedules, setLocalDefaultSchedules] = useState<SchedulesType>([] as SchedulesType);
-    const [cloudSchedules, setCloudSchedules] = useState<SchedulesType>([] as SchedulesType);
+    const [cloudSchedules, setCloudSchedules] = useState<SchedulesCloudType>([] as SchedulesCloudType);
 
     useEffect(() => {
         const localJSON = JSON.parse(localStorage.getItem('schedules') || '[]');
