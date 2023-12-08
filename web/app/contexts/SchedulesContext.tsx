@@ -18,7 +18,7 @@ type SchedulesType = Array<Array<ScheduleClassType>>;
 
 interface SchedulesContextType {
     localSchedules: SchedulesType;
-    setLocalSchedules: (newSchedules: Array<ScheduleClassType>) => void;
+    setLocalSchedules: (newSchedules: Array<ScheduleClassType> | Array<Array<ScheduleClassType>>, add?: boolean) => void;
     cloudSchedules: SchedulesType;
     setCloudSchedules: React.Dispatch<React.SetStateAction<SchedulesType>>;
 }
@@ -37,11 +37,19 @@ export default function SchedulesContextProvider({ children }: {
         setLocalDefaultSchedules(localSchedulesFromJSON);
     }, []);
 
-    const setLocalSchedules = (newSchedules: Array<ScheduleClassType>) => {
-        localStorage.setItem('schedules', JSON.stringify([
-            ...newSchedules,
-            ...localSchedules,
-        ]));
+    const setLocalSchedules = (newSchedules: Array<ScheduleClassType> | Array<Array<ScheduleClassType>>, add: boolean = true) => {
+        if (add) {
+            const newLocalSchedules = [
+                ...newSchedules,
+                ...localSchedules,
+            ];
+            const uniqueSchedules = newLocalSchedules.filter((schedule, index, self) => {
+                const stringSchedule = JSON.stringify(schedule);
+                return index === self.findIndex((s) => JSON.stringify(s) === stringSchedule);
+            });
+            localStorage.setItem('schedules', JSON.stringify(uniqueSchedules));
+        } else localStorage.setItem('schedules', JSON.stringify(newSchedules));
+
         const localJSON = JSON.parse(localStorage.getItem('schedules') || '[]');
         const localSchedulesFromJSON: SchedulesType = localJSON;
         setLocalDefaultSchedules(localSchedulesFromJSON);
