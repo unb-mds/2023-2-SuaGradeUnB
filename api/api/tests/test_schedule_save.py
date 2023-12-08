@@ -122,7 +122,7 @@ class TestScheduleSaveAPI(APITestCase, ErrorRequestBodyScheduleSave):
         tokens = TokenObtainPairSerializer.get_token(self.user)
         self.access_token = tokens.access_token
 
-        self.url = reverse('api:save-schedule')
+        self.url = reverse('api:schedules')
         self.content_type = 'application/json'
 
     def make_post_request(self, auth: str = 'correct_token', schedule: str = '[]'):

@@ -9,7 +9,7 @@ from users.models import User
 import json
 
 
-class TestGetSchedules(APITestCase):
+class TestDeleteSchedules(APITestCase):
     def setUp(self):
         self.department = dbh.get_or_create_department('518', '2023', '2')
         self.discipline = dbh.get_or_create_discipline(
@@ -34,7 +34,7 @@ class TestGetSchedules(APITestCase):
         tokens = TokenObtainPairSerializer.get_token(self.user)
         self.access_token = tokens.access_token
 
-        self.url = reverse('api:schedules')
+        self.url = "api:delete-schedule"
         self.content_type = 'application/json'
 
         self.schedules = self.client.post(
@@ -45,26 +45,48 @@ class TestGetSchedules(APITestCase):
         self.headers = {
             'Authorization': 'Bearer ' + str(self.access_token)
         }
-        self.client.post(self.url,
+        
+        
+    def save_schedule(self):
+        self.client.post(reverse('api:schedules'),
                         self.schedule_json, content_type=self.content_type, headers=self.headers)
-
-    def test_get_schedules(self):
-        """
-        Testa a obtenção de horários salvos
-        """
-
-        content = self.client.get(
-            self.url, headers=self.headers)
-        
-        self.assertEqual(len(content.data), 1)
-        self.assertEqual(content.status_code, 200)
     
-    def test_get_schedules_with_invalid_token(self):
+    def get_user_schedules(self):
+        return self.client.get(
+            reverse('api:schedules'), headers=self.headers)
+
+    def test_delete_non_existent_schedule(self):
         """
-        Testa a obtenção de horários salvos com um token inválido
+        Testa a deleção de uma grade horária que não existe
+        """
+                
+        content = self.client.delete(
+            reverse(self.url, kwargs={'id': 1}), headers=self.headers)
+        
+        self.assertEqual(content.status_code, 400)
+    
+    def test_delete_schedule(self):
+        """
+        Testa a deleção de uma grade horária
         """
         
-        content = self.client.get(
-            self.url, headers={'Authorization': 'Bearer ' + str(self.access_token) + '1'})
+        self.save_schedule()
+        
+        user_schedules = self.get_user_schedules().data
+        schedule_id = user_schedules[0].get('id')
+        
+        content = self.client.delete(
+            reverse(self.url, kwargs={'id': schedule_id}), headers=self.headers)
+        
+        self.assertEqual(content.status_code, 204)
+        self.assertEqual(len(self.get_user_schedules().data), 0)
+    
+    def test_delete_schedule_with_invalid_token(self):
+        """
+        Testa a deleção de uma grade horária com um token inválido
+        """
+        
+        content = self.client.delete(
+            reverse(self.url, kwargs={'id': 12}), headers={'Authorization': 'Bearer ' + str('invalid_token')})
         
         self.assertEqual(content.status_code, 403)

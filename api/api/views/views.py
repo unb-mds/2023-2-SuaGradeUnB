@@ -135,7 +135,7 @@ class YearPeriod(APIView):
         return response.Response(data, status.HTTP_200_OK)
 
 
-class Schedule(APIView):
+class GenerateSchedule(APIView):
     @swagger_auto_schema(
         operation_description="Gera possíveis horários de acordo com as aulas escolhidas com preferência de turno",
         security=[],

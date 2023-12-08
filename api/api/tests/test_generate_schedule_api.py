@@ -3,11 +3,11 @@ from utils.db_handler import get_or_create_department, get_or_create_discipline,
 from random import randint
 import json
 
-class TestScheduleAPI(APITestCase):
+class TestGenerateScheduleAPI(APITestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.content_type = 'application/json'
-        self.api_url = '/courses/schedule/'
+        self.api_url = '/courses/schedules/generate/'
         self.department = get_or_create_department(
             code='518', year='2023', period='2')
         self.discipline = get_or_create_discipline(

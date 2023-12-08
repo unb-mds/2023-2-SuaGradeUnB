@@ -94,3 +94,12 @@ def save_schedule(user: User, schedule_to_save: list[Class]) -> bool:
 def get_schedules(user: User) -> QuerySet:
     """Retorna as grades horárias de um usuário."""
     return Schedule.objects.filter(user=user).all()
+
+def delete_schedule(user: User, id: int) -> bool:
+    """Deleta uma grade horária de um usuário."""
+    try:
+        Schedule.objects.get(user=user, id=id).delete()
+    except Schedule.DoesNotExist:
+        return False
+
+    return True
