@@ -15,6 +15,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['var(--font-poppins)'],
+        mono: ['var(--font-chivo-mono)'],
       },
       colors: {
         primary: '#13AF5E',
