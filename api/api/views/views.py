@@ -11,9 +11,9 @@ from drf_yasg import openapi
 
 from utils.sessions import get_current_year_and_period, get_next_period
 from utils.schedule_generator import ScheduleGenerator
-from utils import db_handler as dbh
+from utils.db_handler import get_best_similarities_by_name, filter_disciplines_by_teacher, filter_disciplines_by_year_and_period, filter_disciplines_by_code
 
-from api import serializers
+from .. import serializers
 from api.swagger import Errors
 from api.models import Discipline
 from api.views.utils import handle_400_error
@@ -48,15 +48,15 @@ class Search(APIView):
 
     def retrieve_disciplines_by_similarity(self, request: request.Request, name: str) -> QuerySet[Discipline]:
         disciplines = self.filter_disciplines(request, name)
-        disciplines = dbh.get_best_similarities_by_name(name, disciplines)
+        disciplines = get_best_similarities_by_name(name, disciplines)
 
         if not disciplines.count():
-            disciplines = dbh.filter_disciplines_by_code(code=name[0])
+            disciplines = filter_disciplines_by_code(code=name[0])
 
             for term in name[1:]:
-                disciplines &= dbh.filter_disciplines_by_code(code=term)
+                disciplines &= filter_disciplines_by_code(code=term)
 
-            disciplines = dbh.filter_disciplines_by_code(name)
+            disciplines = filter_disciplines_by_code(name)
 
         return disciplines
 
@@ -93,14 +93,22 @@ class Search(APIView):
 
         disciplines = self.retrieve_disciplines_by_similarity(request, name)
 
-        if disciplines.count() == 0:
-            """Filtra as disciplinas pelo nome do professor caso não encontre nenhuma disciplina pelo nome da disciplina"""
-            disciplines = dbh.filter_disciplines_by_teacher(name=name)
+        if disciplines.count() != 0:
+            """Caso encontre disciplinas pelo nome"""
+            filtered_disciplines = filter_disciplines_by_year_and_period(
+                year=year, period=period, disciplines=disciplines)
 
-        filtered_disciplines = dbh.filter_disciplines_by_year_and_period(
-            year=year, period=period, disciplines=disciplines)
-        data = serializers.DisciplineSerializer(
-            filtered_disciplines, many=True).data
+            data = serializers.DisciplineSerializer(
+                filtered_disciplines, many=True).data
+        else:
+            """Filtra as disciplinas pelo nome do professor caso não encontre nenhuma disciplina pelo nome"""
+            disciplines = filter_disciplines_by_teacher(name=name)
+
+            filtered_disciplines = filter_disciplines_by_year_and_period(
+                year=year, period=period, disciplines=disciplines)
+
+            data = serializers.DisciplineSerializer(
+                filtered_disciplines, many=True, context={'teacher_name': name}).data
 
         return response.Response(data[:MAXIMUM_RETURNED_DISCIPLINES], status.HTTP_200_OK)
 

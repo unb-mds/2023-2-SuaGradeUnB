@@ -63,7 +63,6 @@ def filter_disciplines_by_teacher(name: str) -> QuerySet:
     query = Q()
     for word in search_words:
         query &= Q(classes__teachers__icontains=word)
-    print(query)
     search_disciplines = disciplines.filter(query).distinct("id")
 
     return search_disciplines
