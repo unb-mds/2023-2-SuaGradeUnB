@@ -3,6 +3,8 @@ from rest_framework.reverse import reverse
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+from ..views.save_schedule import SCHEDULES_LIMIT, SCHEDULES_LIMIT_ERROR_MSG
+
 from utils import db_handler as dbh
 
 from api.serializers import ClassSerializerSchedule
@@ -43,16 +45,16 @@ class TestScheduleSaveAPI(APITestCase, ErrorRequestBodyScheduleSave):
             (['LUIS FILOMENO DE JESUS FERNANDES'], 'FGA - Sala I6', '46M34',
              ['Quarta-feira 10:00 às 11:50', 'Sexta-feira 10:00 às 11:50'],
              '2', [], self.disciplines['discipline_FGA0003_2023_2']),
+            (['RICARDO RAMOS FRAGELLI'], 'FGA - I9', '246M34',
+             ['Segunda-feira 10:00 às 11:50', 'Quarta-feira 10:00 às 11:50',
+              'Sexta-feira 10:00 às 11:50'], '24', [],
+             self.disciplines['discipline_MAT0025_2023_2']),
             (['EDSON ALVES DA COSTA JUNIOR'], 'FGA - I8', '35T23',
              ['Terça-feira 14:00 às 15:50', 'Quinta-feira 14:00 às 15:50'],
              '1', [], self.disciplines['discipline_FGA0003_2024_1']),
             (['LUIS FILOMENO DE JESUS FERNANDES'], 'FGA - Sala I6', '46M34',
              ['Quarta-feira 10:00 às 11:50', 'Sexta-feira 10:00 às 11:50'],
              '2', [], self.disciplines['discipline_FGA0003_2024_1']),
-            (['RICARDO RAMOS FRAGELLI'], 'FGA - I9', '246M34',
-             ['Segunda-feira 10:00 às 11:50', 'Quarta-feira 10:00 às 11:50',
-              'Sexta-feira 10:00 às 11:50'], '24', [],
-             self.disciplines['discipline_MAT0025_2023_2']),
             (['RICARDO RAMOS FRAGELLI'], 'FGA - I9', '246M34',
              ['Segunda-feira 10:00 às 11:50', 'Quarta-feira 10:00 às 11:50',
               'Sexta-feira 10:00 às 11:50'], '24', [],
@@ -64,6 +66,23 @@ class TestScheduleSaveAPI(APITestCase, ErrorRequestBodyScheduleSave):
             (['RICARDO RAMOS FRAGELLI'], 'FGA - I7', '5T23',
              ['Quinta-feira 14:00 às 15:50'], '25', [['2024-01-01 - 2024-01-02', '1', '1']],
              self.disciplines['discipline_MAT0025_2024_1']),
+            (['VINICIUS RISPOLI'], 'FGA - I9', '245M34',
+             ['Segunda-feira 10:00 às 11:50', 'Quarta-feira 10:00 às 11:50',
+              'Quinta-Feira 10:00 às 11:50'], '24', [],
+             self.disciplines['discipline_MAT0025_2024_1']),
+            (['MATEUS VIEIRA ROCHA'], 'FGA - I9', '236M34',
+             ['Segunda-feira 10:00 às 11:50', 'Terça-feira 10:00 às 11:50',
+              'Sexta-feira 10:00 às 11:50'], '24', [],
+             self.disciplines['discipline_MAT0025_2024_1']),
+            (['LUIZA YOKO'], 'FGA - I9', '346M34',
+             ['Terça-feira 10:00 às 11:50', 'Quarta-feira 10:00 às 11:50',
+              'Sexta-feira 10:00 às 11:50'], '24', [],
+             self.disciplines['discipline_MAT0025_2024_1']),
+            (['LUIZA YOKO'], 'FGA - I9', '456M34',
+             ['Quarta-feira 10:00 às 11:50', 'Quinta-feira 10:00 às 11:50',
+              'Sexta-feira 10:00 às 11:50'], '24', [],
+             self.disciplines['discipline_MAT0025_2024_1']),
+
         ]
 
     def generate_schedule_structure(self, classes: list[Class]) -> list:
@@ -150,11 +169,9 @@ class TestScheduleSaveAPI(APITestCase, ErrorRequestBodyScheduleSave):
         """
         schedule = self.generate_schedule_structure([
             self.classes['class_0_2023_2'],
-            self.classes['class_4_2023_2']
+            self.classes['class_2_2023_2']
         ])
-
         response = self.make_post_request(schedule=schedule)
-
         self.assertEqual(len(self.user.schedules.all()), 1)
         self.assertEqual(response.status_code, 201)
 
@@ -228,7 +245,7 @@ class TestScheduleSaveAPI(APITestCase, ErrorRequestBodyScheduleSave):
         - Status code (400 BAD REQUEST)
         """
         schedule = self.generate_schedule_structure([
-            self.classes['class_2_2024_1'],
+            self.classes['class_3_2024_1'],
             self.classes['class_6_2024_1']
         ])
 
@@ -247,7 +264,7 @@ class TestScheduleSaveAPI(APITestCase, ErrorRequestBodyScheduleSave):
         """
         schedule = self.generate_schedule_structure([
             self.classes['class_0_2023_2'],
-            self.classes['class_4_2023_2']
+            self.classes['class_2_2023_2']
         ])
 
         response = self.make_post_request(auth=False, schedule=schedule)
@@ -263,10 +280,43 @@ class TestScheduleSaveAPI(APITestCase, ErrorRequestBodyScheduleSave):
         """
         schedule = self.generate_schedule_structure([
             self.classes['class_0_2023_2'],
-            self.classes['class_4_2023_2']
+            self.classes['class_2_2023_2']
         ])
 
         token = 'incorrect_token'
         response = self.make_post_request(auth=token, schedule=schedule)
 
         self.assertEqual(response.status_code, 403)
+
+    def test_save_limit_reached(self):
+        """
+        Testa o salvamento de uma grade horária quando o limite de grades horárias é atingido.
+        Salva todas as grades horárias possíveis e tenta salvar mais uma.
+
+        Tests:
+        - Status code (400 BAD REQUEST)
+        """
+
+        for i in range(3):
+            schedule = self.generate_schedule_structure([
+                self.classes[f'class_{i}_2023_2']
+            ])
+
+            response = self.make_post_request(schedule=schedule)
+            self.assertEqual(response.status_code, 201)
+
+        for i in range(3, SCHEDULES_LIMIT):
+            schedule = self.generate_schedule_structure([
+                self.classes[f'class_{i}_2024_1']
+            ])
+            response = self.make_post_request(schedule=schedule)
+            self.assertEqual(response.status_code, 201)
+
+        schedule = self.generate_schedule_structure([
+            self.classes[f'class_{SCHEDULES_LIMIT-1}_2024_1']
+        ])
+
+        response = self.make_post_request(schedule=schedule)
+        self.assertEqual(response.data.get('errors'),
+                         SCHEDULES_LIMIT_ERROR_MSG)
+        self.assertEqual(response.status_code, 400)
