@@ -11,6 +11,8 @@ from api.swagger import Errors
 from api.views.utils import handle_400_error
 from api import serializers
 
+SCHEDULES_LIMIT = 10
+
 
 class SaveSchedule():
     @swagger_auto_schema(
@@ -23,6 +25,9 @@ class SaveSchedule():
         }
     )
     def post(self, request: request.Request, *args, **kwargs) -> response.Response:
+        if not check_permission_to_save(request.user):
+            return handle_400_error("you have reached the limit of schedules")
+
         classes = request.data
 
         try:
@@ -204,3 +209,11 @@ def validate_received_schedule(classes_id: list[int]) -> list[Class]:
         raise ValueError("the classes are not compatible")
 
     return schedules[0]
+
+
+def check_permission_to_save(user) -> bool:
+    schedules = dbh.get_schedules(user)
+
+    if len(schedules) >= SCHEDULES_LIMIT:
+        return False
+    return True
