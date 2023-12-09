@@ -12,6 +12,7 @@ from api.views.utils import handle_400_error
 from api import serializers
 
 SCHEDULES_LIMIT = 10
+SCHEDULES_LIMIT_ERROR_MSG = f"you have reached the limit of {SCHEDULES_LIMIT} schedules"
 
 
 class SaveSchedule():
@@ -26,7 +27,7 @@ class SaveSchedule():
     )
     def post(self, request: request.Request, *args, **kwargs) -> response.Response:
         if not check_permission_to_save(request.user):
-            return handle_400_error("you have reached the limit of schedules")
+            return handle_400_error(SCHEDULES_LIMIT_ERROR_MSG)
 
         classes = request.data
 
