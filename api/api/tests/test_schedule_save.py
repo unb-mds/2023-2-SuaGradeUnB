@@ -61,6 +61,9 @@ class TestScheduleSaveAPI(APITestCase, ErrorRequestBodyScheduleSave):
              ['Segunda-feira 10:00 às 11:50', 'Quarta-feira 10:00 às 11:50',
               'Quinta-feira 14:00 às 15:50'], '25', [],
              self.disciplines['discipline_MAT0025_2024_1']),
+            (['RICARDO RAMOS FRAGELLI'], 'FGA - I7', '5T23',
+             ['Quinta-feira 14:00 às 15:50'], '25', [['2024-01-01 - 2024-01-02', '1', '1']],
+             self.disciplines['discipline_MAT0025_2024_1']),
         ]
 
     def generate_schedule_structure(self, classes: list[Class]) -> list:
@@ -154,6 +157,25 @@ class TestScheduleSaveAPI(APITestCase, ErrorRequestBodyScheduleSave):
 
         self.assertEqual(len(self.user.schedules.all()), 1)
         self.assertEqual(response.status_code, 201)
+
+    def test_save_correct_schedule_with_special_dates(self):
+        """
+        Testa o salvamento de uma grade horária correta com um usuário autenticado.
+
+        Tests:
+        - Classes salvas no banco de dados
+        - Quantidade de classes salvas no banco de dados
+        - Status code (201 CREATED)
+        """
+        schedule = self.generate_schedule_structure([
+            self.classes['class_3_2024_1'],
+            self.classes['class_7_2024_1']
+        ])
+
+        response = self.make_post_request(schedule=schedule)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(self.user.schedules.all()), 1)
 
     def test_save_incorrect_schedule_with_different_year_period(self):
         """
