@@ -101,20 +101,18 @@ function AsideButtonsJSX() {
 function LayoutJSX({ children }: { children: React.ReactNode }) {
     const { breakHeighPoint } = useWindowDimensions();
     const { isLoading } = useUser();
-
     const path = usePathname().split('/')[2];
 
     if (isLoading) return <LoadingScreen />;
 
+    const mainClassName = path !== 'home' ?
+        (breakHeighPoint ? 'h-[calc(100%-15.75rem)]' : 'h-[calc(100%-9.75rem)]') :
+        (breakHeighPoint ? 'pt-3 h-[calc(100%-15.75rem)]' : 'pt-7 h-[calc(100%-9.75rem)]');
+
     return (
         <>
             <InfoHeader />
-            <main className={`
-                ${path != 'home' ? (breakHeighPoint ? 'h-[calc(100%-12.75rem)]' : 'h-[calc(100%-6.75rem)]') : breakHeighPoint ?
-                    'pt-3 h-[calc(100%-15.75rem)]' :
-                    'pt-7 h-[calc(100%-9.75rem)]'
-                }
-            `}>
+            <main className={mainClassName}>
                 {children}
             </main>
             <LogoReturnButton />
