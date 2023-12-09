@@ -58,8 +58,13 @@ def get_best_similarities_by_name(name: str, disciplines: Discipline = Disciplin
 def filter_disciplines_by_teacher(name: str) -> QuerySet:
     """Filtra as disciplinas pelo nome do professor na classe."""
     disciplines = Discipline.objects.all()
-    search_disciplines = disciplines.filter(
-        classes__teachers__icontains=name)
+    search_words = name.split()
+
+    query = Q()
+    for word in search_words:
+        query &= Q(classes__teachers__icontains=word)
+    print(query)
+    search_disciplines = disciplines.filter(query).distinct("id")
 
     return search_disciplines
 
