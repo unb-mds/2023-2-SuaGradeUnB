@@ -8,6 +8,31 @@ interface ClassInfoPropsType {
     currentClass: ClassValueType
 }
 
+export function generateSpecialDates(special_dates: Array<Array<string>>, days: Array<string>) {
+    return special_dates.map((specialDate, index) => {
+        const day = specialDate[0];
+        const start = parseInt(specialDate[1]) - 1;
+        const end = parseInt(specialDate[2]) - 1;
+
+        function make_days(start: number, end: number) {
+            return days.slice(start, end + 1).map((day, index) =>
+                <div className='pl-3' key={index}>
+                    {day}
+                </div>
+            );
+        }
+
+        return (
+            <Fragment key={index}>
+                <span className='font-semibold'>
+                    {day}
+                </span>
+                {make_days(start, end)}
+            </Fragment>
+        );
+    });
+}
+
 export default function ClassInfo({ currentClass }: ClassInfoPropsType) {
     return (
         <div>
@@ -24,28 +49,10 @@ export default function ClassInfo({ currentClass }: ClassInfoPropsType) {
                                 <div key={index}>
                                     {day}
                                 </div>
-                            ) : currentClass.class.special_dates.map((specialDate, index) => {
-                                const day = specialDate[0];
-                                const start = parseInt(specialDate[1]) - 1;
-                                const end = parseInt(specialDate[2]) - 1;
-
-                                function make_days(start: number, end: number) {
-                                    return currentClass.class.days.slice(start, end + 1).map((day, index) =>
-                                        <div className='pl-3' key={index}>
-                                            {day}
-                                        </div>
-                                    );
-                                }
-
-                                return (
-                                    <Fragment key={index}>
-                                        <span className='font-semibold'>
-                                            {day}
-                                        </span>
-                                        {make_days(start, end)}
-                                    </Fragment>
-                                );
-                            })}
+                            ) : generateSpecialDates(
+                                currentClass.class.special_dates,
+                                currentClass.class.days
+                            )}
                     </div>
                 </Tooltip>
             </div>

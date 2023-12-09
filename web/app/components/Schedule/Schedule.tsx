@@ -2,13 +2,16 @@
 
 import { ScheduleClassType } from '@/app/contexts/SchedulesContext';
 import { HTMLProps, useEffect, useState } from 'react';
+import { generateSpecialDates } from '../ClassInfo';
+import Tooltip from '../AsideSchedulePopUp/Tooltip';
 
 interface SchedulePropsType extends HTMLProps<HTMLDivElement> {
     schedules?: Array<ScheduleClassType>;
     preview?: boolean;
+    toDownload?: boolean;
 }
 
-export default function Schedule({ schedules, preview, ...props }: SchedulePropsType) {
+export default function Schedule({ schedules, preview, toDownload, ...props }: SchedulePropsType) {
     const [currentSchedule, setCurrentSchedule] = useState<Array<Array<ScheduleClassType>>>(new Array(6).fill(new Array(15).fill(null)));
 
     const days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
@@ -59,16 +62,17 @@ export default function Schedule({ schedules, preview, ...props }: ScheduleProps
 
     return (
         <div
-            className={`${preview ? 'scale-[.3]' : ''}`}
+            {...props}
+            className={`${toDownload ? 'flex justify-end flex-row-reverse pt-10' : ''} ${preview ? 'scale-[.3]' : ''}`}
             onClick={props.onClick}
         >
-            <div className='p-5 m-auto w-max'>
+            <div className={`p-5 ${!toDownload ? 'm-auto' : ''} w-max`}>
                 <div className="flex justify-end">
                     <div className="w-40"></div>
                     <div className="flex">
                         {days.map((day, index) =>
                             <div key={index} className="text-center w-28 m-[2px]">
-                                {day}
+                                <p>{day}</p>
                             </div>
                         )}
                     </div>
@@ -77,11 +81,11 @@ export default function Schedule({ schedules, preview, ...props }: ScheduleProps
                     {times.map((time, timeIndex) =>
                         <div className="flex" key={timeIndex}>
                             <div className="flex justify-center items-center font-mono w-40">
-                                {time}
+                                <p>{time}</p>
                             </div>
                             <div className="flex">
                                 {days.map((day, dayIndex) =>
-                                    <div key={dayIndex} className="flex rounded-xl border border-[#9B9898] justify-center items-center w-28 h-8 m-[2px]">
+                                    <div key={dayIndex} className={`flex ${toDownload ? 'pb-5' : ''} rounded-xl border border-[#9B9898] justify-center items-center w-28 h-8 m-[2px]`}>
                                         {currentSchedule[dayIndex] &&
                                             currentSchedule[dayIndex][timeIndex] &&
                                             currentSchedule[dayIndex][timeIndex].discipline.code}
@@ -106,11 +110,20 @@ export default function Schedule({ schedules, preview, ...props }: ScheduleProps
                                         {schedule.teachers.map((teacher, index) => {
                                             return (
                                                 <li key={index}>
-                                                    {teacher}
+                                                    <p>{teacher}</p>
                                                 </li>
                                             );
                                         })}
                                     </ul>
+                                    {schedule.special_dates.length ?
+                                        <>
+                                            <span className='font-semibold pr-2'>DATAS:</span>
+                                            {!toDownload ? <Tooltip>
+                                                {generateSpecialDates(schedule.special_dates, schedule.days)}
+                                            </Tooltip> : generateSpecialDates(schedule.special_dates, schedule.days)}
+                                        </> : null
+                                    }
+
                                 </div>
                             );
                         })}

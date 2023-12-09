@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import useSchedules from '@/app/hooks/useSchedules';
 import useUser from '@/app/hooks/useUser';
+import useWindowDimensions from '@/app/hooks/useWindowDimensions';
 
 import { CloudScheduleType, ScheduleClassType } from '@/app/contexts/SchedulesContext';
 
@@ -17,6 +18,10 @@ import deleteIcon from '@/public/icons/delete.jpg';
 import saveSchedule from '@/app/utils/api/saveSchedule';
 import getSchedules from '@/app/utils/api/getSchedules';
 import { days, months } from '@/app/utils/dates';
+import deleteSchedule from '@/app/utils/api/deleteSchedule';
+import { errorToast } from '@/app/utils/errorToast';
+
+import jsPDF from 'jspdf';
 
 export default function SchedulePreview({ localSchedule, cloudSchedule, index, isCloud = false }: {
     localSchedule?: Array<ScheduleClassType>;
@@ -27,31 +32,39 @@ export default function SchedulePreview({ localSchedule, cloudSchedule, index, i
     const { user } = useUser();
     const { localSchedules, setLocalSchedules, setCloudSchedules } = useSchedules();
 
+    const [toDownload, setToDownload] = useState(false);
     const [changeDate, setChangeDate] = useState('');
     const [activeScheduleModal, setActiveScheduleModal] = useState(false);
     const [activeDeleteModal, setActiveDeleteModal] = useState(false);
 
-    function handleDelete() {
+    const commonError = () => errorToast('Houve um erro na atualização das grades!');
+
+    async function handleDelete() {
         if (!isCloud) {
             const newLocalSchedules = [...localSchedules];
             newLocalSchedules.splice(index, 1);
             setLocalSchedules(newLocalSchedules, false);
+        } else {
+            const response = await deleteSchedule(cloudSchedule?.id, user.access);
+
+            if (response.status == 204) {
+                getSchedules(user.access).then(response => {
+                    setCloudSchedules(response.data);
+                }).catch(() => commonError());
+            } else errorToast('Não foi possível deletar a grade na nuvem!');
         }
         setActiveDeleteModal(false);
     }
 
     async function handleUploadToCloud() {
         const saveResponse = await saveSchedule(localSchedule, user.access);
-        const getResponse = await getSchedules(user.access);
 
-        if (saveResponse.status == 201 && getResponse.status == 200) {
-            const data: Array<any> = getResponse.data;
-            data.forEach((schedule, index) => {
-                data[index].classes = JSON.parse(schedule.classes);
-            });
-            handleDelete();
-            setCloudSchedules(data);
-        }
+        if (saveResponse.status == 201) {
+            getSchedules(user.access).then(response => {
+                handleDelete();
+                setCloudSchedules(response.data);
+            }).catch(() => commonError());
+        } else errorToast('Não foi possível salvar a grade na nuvem!');
     }
 
     useEffect(() => {
@@ -66,6 +79,31 @@ export default function SchedulePreview({ localSchedule, cloudSchedule, index, i
         }
     }, [isCloud, cloudSchedule?.created_at]);
 
+    useEffect(() => {
+        function handleDownloadPDF() {
+            const doc = document.getElementById('download-content')!;
+
+            const pdfManager = new jsPDF('l', 'pt', 'a4');
+            pdfManager.html(doc, {
+                callback: function (doc) {
+                    doc.save(`schedule-${isCloud ? 'cloud' : 'local'}-${index + 1}.pdf`);
+                },
+                x: 0,
+                y: 0,
+                width: 1150,
+                windowWidth: 2000,
+            });
+        }
+
+        if (toDownload && activeScheduleModal) {
+            setTimeout(() => {
+                handleDownloadPDF();
+                setActiveScheduleModal(false);
+                setToDownload(false);
+            }, 150);
+        }
+    }, [toDownload, activeScheduleModal, isCloud, index]);
+
     return (
         <>
             <div className='relative w-full max-w-sm'>
@@ -79,7 +117,7 @@ export default function SchedulePreview({ localSchedule, cloudSchedule, index, i
                     />
                     {activeScheduleModal &&
                         <Modal setActiveModal={setActiveScheduleModal}>
-                            <Schedule schedules={isCloud ? cloudSchedule!.classes : localSchedule} />
+                            <Schedule id='download-content' schedules={isCloud ? cloudSchedule!.classes : localSchedule} toDownload={toDownload} />
                         </Modal>
                     }
                 </div>
@@ -91,12 +129,15 @@ export default function SchedulePreview({ localSchedule, cloudSchedule, index, i
                         {isCloud && changeDate && <span className='text-sm font-normal'> - {changeDate}</span>}
                     </div>
                     <div className='flex gap-4 h-[25px] opacity-50'>
-                        {!isCloud &&
+                        {!isCloud && !user.is_anonymous &&
                             <button onClick={() => handleUploadToCloud()}>
                                 <Image width={25} src={uploadIcon} alt="ícone de upload" />
                             </button>
                         }
-                        <button>
+                        <button onClick={() => {
+                            setActiveScheduleModal(true);
+                            setToDownload(true);
+                        }}>
                             <Image width={25} height={25} src={downloadIcon} alt="ícone de download" />
                         </button>
                         <button onClick={() => setActiveDeleteModal(true)}>
