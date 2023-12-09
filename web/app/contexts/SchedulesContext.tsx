@@ -36,7 +36,7 @@ export default function SchedulesContextProvider({ children }: {
     children: React.ReactNode;
 }) {
     const [localSchedules, setLocalDefaultSchedules] = useState<SchedulesType>([] as SchedulesType);
-    const [cloudSchedules, setCloudSchedules] = useState<SchedulesCloudType>([] as SchedulesCloudType);
+    const [cloudSchedules, setCloudDefaultSchedules] = useState<SchedulesCloudType>([] as SchedulesCloudType);
 
     useEffect(() => {
         const localJSON = JSON.parse(localStorage.getItem('schedules') || '[]');
@@ -60,6 +60,15 @@ export default function SchedulesContextProvider({ children }: {
         const localJSON = JSON.parse(localStorage.getItem('schedules') || '[]');
         const localSchedulesFromJSON: SchedulesType = localJSON;
         setLocalDefaultSchedules(localSchedulesFromJSON);
+    };
+
+    const setCloudSchedules = (newSchedules: SchedulesCloudType) => {
+        console.log(newSchedules);
+        const data: Array<any> = newSchedules;
+        data.forEach((schedule, index) => {
+            data[index].classes = JSON.parse(schedule.classes);
+        });
+        setCloudDefaultSchedules(data);
     };
 
     return (
