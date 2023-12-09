@@ -19,7 +19,7 @@ from api.models import Discipline
 from api.views.utils import handle_400_error
 
 
-MAXIMUM_RETURNED_DISCIPLINES = 8
+MAXIMUM_RETURNED_DISCIPLINES = 15
 ERROR_MESSAGE = "no valid argument found for 'search', 'year' or 'period'"
 MINIMUM_SEARCH_LENGTH = 4
 ERROR_MESSAGE_SEARCH_LENGTH = f"search must have at least {MINIMUM_SEARCH_LENGTH} characters"
