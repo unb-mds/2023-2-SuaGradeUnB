@@ -15,18 +15,19 @@ from api import serializers
 
 from .save_schedule import SaveSchedule
 
+
 class Schedules(APIView, SaveSchedule):
     permission_classes = [IsAuthenticated]
-    
+
     def get_permissions(self):
         """
         Instancia e retorna a lista de permissões que serão usadas por esta view.
         """
         if self.request.method in ['GET', 'POST']:
             return [permission() for permission in self.permission_classes]
-        else: # pragma: no cover
+        else:  # pragma: no cover
             return []
-        
+
     @swagger_auto_schema(
         operation_description="Retorna as grades horárias do usuário logado.",
         security=[{'Bearer': []}],
@@ -37,9 +38,9 @@ class Schedules(APIView, SaveSchedule):
     )
     def get(self, request: request.Request, **kwargs) -> response.Response:
         """Retorna as grades horárias do usuário logado."""
-        
+
         user = request.user
         schedules = dbh.get_schedules(user)
         data = serializers.ScheduleSerializer(schedules, many=True).data
-        
+
         return response.Response(status=status.HTTP_200_OK, data=data)

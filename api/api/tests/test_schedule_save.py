@@ -49,7 +49,7 @@ class TestScheduleSaveAPI(APITestCase, ErrorRequestBodyScheduleSave):
              ['Segunda-feira 10:00 às 11:50', 'Quarta-feira 10:00 às 11:50',
               'Sexta-feira 10:00 às 11:50'], '24', [],
              self.disciplines['discipline_MAT0025_2023_2']),
-            (['EDSON ALVES DA COSTA JUNIOR'], 'FGA - I8', '35T23',
+            (['EDSON ALVES DA COSTA JUNIOR'], 'FGA - I8', '24M34',
              ['Terça-feira 14:00 às 15:50', 'Quinta-feira 14:00 às 15:50'],
              '1', [], self.disciplines['discipline_FGA0003_2024_1']),
             (['LUIS FILOMENO DE JESUS FERNANDES'], 'FGA - Sala I6', '46M34',

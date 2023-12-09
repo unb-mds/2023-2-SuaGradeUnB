@@ -6,6 +6,7 @@ from drf_yasg import openapi
 
 from rest_framework import status, request, response
 
+from utils import db_handler as dbh
 from api.models import Class
 from api.swagger import Errors
 from api.views.utils import handle_400_error
