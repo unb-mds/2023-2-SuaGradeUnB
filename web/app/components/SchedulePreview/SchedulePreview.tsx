@@ -121,12 +121,12 @@ export default function SchedulePreview({ localSchedule, cloudSchedule, index, i
                         </Modal>
                     }
                 </div>
-                <div className='flex justify-between items-center w-full absolute -bottom-7'>
+                <div className={`flex justify-between items-center w-full absolute ${isCloud ? '-bottom-14' : '-bottom-7'}`}>
                     <div
                         className='text-[#000000] opacity-40 text-lg font-bold'
                     >
-                        Grade {index + 1}
-                        {isCloud && changeDate && <span className='text-sm font-normal'> - {changeDate}</span>}
+                        Grade {index + 1} <br />
+                        {isCloud && changeDate && <span className='text-sm font-normal'>{changeDate}</span>}
                     </div>
                     <div className='flex gap-4 h-[25px] opacity-50'>
                         {!isCloud && !user.is_anonymous &&

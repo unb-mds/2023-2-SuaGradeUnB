@@ -1,8 +1,11 @@
 import { Fragment } from 'react';
+import Image from 'next/image';
+import ClassInfoBox from './ClassInfoBox';
 
 import { ClassType, DisciplineType } from '@/app/utils/api/searchDiscipline';
 
-import ClassInfoBox from './ClassInfoBox';
+import expand_more from '@/public/icons/expand_more.png';
+import expand_less from '@/public/icons/expand_less.png';
 
 interface DisciplineFragmentPropsType {
     index: number,
@@ -26,9 +29,7 @@ function DisciplineFragmentJSX({ handleDisciplineToggle, ...props }: {
                 onClick={() => handleDisciplineToggle(index)}
                 className='flex items-center gap-3'
             >
-                <span className="material-symbols-rounded">
-                    {discipline.expanded ? 'expand_less' : 'expand_more'}
-                </span>
+                <Image src={discipline.expanded ? expand_more : expand_less} alt="expand icon" />
                 <span className='font-semibold'>{discipline.name} - {discipline.code}</span>
             </button>
             {discipline.expanded &&

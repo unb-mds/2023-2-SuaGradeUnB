@@ -110,7 +110,7 @@ function LayoutJSX({ children }: { children: React.ReactNode }) {
         <>
             <InfoHeader />
             <main className={`
-                ${path != 'home' ? 'h-[calc(100%-12.75rem)]' :breakHeighPoint ?
+                ${path != 'home' ? (breakHeighPoint ? 'h-[calc(100%-12.75rem)]' : 'h-[calc(100%-6.75rem)]') : breakHeighPoint ?
                     'pt-3 h-[calc(100%-15.75rem)]' :
                     'pt-7 h-[calc(100%-9.75rem)]'
                 }

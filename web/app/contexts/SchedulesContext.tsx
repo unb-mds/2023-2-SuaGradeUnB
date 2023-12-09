@@ -63,7 +63,6 @@ export default function SchedulesContextProvider({ children }: {
     };
 
     const setCloudSchedules = (newSchedules: SchedulesCloudType) => {
-        console.log(newSchedules);
         const data: Array<any> = newSchedules;
         data.forEach((schedule, index) => {
             data[index].classes = JSON.parse(schedule.classes);

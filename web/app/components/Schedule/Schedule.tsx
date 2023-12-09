@@ -13,6 +13,7 @@ interface SchedulePropsType extends HTMLProps<HTMLDivElement> {
 
 export default function Schedule({ schedules, preview, toDownload, ...props }: SchedulePropsType) {
     const [currentSchedule, setCurrentSchedule] = useState<Array<Array<ScheduleClassType>>>(new Array(6).fill(new Array(15).fill(null)));
+    const uniqueTeachers = new Set<string>();
 
     const days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
     const times = [
@@ -108,6 +109,9 @@ export default function Schedule({ schedules, preview, toDownload, ...props }: S
                                     <span className='font-semibold'>PROFESSORES:</span>
                                     <ul className='list-inside'>
                                         {schedule.teachers.map((teacher, index) => {
+                                            if (uniqueTeachers.has(teacher)) return null;
+                                            
+                                            uniqueTeachers.add(teacher);
                                             return (
                                                 <li key={index}>
                                                     <p>{teacher}</p>
