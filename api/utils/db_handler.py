@@ -55,6 +55,15 @@ def get_best_similarities_by_name(name: str, disciplines: Discipline = Disciplin
     return values
 
 
+def filter_disciplines_by_teacher(name: str) -> QuerySet:
+    """Filtra as disciplinas pelo nome do professor na classe."""
+    disciplines = Discipline.objects.all()
+    search_disciplines = disciplines.filter(
+        classes__teachers__icontains=name)
+
+    return search_disciplines
+
+
 def filter_disciplines_by_code(code: str, disciplines: Discipline = Discipline.objects) -> QuerySet:
     """Filtra as disciplinas pelo código."""
     return disciplines.filter(code__icontains=code)
@@ -86,14 +95,16 @@ def save_schedule(user: User, schedule_to_save: list[Class]) -> bool:
 
     try:
         Schedule.objects.get_or_create(user=user, classes=json_schedule)
-    except: # pragma: no cover
+    except:  # pragma: no cover
         return False
 
     return True
 
+
 def get_schedules(user: User) -> QuerySet:
     """Retorna as grades horárias de um usuário."""
     return Schedule.objects.filter(user=user).all()
+
 
 def delete_schedule(user: User, id: int) -> bool:
     """Deleta uma grade horária de um usuário."""

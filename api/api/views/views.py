@@ -93,6 +93,10 @@ class Search(APIView):
 
         disciplines = self.retrieve_disciplines_by_similarity(request, name)
 
+        if disciplines.count() == 0:
+            """Filtra as disciplinas pelo nome do professor caso não encontre nenhuma disciplina pelo nome da disciplina"""
+            disciplines = dbh.filter_disciplines_by_teacher(name=name)
+
         filtered_disciplines = dbh.filter_disciplines_by_year_and_period(
             year=year, period=period, disciplines=disciplines)
         data = serializers.DisciplineSerializer(
