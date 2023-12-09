@@ -72,8 +72,16 @@ def get_class_by_id(id: int, classes: BaseManager[Class] = Class.objects) -> Cla
 
 def get_class_by_params(classes: BaseManager[Class] = Class.objects, **kwargs) -> Class | None:
     """Filtra as turmas pelos argumentos: nome, código, departamento, ..."""
+
+    filtered_classes = classes.all()
+    for special_date in kwargs.get("special_dates", []):
+        filtered_classes = filtered_classes.filter(
+            special_dates__contains=special_date
+        )
+
+    kwargs.pop("special_dates", None)
     try:
-        return classes.get(**kwargs)
+        return filtered_classes.get(**kwargs)
     except Class.DoesNotExist:
         return None
 
@@ -86,14 +94,16 @@ def save_schedule(user: User, schedule_to_save: list[Class]) -> bool:
 
     try:
         Schedule.objects.get_or_create(user=user, classes=json_schedule)
-    except: # pragma: no cover
+    except:  # pragma: no cover
         return False
 
     return True
 
+
 def get_schedules(user: User) -> QuerySet:
     """Retorna as grades horárias de um usuário."""
     return Schedule.objects.filter(user=user).all()
+
 
 def delete_schedule(user: User, id: int) -> bool:
     """Deleta uma grade horária de um usuário."""
