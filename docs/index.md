@@ -7,7 +7,7 @@ hide:
 
 ## Sobre
 
-O Sua Grade UnB é um projeto em desenvolvimento da matéria **Métodos de Desenvolvimento de Software**, a qual tem como objetivo auxiliar os alunos da Universidade de Brasília a montarem suas grades horárias de forma mais fácil e intuitiva.
+O [Sua Grade UnB](https://suagradeunb.com.br) é um projeto em desenvolvimento da matéria **Métodos de Desenvolvimento de Software**, a qual tem como objetivo auxiliar os alunos da Universidade de Brasília a montarem suas grades horárias de forma mais fácil e intuitiva.
 
 ## Equipe
 
