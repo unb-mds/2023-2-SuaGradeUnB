@@ -49,7 +49,7 @@ class TestScheduleSaveAPI(APITestCase, ErrorRequestBodyScheduleSave):
              ['Segunda-feira 10:00 às 11:50', 'Quarta-feira 10:00 às 11:50',
               'Sexta-feira 10:00 às 11:50'], '24', [],
              self.disciplines['discipline_MAT0025_2023_2']),
-            (['EDSON ALVES DA COSTA JUNIOR'], 'FGA - I8', '35T23',
+            (['EDSON ALVES DA COSTA JUNIOR'], 'FGA - I8', '24M34',
              ['Terça-feira 14:00 às 15:50', 'Quinta-feira 14:00 às 15:50'],
              '1', [], self.disciplines['discipline_FGA0003_2024_1']),
             (['LUIS FILOMENO DE JESUS FERNANDES'], 'FGA - Sala I6', '46M34',
@@ -62,6 +62,9 @@ class TestScheduleSaveAPI(APITestCase, ErrorRequestBodyScheduleSave):
             (['RICARDO RAMOS FRAGELLI'], 'FGA - I7', '24M34 5T23',
              ['Segunda-feira 10:00 às 11:50', 'Quarta-feira 10:00 às 11:50',
               'Quinta-feira 14:00 às 15:50'], '25', [],
+             self.disciplines['discipline_MAT0025_2024_1']),
+            (['RICARDO RAMOS FRAGELLI'], 'FGA - I7', '5T23',
+             ['Quinta-feira 14:00 às 15:50'], '25', [['2024-01-01 - 2024-01-02', '1', '1']],
              self.disciplines['discipline_MAT0025_2024_1']),
             (['VINICIUS RISPOLI'], 'FGA - I9', '245M34',
              ['Segunda-feira 10:00 às 11:50', 'Quarta-feira 10:00 às 11:50',
@@ -171,6 +174,25 @@ class TestScheduleSaveAPI(APITestCase, ErrorRequestBodyScheduleSave):
         response = self.make_post_request(schedule=schedule)
         self.assertEqual(len(self.user.schedules.all()), 1)
         self.assertEqual(response.status_code, 201)
+
+    def test_save_correct_schedule_with_special_dates(self):
+        """
+        Testa o salvamento de uma grade horária correta com um usuário autenticado.
+
+        Tests:
+        - Classes salvas no banco de dados
+        - Quantidade de classes salvas no banco de dados
+        - Status code (201 CREATED)
+        """
+        schedule = self.generate_schedule_structure([
+            self.classes['class_3_2024_1'],
+            self.classes['class_7_2024_1']
+        ])
+
+        response = self.make_post_request(schedule=schedule)
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(len(self.user.schedules.all()), 1)
 
     def test_save_incorrect_schedule_with_different_year_period(self):
         """

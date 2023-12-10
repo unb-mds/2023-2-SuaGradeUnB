@@ -1,11 +1,12 @@
 from utils.schedule_generator import ScheduleGenerator
-from utils import db_handler as dbh
+from utils.db_handler import get_class_by_params, save_schedule
 
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 from rest_framework import status, request, response
 
+from utils import db_handler as dbh
 from api.models import Class
 from api.swagger import Errors
 from api.views.utils import handle_400_error
@@ -54,7 +55,7 @@ class SaveSchedule():
             return handle_400_error(error_msg)
 
         user = request.user
-        answer = dbh.save_schedule(user, valid_schedule)
+        answer = save_schedule(user, valid_schedule)
 
         return response.Response(status=status.HTTP_201_CREATED) if answer else handle_400_error("error while saving schedule")
 
@@ -150,7 +151,7 @@ def check_classes_viability(classes: list[dict], unique_year_period: set, curren
         year_period = retrieve_year_period_from_class(_class)
         unique_year_period.add(year_period)
 
-        db_class = dbh.get_class_by_params(**key_args)
+        db_class = get_class_by_params(**key_args)
         if not db_class:
             code = retrieve_discipline_code_from_class(_class)
             error_msg = f"the class {code} does not exists with this params"

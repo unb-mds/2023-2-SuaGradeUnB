@@ -25,5 +25,5 @@ class DeleteSchedule(APIView):
     def delete(self, request: request.Request, id: int) -> response.Response:
         """Delete a grade horária do usuário logado."""
         user = request.user
-        
+
         return response.Response(status=status.HTTP_204_NO_CONTENT) if dbh.delete_schedule(user, id) else response.Response(status=status.HTTP_400_BAD_REQUEST)
