@@ -28,8 +28,13 @@ export default function GenerateScheduleButton() {
         });
         const response = await generateSchedule(classes_id);
         if (response.status === 200) {
-            setLocalSchedules(response.data as Array<ScheduleClassType>);
-            router.replace('/schedules/mygrades');
+            const schedules = response.data as Array<ScheduleClassType>;
+            if (!schedules.length) {
+                errorToast('Nenhuma grade conseguiu ser gerada!');
+            } else {
+                setLocalSchedules(schedules);
+                router.replace('/schedules/mygrades');
+            }
         } else errorToast('Não foi possível gerar as grades, tente novamente mais tarde!');
     };
     return (
