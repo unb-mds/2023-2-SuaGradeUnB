@@ -98,22 +98,16 @@ function AsideButtonsJSX() {
     );
 }
 
-function getMainClassName(breakHeighPoint: boolean) {
-    return  `pt-${breakHeighPoint ? 36 : 16} pb-36`;
-}
-
 function LayoutJSX({ children }: { children: React.ReactNode }) {
     const { breakHeighPoint } = useWindowDimensions();
     const { isLoading } = useUser();
 
     if (isLoading) return <LoadingScreen />;
 
-    const mainClassName = getMainClassName(breakHeighPoint);
-
     return (
         <>
             <InfoHeader />
-            <main className={mainClassName}>
+            <main className={`${breakHeighPoint ? 'pt-[136px]' : 'pt-16'} pb-36`}>
                 {children}
             </main>
             <LogoReturnButton />
