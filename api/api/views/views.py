@@ -48,12 +48,11 @@ class Search(APIView):
 
         return disciplines
 
-    def retrieve_disciplines_by_similarity(self, request: request.Request, name: str) -> tuple[QuerySet[Discipline], bool]:
+    def retrieve_disciplines_by_similarity(self, request: request.Request, name: str) -> QuerySet[Discipline]:
         disciplines = self.filter_disciplines(request, name)
 
         disciplines = get_best_similarities_by_name(name, disciplines)
 
-        search_by_teacher = False
         if not disciplines.count():
             disciplines = filter_disciplines_by_code(code=name[0])
 
@@ -62,12 +61,7 @@ class Search(APIView):
 
             disciplines = filter_disciplines_by_code(name)
 
-        if not disciplines.count():
-            disciplines = filter_disciplines_by_teacher(name)
-            if disciplines.count():
-                search_by_teacher = True
-
-        return disciplines, search_by_teacher
+        return disciplines
 
     @swagger_auto_schema(
         operation_description="Busca disciplinas por nome ou código. O ano e período são obrigatórios.",
@@ -100,21 +94,20 @@ class Search(APIView):
         if len(name) < MINIMUM_SEARCH_LENGTH:
             return handle_400_error(ERROR_MESSAGE_SEARCH_LENGTH)
 
-        disciplines, search_by_teacher = self.retrieve_disciplines_by_similarity(
+        disciplines = self.retrieve_disciplines_by_similarity(
             request, name)
+        search_by_teacher = False
+        if not disciplines.count():
+            disciplines = filter_disciplines_by_teacher(name)
+            search_by_teacher = True
+
+        filtered_disciplines = filter_disciplines_by_year_and_period(
+            year=year, period=period, disciplines=disciplines)
 
         if search_by_teacher:
-
-            filtered_disciplines = filter_disciplines_by_year_and_period(
-                year=year, period=period, disciplines=disciplines)
-
             data = serializers.DisciplineSerializer(
                 filtered_disciplines, many=True, context={'teacher_name': name}).data
         else:
-
-            filtered_disciplines = filter_disciplines_by_year_and_period(
-                year=year, period=period, disciplines=disciplines)
-
             data = serializers.DisciplineSerializer(
                 filtered_disciplines, many=True).data
 
