@@ -113,9 +113,11 @@ def save_schedule(user: User, schedule_to_save: list[Class]) -> bool:
     return True
 
 
+
 def get_schedules(user: User) -> QuerySet:
     """Retorna as grades horárias de um usuário."""
     return Schedule.objects.filter(user=user).all()
+
 
 
 def delete_schedule(user: User, id: int) -> bool:
@@ -136,3 +138,4 @@ def filter_classes_by_teacher(name: str, classes: QuerySet) -> QuerySet:
     for word in search_words:
         query &= Q(teachers__icontains=word)
     return classes.filter(query)
+
