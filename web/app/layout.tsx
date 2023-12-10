@@ -1,20 +1,28 @@
 import type { Metadata } from 'next';
 
-import { Poppins } from 'next/font/google';
+import { Poppins, Chivo_Mono } from 'next/font/google';
 import './globals.css';
 
 import UserContextProvider from './contexts/UserContext';
 import YearPeriodContextProvider from './contexts/YearPeriodContext';
 import ClassesToShowContextProvider from './contexts/ClassesToShowContext';
 import SelectedClassesContextProvider from './contexts/SelectedClassesContext/SelectedClassesContext';
+import SchedulesContextProvider from './contexts/SchedulesContext';
 
 import { Toaster } from 'react-hot-toast';
 
-const poppins = Poppins({
+export const poppins = Poppins({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
   style: ['normal', 'italic'],
   subsets: ['latin'],
   variable: '--font-poppins',
+});
+
+export const chivoMono = Chivo_Mono({
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  variable: '--font-chivo-mono',
 });
 
 export const metadata: Metadata = {
@@ -29,17 +37,19 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} h-screen font-sans bg-white`}>
+      <body className={`${poppins.variable} ${chivoMono.variable} h-screen font-sans bg-white`}>
         <Toaster />
-        <UserContextProvider>
-          <YearPeriodContextProvider>
-            <ClassesToShowContextProvider>
-              <SelectedClassesContextProvider>
-                {children}
-              </SelectedClassesContextProvider>
-            </ClassesToShowContextProvider>
-          </YearPeriodContextProvider>
-        </UserContextProvider>
+        <SchedulesContextProvider>
+          <UserContextProvider>
+            <YearPeriodContextProvider>
+              <ClassesToShowContextProvider>
+                <SelectedClassesContextProvider>
+                  {children}
+                </SelectedClassesContextProvider>
+              </ClassesToShowContextProvider>
+            </YearPeriodContextProvider>
+          </UserContextProvider>
+        </SchedulesContextProvider>
       </body>
     </html>
   );

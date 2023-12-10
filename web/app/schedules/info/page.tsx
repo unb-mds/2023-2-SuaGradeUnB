@@ -54,11 +54,9 @@ function HowToUse() {
     return (
         <>
             <h2 className="text-3xl font-semibold pt-5 pb-5">Como utilizar?</h2>
-            <p className="text-justify">
-                <p className="pb-5">Na página inicial, clique no botão <b>Buscar Matéria</b> para selecionar as disciplinas desejadas para a sua grade. Escolha o ano/período e insira o nome da disciplina para poder optar por turmas potenciais na criação da grade, permitindo a escolha de até quatro turmas para cada disciplina.</p>
-                <p className="pb-5">Após fazer suas escolhas, clique no botão <b>Gerar Grade</b> e defina a prioridade dos turnos que melhor se adequam à sua rotina. Em seguida, basta escolher a grade mais adequada entre as opções geradas para realizar o download e/ou salvar as disciplinas escolhidas.</p>
-                <p>Compartilhe suas experiências e sugestões. O aplicativo está em constante desenvolvimento, e seu feedback é valioso para aprimorar a experiência de todos os usuários.</p>
-            </p>
+            <p className="pb-5 text-justify">Na página inicial, clique no botão <b>Buscar Matéria</b> para selecionar as disciplinas desejadas para a sua grade. Escolha o ano/período e insira o nome da disciplina para poder optar por turmas potenciais na criação da grade, permitindo a escolha de até quatro turmas para cada disciplina.</p>
+            <p className="pb-5 text-justify">Após fazer suas escolhas, clique no botão <b>Gerar Grade</b> e defina a prioridade dos turnos que melhor se adequam à sua rotina. Em seguida, basta escolher a grade mais adequada entre as opções geradas para realizar o download e/ou salvar as disciplinas escolhidas.</p>
+            <p className="text-justify">Compartilhe suas experiências e sugestões. O aplicativo está em constante desenvolvimento, e seu feedback é valioso para aprimorar a experiência de todos os usuários.</p>
         </>
     );
 }

@@ -16,10 +16,12 @@
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 4px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-track {
+  height: 4px;
   background: var(--main-white);
 }
 

@@ -98,16 +98,24 @@ function AsideButtonsJSX() {
     );
 }
 
+function getMainClassName(path: string, breakHeighPoint: boolean) {
+    const baseClassName = breakHeighPoint ? 'h-[calc(100%-15.75rem)]' : 'h-[calc(100%-9.75rem)]';
+    return path !== 'home' ? baseClassName : `pt-${breakHeighPoint ? 3 : 7} ${baseClassName}`;
+}
+
 function LayoutJSX({ children }: { children: React.ReactNode }) {
     const { breakHeighPoint } = useWindowDimensions();
     const { isLoading } = useUser();
+    const path = usePathname().split('/')[2];
 
     if (isLoading) return <LoadingScreen />;
+
+    const mainClassName = getMainClassName(path, breakHeighPoint);
 
     return (
         <>
             <InfoHeader />
-            <main className={`${breakHeighPoint ? 'pt-3 h-[calc(100%-15.75rem)]' : 'pt-7 h-[calc(100%-9.75rem)]'}`}>
+            <main className={mainClassName}>
                 {children}
             </main>
             <LogoReturnButton />

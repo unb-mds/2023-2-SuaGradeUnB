@@ -4,8 +4,7 @@ import { useState } from 'react';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import useUser from '../hooks/useUser';
 
-const days = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+import { days, months } from '../utils/dates';
 
 const currentDateObject = new Date(
     new Date().toLocaleString('en', {

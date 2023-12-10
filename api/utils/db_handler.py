@@ -111,5 +111,5 @@ def delete_schedule(user: User, id: int) -> bool:
         Schedule.objects.get(user=user, id=id).delete()
     except Schedule.DoesNotExist:
         return False
-
+      
     return True
