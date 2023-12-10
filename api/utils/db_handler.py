@@ -68,6 +68,15 @@ def filter_disciplines_by_teacher(name: str) -> QuerySet:
     return search_disciplines
 
 
+def filter_classes_by_teacher(name: str, classes: QuerySet) -> QuerySet:
+    search_words = name.split()
+    query = Q()
+
+    for word in search_words:
+        query &= Q(teachers__icontains=word)
+    return classes.filter(query)
+
+
 def filter_disciplines_by_code(code: str, disciplines: Discipline = Discipline.objects) -> QuerySet:
     """Filtra as disciplinas pelo código."""
     return disciplines.filter(code__icontains=code)

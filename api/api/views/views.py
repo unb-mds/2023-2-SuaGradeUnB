@@ -1,4 +1,5 @@
 from unidecode import unidecode
+from ..models import Class, Discipline
 
 from django.contrib import admin
 from django.db.models.query import QuerySet
@@ -36,20 +37,23 @@ class Search(APIView):
 
     def filter_disciplines(self, request: request.Request, name: str) -> QuerySet[Discipline]:
         unicode_name = unidecode(name).casefold()
-
         model_handler = admin.ModelAdmin(Discipline, admin.site)
-        model_handler.search_fields = ['unicode_name', 'code']
+        model_handler.search_fields = [
+            'unicode_name', 'code']
 
         disciplines = Discipline.objects.all()
+
         disciplines, _ = model_handler.get_search_results(
             request, disciplines, unicode_name)
 
         return disciplines
 
-    def retrieve_disciplines_by_similarity(self, request: request.Request, name: str) -> QuerySet[Discipline]:
+    def retrieve_disciplines_by_similarity(self, request: request.Request, name: str) -> tuple[QuerySet[Discipline], bool]:
         disciplines = self.filter_disciplines(request, name)
+
         disciplines = get_best_similarities_by_name(name, disciplines)
 
+        search_by_teacher = False
         if not disciplines.count():
             disciplines = filter_disciplines_by_code(code=name[0])
 
@@ -58,7 +62,12 @@ class Search(APIView):
 
             disciplines = filter_disciplines_by_code(name)
 
-        return disciplines
+        if not disciplines.count():
+            disciplines = filter_disciplines_by_teacher(name)
+            if disciplines.count():
+                search_by_teacher = True
+
+        return disciplines, search_by_teacher
 
     @swagger_auto_schema(
         operation_description="Busca disciplinas por nome ou código. O ano e período são obrigatórios.",
@@ -91,24 +100,23 @@ class Search(APIView):
         if len(name) < MINIMUM_SEARCH_LENGTH:
             return handle_400_error(ERROR_MESSAGE_SEARCH_LENGTH)
 
-        disciplines = self.retrieve_disciplines_by_similarity(request, name)
+        disciplines, search_by_teacher = self.retrieve_disciplines_by_similarity(
+            request, name)
 
-        if disciplines.count() != 0:
-            """Caso encontre disciplinas pelo nome"""
-            filtered_disciplines = filter_disciplines_by_year_and_period(
-                year=year, period=period, disciplines=disciplines)
-
-            data = serializers.DisciplineSerializer(
-                filtered_disciplines, many=True).data
-        else:
-            """Filtra as disciplinas pelo nome do professor caso não encontre nenhuma disciplina pelo nome"""
-            disciplines = filter_disciplines_by_teacher(name=name)
+        if search_by_teacher:
 
             filtered_disciplines = filter_disciplines_by_year_and_period(
                 year=year, period=period, disciplines=disciplines)
 
             data = serializers.DisciplineSerializer(
                 filtered_disciplines, many=True, context={'teacher_name': name}).data
+        else:
+
+            filtered_disciplines = filter_disciplines_by_year_and_period(
+                year=year, period=period, disciplines=disciplines)
+
+            data = serializers.DisciplineSerializer(
+                filtered_disciplines, many=True).data
 
         return response.Response(data[:MAXIMUM_RETURNED_DISCIPLINES], status.HTTP_200_OK)
 

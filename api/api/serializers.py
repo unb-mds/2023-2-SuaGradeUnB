@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from api.models import Department, Discipline, Class, Schedule
+import utils.db_handler as dbh
 
 
 class DepartmentSerializer(ModelSerializer):
@@ -26,12 +27,13 @@ class DisciplineSerializerSchedule(ModelSerializer):
 class DisciplineSerializer(DisciplineSerializerSchedule):
     classes = serializers.SerializerMethodField()
 
-    def get_classes(self, obj):
+    def get_classes(self, discipline: Discipline):
         teacher_name = self.context.get('teacher_name')
-        classes = obj.classes.all() if hasattr(
-            obj, 'classes') else Class.objects.none()
+        classes = discipline.classes.all() if hasattr(
+            discipline, 'classes') else Class.objects.none()
         if teacher_name:
-            classes = classes.filter(teachers__icontains=teacher_name)
+            classes = dbh.filter_classes_by_teacher(
+                name=teacher_name, classes=classes)
 
         return ClassSerializer(classes, many=True).data
 
