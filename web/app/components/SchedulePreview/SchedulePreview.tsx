@@ -43,19 +43,14 @@ function DeleteModalHandler(props: {
     }
     isCloud?: boolean;
     index: number;
-    handleDeleteCloud: () => Promise<void>;
-}) {
-    const { localSchedules, setLocalSchedules } = useSchedules();
-
-    function handleDeleteLocal() {
-        const newLocalSchedules = [...localSchedules];
-        newLocalSchedules.splice(props.index, 1);
-        setLocalSchedules(newLocalSchedules, false);
+    deleteHandler: {
+        handleDeleteCloud: () => Promise<void>;
+        handleDeleteLocal: () => void;
     }
-
+}) {
     async function handleDelete() {
-        if (!props.isCloud) handleDeleteLocal();
-        else await props.handleDeleteCloud();
+        if (!props.isCloud) props.deleteHandler.handleDeleteLocal();
+        else await props.deleteHandler.handleDeleteCloud();
         props.deleteModal.setActiveDeleteModal(false);
     }
 
@@ -82,13 +77,14 @@ function handleDate(created_at: string) {
 }
 
 function BottomPart(props: {
-    localSchedule?: Array<ScheduleClassType>;
-    cloudSchedule?: CloudScheduleType;
-    index: number;
-    cloud: {
-        isCloud?: boolean;
-        handleDeleteCloud: () => void;
+    schedules: {
+        localSchedule?: Array<ScheduleClassType>;
+        cloudSchedule?: CloudScheduleType;
     }
+    index: number;
+    position: number;
+    isCloud?: boolean;
+    handleDelete: () => void;
     setters: {
         setActiveScheduleModal: (value: boolean) => void;
         setActiveDeleteModal: (value: boolean) => void;
@@ -101,32 +97,32 @@ function BottomPart(props: {
     const [changeDate, setChangeDate] = useState('');
 
     async function handleUploadToCloud() {
-        const saveResponse = await saveSchedule(props.localSchedule, user.access);
+        const saveResponse = await saveSchedule(props.schedules.localSchedule, user.access);
 
         if (saveResponse.status == 201) {
             getSchedules(user.access).then(response => {
-                props.cloud.handleDeleteCloud();
+                props.handleDelete();
                 setCloudSchedules(response.data);
             }).catch(() => commonError());
         } else errorToast('Não foi possível salvar a grade na nuvem!');
     }
 
     useEffect(() => {
-        if (props.cloud.isCloud && props.cloudSchedule?.created_at) {
-            setChangeDate(handleDate(props.cloudSchedule.created_at));
+        if (props.isCloud && props.schedules.cloudSchedule?.created_at) {
+            setChangeDate(handleDate(props.schedules.cloudSchedule.created_at));
         }
-    }, [props.cloud.isCloud, props.cloudSchedule?.created_at]);
+    }, [props.isCloud, props.schedules.cloudSchedule?.created_at]);
 
     return (
-        <div className={`flex justify-between items-center w-full absolute ${props.cloud.isCloud ? '-bottom-14' : '-bottom-7'}`}>
+        <div className={`flex justify-between items-center w-full absolute ${props.isCloud ? '-bottom-14' : '-bottom-7'}`}>
             <div
                 className='text-[#000000] opacity-40 text-lg font-bold'
             >
-                Grade {props.index + 1} <br />
-                {props.cloud.isCloud && changeDate && <span className='text-sm font-normal'>{changeDate}</span>}
+                Grade {props.position} <br />
+                {props.isCloud && changeDate && <span className='text-sm font-normal'>{changeDate}</span>}
             </div>
             <div className='flex gap-4 h-[25px] opacity-50'>
-                {!props.cloud.isCloud && !user.is_anonymous &&
+                {!props.isCloud && !user.is_anonymous &&
                     <button onClick={() => handleUploadToCloud()}>
                         <Image width={25} src={uploadIcon} alt="ícone de upload" />
                     </button>
@@ -156,14 +152,15 @@ function handleDownloadPDF(isCloud: boolean, index: number) {
     });
 }
 
-export default function SchedulePreview({ localSchedule, cloudSchedule, index, isCloud = false }: {
+export default function SchedulePreview({ localSchedule, cloudSchedule, index, position, isCloud = false }: {
     localSchedule?: Array<ScheduleClassType>;
     cloudSchedule?: CloudScheduleType;
     index: number;
+    position: number;
     isCloud?: boolean;
 }) {
     const { user } = useUser();
-    const { setCloudSchedules } = useSchedules();
+    const { localSchedules, setCloudSchedules, setLocalSchedules } = useSchedules();
 
     const [toDownload, setToDownload] = useState(false);
     const [activeScheduleModal, setActiveScheduleModal] = useState(false);
@@ -179,13 +176,19 @@ export default function SchedulePreview({ localSchedule, cloudSchedule, index, i
         } else errorToast('Não foi possível deletar a grade na nuvem!');
     }
 
+    function handleDeleteLocal() {
+        const newLocalSchedules = [...localSchedules];
+        newLocalSchedules.splice(index, 1);
+        setLocalSchedules(newLocalSchedules, false);
+    }
+
     useEffect(() => {
         if (toDownload && activeScheduleModal) {
             setTimeout(() => {
                 handleDownloadPDF(isCloud, index);
                 setActiveScheduleModal(false);
                 setToDownload(false);
-            }, 150);
+            }, 75);
         }
     }, [toDownload, activeScheduleModal, isCloud, index]);
 
@@ -205,16 +208,15 @@ export default function SchedulePreview({ localSchedule, cloudSchedule, index, i
                     }
                 </div>
                 <BottomPart
-                    localSchedule={localSchedule}
-                    cloudSchedule={cloudSchedule}
-                    index={index}
-                    cloud={{ isCloud, handleDeleteCloud }}
+                    schedules={{ localSchedule, cloudSchedule }}
+                    index={index} position={position} isCloud={isCloud}
                     setters={{ setActiveScheduleModal, setActiveDeleteModal, setToDownload }}
+                    handleDelete={handleDeleteLocal}
                 />
             </div>
             <DeleteModalHandler
-                deleteModal={{ activeDeleteModal, setActiveDeleteModal }}
-                isCloud={isCloud} index={index} handleDeleteCloud={handleDeleteCloud}
+                deleteModal={{ activeDeleteModal, setActiveDeleteModal }} isCloud={isCloud} index={index}
+                deleteHandler={{ handleDeleteCloud, handleDeleteLocal }}
             />
         </>
     );

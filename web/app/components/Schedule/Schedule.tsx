@@ -64,7 +64,7 @@ export default function Schedule({ schedules, preview, toDownload, ...props }: S
     return (
         <div
             {...props}
-            className={`${toDownload ? 'flex justify-end flex-row-reverse pt-10' : ''} ${preview ? 'scale-[.3]' : ''}`}
+            className={`${toDownload ? 'flex justify-end flex-row-reverse pt-10 tracking-[0.01px]' : ''} ${preview ? 'scale-[.3]' : ''}`}
             onClick={props.onClick}
         >
             <div className={`p-5 ${!toDownload ? 'm-auto' : ''} w-max`}>
@@ -86,7 +86,7 @@ export default function Schedule({ schedules, preview, toDownload, ...props }: S
                             </div>
                             <div className="flex">
                                 {days.map((day, dayIndex) =>
-                                    <div key={dayIndex} className={`flex ${toDownload ? 'pb-5' : ''} rounded-xl border border-[#9B9898] justify-center items-center w-28 h-8 m-[2px]`}>
+                                    <div key={dayIndex} className={`flex ${toDownload ? 'pb-5 font-mono' : ''} rounded-xl border border-[#9B9898] justify-center items-center w-28 h-8 m-[2px]`}>
                                         {currentSchedule[dayIndex] &&
                                             currentSchedule[dayIndex][timeIndex] &&
                                             currentSchedule[dayIndex][timeIndex].discipline.code}
@@ -98,19 +98,21 @@ export default function Schedule({ schedules, preview, toDownload, ...props }: S
                 </div>
             </div>
             {!preview &&
-                <div className='flex flex-col w-max pl-10 pb-5'>
+                <div className={`flex flex-col w-max pl-10 pb-5 ${toDownload ? 'max-w-lg' : ''}`}>
                     <ul className='list-disc'>
                         {schedules && schedules.map((schedule, index) => {
                             return (
                                 <div className='p-1' key={index}>
                                     <li>
-                                        <span className='font-semibold'>{schedule.discipline.code}</span> - {schedule.discipline.name} - ({schedule.classroom})
+                                        <span className={`font-semibold ${toDownload ? 'font-mono' : ''}`}>
+                                            {schedule.discipline.code}
+                                        </span> - {schedule.discipline.name} - <span className={toDownload ? 'font-mono' : ''}>({schedule.classroom})</span>
                                     </li>
                                     <span className='font-semibold'>PROFESSORES:</span>
                                     <ul className='list-inside'>
                                         {schedule.teachers.map((teacher, index) => {
                                             if (uniqueTeachers.has(teacher)) return null;
-                                            
+
                                             uniqueTeachers.add(teacher);
                                             return (
                                                 <li key={index}>
