@@ -3,6 +3,9 @@ import { HTMLProps, MouseEventHandler, useEffect, useState } from 'react';
 
 import useSelectedClasses from '@/app/hooks/useSelectedClasses';
 import ClassInfo from '../ClassInfo';
+import Image from 'next/image';
+
+import addIcon from '@/public/icons/add.jpg';
 
 interface ClassInfoBoxPropsType extends HTMLProps<HTMLDivElement> {
     currentDiscipline: DisciplineType,
@@ -20,7 +23,7 @@ export default function ClassInfoBox({ currentDiscipline, currentClass, ...props
 
     return (
         <div
-            className={`flex justify-between ${selected ? 'bg-primary bg-opacity-40' : 'hover:bg-gray-300'} hover:bg-opacity-40 hover:cursor-pointer rounded-md py-1 px-2 ${props.className || ''}`}
+            className={`grid grid-cols-7 ${selected ? 'bg-primary bg-opacity-40' : 'hover:bg-gray-300'} hover:bg-opacity-40 hover:cursor-pointer rounded-md py-1 px-2 ${props.className || ''}`}
         >
             <ClassInfo currentClass={{
                 class: currentClass,
@@ -32,8 +35,11 @@ export default function ClassInfoBox({ currentDiscipline, currentClass, ...props
             }} />
             <button
                 onClick={props.onClick as MouseEventHandler<HTMLButtonElement> | undefined}
-                className='material-symbols-rounded hover:cursor-pointer'>
-                add
+                className='hover:cursor-pointer col-start-7 flex justify-center items-center'>
+                <Image
+                    width={25} height={25}
+                    src={addIcon} alt='ícone adicionar matéria'
+                />
             </button>
         </div>
     );
