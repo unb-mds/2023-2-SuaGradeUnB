@@ -42,7 +42,7 @@ function AsideSchedulePopUpJSX(props: AsideSchedulePopUpJSXPropsType) {
         <div className='flex justify-center'>
             <div
                 ref={props.divAddClassRef}
-                className={`flex flex-col justify-between items-center w-11/12 ${showPopUpContent ? 'py-5 h-5/6' : 'h-0'} transition-all duration-500 absolute bottom-0 rounded-t-[40px] bg-snow-secondary z-10`}
+                className={`fixed flex flex-col justify-between items-center w-11/12 ${showPopUpContent ? 'py-5 h-5/6' : 'h-0'} transition-all duration-500 bottom-0 rounded-t-[40px] bg-snow-secondary z-10`}
             >
                 {showPopUpContent &&
                     <section className='flex flex-col items-center gap-5 w-full h-full text-[#333333]'>
