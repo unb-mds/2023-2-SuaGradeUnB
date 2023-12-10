@@ -15,7 +15,7 @@
 [![Docker version](https://img.shields.io/badge/docker-24.0.7-blue)](https://docs.docker.com/engine/install/)
 [![Docker Compose version](https://img.shields.io/badge/docker_compose-2.21.0-blue)](https://docs.docker.com/compose/install/)
 
-O Sua Grade UnB é um projeto da matéria **Métodos de Desenvolvimento de Software**, a qual tem como objetivo auxiliar os alunos da Universidade de Brasília a montarem suas grades horárias de maneira fácil e intuitiva.
+O [Sua Grade UnB](https://suagradeunb.com.br) é um projeto da matéria **Métodos de Desenvolvimento de Software**, a qual tem como objetivo auxiliar os alunos da Universidade de Brasília a montarem suas grades horárias de maneira fácil e intuitiva.
 
 Com apenas alguns cliques, o aluno poderá montar sua grade horária de acordo com as matérias que deseja cursar. Além disso, o sistema auxiliará o aluno ao resolver os conflitos de horários entre as matérias escolhidas, retornando as melhores opções de horários de acordo com suas preferências.
 
@@ -33,6 +33,7 @@ O projeto é software livre e está sob a licença [MIT](./LICENSE).
     - [💾 Execução](#-execução)
       - [Observações do Docker](#observações-do-docker)
     - [✅ Autenticação do Google OAuth](#-autenticação-do-google-oauth)
+    - [📥 Atualização do banco de dados](#-atualização-do-banco-de-dados)
     - [🖱️ Acesso aos serviços](#️-acesso-aos-serviços)
     - [📍 Migrations](#-migrations)
   - [📚 Documentação](#-documentação)
@@ -139,6 +140,18 @@ Adicionando serviços:
 3. Ative os seguintes serviços:
     - IAM Service Account Credentials API
     - Identity and Access Management (IAM) API
+
+### 📥 Atualização do banco de dados
+
+A obtenção dos dados das disciplinas é feita através de um _web scraping_ no site da [Universidade de Brasília](https://sigaa.unb.br/sigaa/public/turmas/listar.jsf) e, por isso, é necessário atualizar o banco de dados com certa frequência. As requisições ainda são feitas de forma manual. Para realizar a atualização, rode o seguinte comando:
+
+```bash
+# Atualiza para o período atual e o próximo
+make updatedb-all
+
+# Comando equivalente
+docker exec django-api ./manage.py updatedb -a
+```
 
 ### 🖱️ Acesso aos serviços
 
