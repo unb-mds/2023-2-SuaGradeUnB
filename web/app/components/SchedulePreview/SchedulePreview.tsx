@@ -59,22 +59,26 @@ function DeleteModalHandler(props: {
         props.deleteModal.setActiveDeleteModal(false);
     }
 
-    return (
-        props.deleteModal.activeDeleteModal &&
+    return props.deleteModal.activeDeleteModal &&
         <Modal setActiveModal={props.deleteModal.setActiveDeleteModal} noExit>
             <div className="flex flex-col items-center justify-center h-full gap-10">
                 <h1 className="font-semibold text-center">A grade será deletada para sempre, tem certeza?</h1>
                 <div className="flex gap-16 justify-center mt-4">
-                    <Button onClick={() => props.deleteModal.setActiveDeleteModal(false)} className='bg-gray-400'>
-                        Não
-                    </Button>
-                    <Button onClick={() => handleDelete()} className='bg-primary'>
-                        Sim
-                    </Button>
+                    <Button onClick={() => props.deleteModal.setActiveDeleteModal(false)} className='bg-gray-400'>Não</Button>
+                    <Button onClick={() => handleDelete()} className='bg-primary'>Sim</Button>
                 </div>
             </div>
-        </Modal>
-    );
+        </Modal>;
+}
+
+function handleDate(created_at: string) {
+    const date = new Date(created_at);
+
+    const currentDay = date.getDate().toString();
+    const currentMonth = months[date.getMonth()];
+    const currentWeekDay = days[date.getDay()];
+
+    return `${currentWeekDay}, ${currentDay} de ${currentMonth}`;
 }
 
 function BottomPart(props: {
@@ -109,13 +113,7 @@ function BottomPart(props: {
 
     useEffect(() => {
         if (props.cloud.isCloud && props.cloudSchedule?.created_at) {
-            const date = new Date(props.cloudSchedule.created_at);
-
-            const currentDay = date.getDate().toString();
-            const currentMonth = months[date.getMonth()];
-            const currentWeekDay = days[date.getDay()];
-
-            setChangeDate(`${currentWeekDay}, ${currentDay} de ${currentMonth}`);
+            setChangeDate(handleDate(props.cloudSchedule.created_at));
         }
     }, [props.cloud.isCloud, props.cloudSchedule?.created_at]);
 
@@ -199,9 +197,7 @@ export default function SchedulePreview({ localSchedule, cloudSchedule, index, i
                         if (!activeScheduleModal) setActiveScheduleModal(true);
                     }}
                     className='flex justify-center items-center bg-snow-tertiary h-48 rounded-3xl'>
-                    <Schedule
-                        schedules={isCloud ? cloudSchedule!.classes : localSchedule} preview
-                    />
+                    <Schedule schedules={isCloud ? cloudSchedule!.classes : localSchedule} preview />
                     {activeScheduleModal &&
                         <Modal setActiveModal={setActiveScheduleModal}>
                             <Schedule id='download-content' schedules={isCloud ? cloudSchedule!.classes : localSchedule} toDownload={toDownload} />
