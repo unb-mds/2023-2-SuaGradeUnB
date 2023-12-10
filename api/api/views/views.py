@@ -71,9 +71,8 @@ class Search(APIView):
             search_by_teacher = True
         return disciplines, search_by_teacher
 
-    def get_serialized_data(self, year: str, period: str, disciplines, search_by_teacher, name) -> list:
-        filtered_disciplines = filter_disciplines_by_year_and_period(
-            year=year, period=period, disciplines=disciplines)
+    def get_serialized_data(self, filter_params: dict, search_by_teacher: bool, name: str) -> list:
+        filtered_disciplines = filter_disciplines_by_year_and_period(**filter_params)
         if search_by_teacher:
             data = serializers.DisciplineSerializer(
                 filtered_disciplines, many=True, context={'teacher_name': name}).data
@@ -116,9 +115,11 @@ class Search(APIView):
         disciplines, search_by_teacher = self.get_disciplines_and_search_flag(
             request, name)
 
-        data = self.get_serialized_data(year=year, period=period, disciplines=disciplines,
-                                        search_by_teacher=search_by_teacher, name=name)
-
+        data = self.get_serialized_data(
+            filter_params={'year': year, 'period': period,'disciplines': disciplines},
+            search_by_teacher=search_by_teacher,
+            name=name
+        )
         return response.Response(data[:MAXIMUM_RETURNED_DISCIPLINES], status.HTTP_200_OK)
 
 
