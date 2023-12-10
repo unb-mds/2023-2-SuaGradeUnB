@@ -41,7 +41,7 @@ export default function Profile() {
             {activeModal &&
                 <Modal setActiveModal={setActiveModal} noExit>
                     <div className="flex flex-col items-center justify-center h-full gap-16">
-                        <h1 className="font-semibold text-center">Vc tem grades não salvas na nuvem e vai perde-las!</h1>
+                        <h1 className="font-semibold text-center">Você tem grades não salvas na nuvem e vai perdê-las!</h1>
                         <div>
                             <h2 className="font-semibold text-center">Tem certeza que quer sair?</h2>
                             <div className="flex gap-16 justify-center mt-4">
