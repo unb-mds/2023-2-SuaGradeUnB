@@ -85,8 +85,16 @@ def get_class_by_id(id: int, classes: BaseManager[Class] = Class.objects) -> Cla
 
 def get_class_by_params(classes: BaseManager[Class] = Class.objects, **kwargs) -> Class | None:
     """Filtra as turmas pelos argumentos: nome, código, departamento, ..."""
+
+    filtered_classes = classes.all()
+    for special_date in kwargs.get("special_dates", []):
+        filtered_classes = filtered_classes.filter(
+            special_dates__contains=special_date
+        )
+
+    kwargs.pop("special_dates", None)
     try:
-        return classes.get(**kwargs)
+        return filtered_classes.get(**kwargs)
     except Class.DoesNotExist:
         return None
 
