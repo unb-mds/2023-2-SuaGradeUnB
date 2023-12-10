@@ -4,9 +4,9 @@ import useSchedules from '@/app/hooks/useSchedules';
 
 import SchedulePreview from '@/app/components/SchedulePreview/SchedulePreview';
 
-export function RenderLocalSchedules(){
+function RenderLocalSchedules() {
     const { localSchedules } = useSchedules();
-    if(!localSchedules.length) return null;
+    if (!localSchedules.length) return null;
 
     return (
         <>
@@ -17,15 +17,15 @@ export function RenderLocalSchedules(){
                 )}
             </div>
         </>
-    
+
     );
 }
 
-export function RenderCloudSchedules(){
+function RenderCloudSchedules() {
     const { cloudSchedules } = useSchedules();
-    if(!cloudSchedules.length) return null;
+    if (!cloudSchedules.length) return null;
 
-    return(
+    return (
         <>
             <h1 className={`text-center pb-5 ${cloudSchedules.length ? 'pt-16' : ''}`}>Grades nuvem</h1>
             <div className='flex flex-wrap justify-center items-center gap-16 w-11/12 mx-auto'>
