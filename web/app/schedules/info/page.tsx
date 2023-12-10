@@ -28,7 +28,7 @@ const Team = () => {
                 <CollaboratorImage name="Caio Habibe" src="https://github.com/CaioHabibe.png" />
                 <CollaboratorImage name="Caio Rodrigues" src="https://github.com/caio-felipee.png" />
             </div>
-        <div className="grid grid-cols-3 pb-10 gap-5">
+            <div className="grid grid-cols-3 gap-5">
                 <CollaboratorImage name="Gabriel Castelo" src="https://github.com/GabrielCastelo-31.png" />
                 <CollaboratorImage name="Henrique Camelo" src="https://github.com/henriquecq.png" />
                 <CollaboratorImage name="Mateus Vieira" src="https://github.com/mateusvrs.png" />
@@ -42,7 +42,7 @@ function About() {
         <>
             <h2 className="text-3xl font-semibold pb-5">Sobre</h2>
             <p className="text-justify">
-                O Sua Grade UnB é um projeto em desenvolvimento da matéria de <b>Desenvolvimento de Software</b>.
+                O Sua Grade UnB é um projeto em desenvolvimento da matéria de <b>Métodos de Desenvolvimento de Software</b>.
                 Seu propósito é proporcionar aos estudantes da Universidade de Brasília uma experiência simplificada e intuitiva na elaboração de suas grades horárias.
                 O projeto visa facilitar o processo de organização acadêmica, oferecendo uma ferramenta eficiente e amigável para a montagem de horários, otimizando assim a gestão do tempo dos alunos.
             </p>
