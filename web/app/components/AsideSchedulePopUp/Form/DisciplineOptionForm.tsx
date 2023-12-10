@@ -25,10 +25,6 @@ function Form(props: FormPropsType) {
     return (
         <>
             <div className='flex flex-col items-center gap-1 w-full max-w-md'>
-                <span className='text-xl font-semibold'>Matéria</span>
-                <InputForm form={{ formData, setFormData }} setInfos={props.setInfos} />
-            </div>
-            <div className='flex flex-col items-center gap-1 w-full max-w-md'>
                 <span className='text-xl font-semibold'>Ano/Período</span>
                 <select
                     className='bg-white shadow-md h-14 w-11/12 p-2 rounded-xl'
@@ -38,6 +34,10 @@ function Form(props: FormPropsType) {
                     <option disabled={disableDefault} value="">Selecione uma opção</option>
                     {periods['year/period'].map((item, index) => <option key={index} value={item}>{item}</option>)}
                 </select>
+            </div>
+            <div className='flex flex-col items-center gap-1 w-full max-w-md'>
+                <span className='text-xl font-semibold'>Matéria</span>
+                <InputForm form={{ formData, setFormData }} setInfos={props.setInfos} />
             </div>
         </>
     );
