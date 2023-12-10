@@ -34,9 +34,7 @@ export default function GenerateScheduleButton() {
     };
     return (
         <div className='flex justify-center'>
-            <Button disabled={!classesToShow.length} onClick={createSchedule}
-                className='absolute bottom-20 w-52 h-10 font-semibold bg-primary disabled:opacity-70'
-            >
+            <Button disabled={!classesToShow.length} onClick={createSchedule} className='absolute bottom-20 w-52 h-10 font-semibold bg-primary disabled:opacity-70'>
                 Gerar Grade
             </Button>
         </div>
