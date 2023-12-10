@@ -17,7 +17,7 @@ export default function AddDisciplineButton(props: AddDisciplineButtonPropsType)
             <Button
                 innerRef={props.buttonAddDisciplineRef}
                 onClick={() => setShowPopUpContent(!showPopUpContent)}
-                className={`absolute ${breakHeighPoint ? 'top-20' : 'top-3'} font-semibold bg-secondary`}
+                className={`fixed ${breakHeighPoint ? 'top-20' : 'top-3'} z-[6] font-semibold bg-secondary`}
             >
                 Buscar matéria
             </Button>
