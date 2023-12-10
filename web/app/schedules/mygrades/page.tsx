@@ -28,7 +28,7 @@ function RenderCloudSchedules() {
     return (
         <>
             <h1 className={`text-center pb-5 ${cloudSchedules.length ? 'pt-16' : ''}`}>Grades nuvem</h1>
-            <div className='flex flex-wrap justify-center items-center gap-16 w-11/12 mx-auto'>
+            <div className='flex flex-wrap justify-center items-center gap-10 w-11/12 mx-auto'>
                 {cloudSchedules.map((schedule, index) => (
                     schedule && <SchedulePreview key={index} index={index} cloudSchedule={schedule} position={cloudSchedules.length - index} isCloud />
                 ))}
