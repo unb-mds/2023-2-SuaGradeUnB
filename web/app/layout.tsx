@@ -37,7 +37,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} ${chivoMono.variable} h-screen font-sans bg-white`}>
+      <body className={`${poppins.variable} ${chivoMono.variable} max-h-screen font-sans bg-white`}>
         <Toaster />
         <SchedulesContextProvider>
           <UserContextProvider>

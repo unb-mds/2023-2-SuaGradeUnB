@@ -114,7 +114,7 @@ function BottomPart(props: {
     }, [props.isCloud, props.schedules.cloudSchedule?.created_at]);
 
     return (
-        <div className={`flex justify-between items-center w-full absolute ${props.isCloud ? '-bottom-14' : '-bottom-7'}`}>
+        <div className={`flex justify-between items-center w-full ${props.isCloud ? '-bottom-14' : '-bottom-7'}`}>
             <div
                 className='text-[#000000] opacity-40 text-lg font-bold'
             >

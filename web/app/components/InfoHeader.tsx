@@ -24,7 +24,8 @@ export default function InfoHeader() {
 
     return (
         <header className={`
-            rounded-b-[40px] mb-8 flex flex-col justify-end bg-primary px-6 
+            fixed top-0 w-full 
+            rounded-b-[40px] mb-8 flex flex-col z-[5] justify-end bg-primary px-6 
             ${breakHeighPoint ? 'h-24' : 'h-0'} transition-all duration-300
         `}>
             <h1 className='col-span-2 font-semibold text-base text-white'>

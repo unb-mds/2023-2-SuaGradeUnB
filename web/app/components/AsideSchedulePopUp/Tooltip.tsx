@@ -1,9 +1,11 @@
 'use client';
 
 import styles from '@/app/styles/tooltip.module.css';
+import Image from 'next/image';
 
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { useEffect, useState } from 'react';
+import questionIcon from '@/public/icons/question.jpg';
 
 interface TooltipPropsType {
     children: React.ReactNode,
@@ -34,7 +36,10 @@ export default function Tooltip({ children }: TooltipPropsType) {
             <span
                 onClick={() => setActive(true)}
                 className='flex justify-center items-center material-symbols-rounded text-xs border-black border-solid border-2 rounded-full h-5 w-5 hover:bg-gray-300'>
-                question_mark
+                <Image
+                    width={15} height={15}
+                    src={questionIcon} alt='ícone de interrogação'
+                />
             </span>
             <span className={`${active ? 'visible' : 'invisible'} ${styles.inside} ${styles.tooltiptext} p-2`}>
                 <div className='relative flex flex-col gap-1 justify-center items-center rounded-md p-5 bg-snow-primary'>

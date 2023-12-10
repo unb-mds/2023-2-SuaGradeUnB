@@ -32,7 +32,7 @@ function LogoReturnButton() {
 
     return (
         user.is_anonymous &&
-        <Button onClick={() => router.replace('/')} className="absolute top-4 right-6 !shadow-none !p-0 ">
+        <Button onClick={() => router.replace('/')} className="fixed z-[6] top-4 right-6 !shadow-none !p-0 ">
             <div className="bg-white flex justify-center items-center rounded-full w-12 h-12">
                 <Image 
                     width={35} height={35}
@@ -85,7 +85,7 @@ function AsideButtonsJSX() {
     }, [path, width, footerWidth]);
 
     return (
-        <div ref={onFooterRefChange} className="flex justify-around bg-white rounded-t-[25px] px-6 py-3 max-w-md  absolute m-auto inset-x-px bottom-0 backdrop-blur-sm bg-opacity-50 drop-shadow-lg">
+        <div ref={onFooterRefChange} className="flex justify-around bg-white rounded-t-[25px] px-6 py-3 max-w-md fixed b-0 m-auto inset-x-px bottom-0 backdrop-blur-sm bg-opacity-50 drop-shadow-lg">
             <div style={{
                 width: currentBlobDimensions.width,
                 left: currentBlobDimensions.x
@@ -98,24 +98,16 @@ function AsideButtonsJSX() {
     );
 }
 
-function getMainClassName(path: string, breakHeighPoint: boolean) {
-    const baseClassName = breakHeighPoint ? 'h-[calc(100%-15.75rem)]' : 'h-[calc(100%-9.75rem)]';
-    return path !== 'home' ? baseClassName : `pt-${breakHeighPoint ? 3 : 7} ${baseClassName}`;
-}
-
 function LayoutJSX({ children }: { children: React.ReactNode }) {
     const { breakHeighPoint } = useWindowDimensions();
     const { isLoading } = useUser();
-    const path = usePathname().split('/')[2];
 
     if (isLoading) return <LoadingScreen />;
-
-    const mainClassName = getMainClassName(path, breakHeighPoint);
 
     return (
         <>
             <InfoHeader />
-            <main className={mainClassName}>
+            <main className={`${breakHeighPoint ? 'pt-[136px]' : 'pt-16'} pb-36`}>
                 {children}
             </main>
             <LogoReturnButton />

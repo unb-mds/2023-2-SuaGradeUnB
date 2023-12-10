@@ -35,7 +35,7 @@ export function generateSpecialDates(special_dates: Array<Array<string>>, days: 
 
 export default function ClassInfo({ currentClass }: ClassInfoPropsType) {
     return (
-        <div>
+        <div className = "col-span-6">
             <div>
                 <span className='font-semibold'>Sala:</span> {currentClass.class.classroom}
             </div>
