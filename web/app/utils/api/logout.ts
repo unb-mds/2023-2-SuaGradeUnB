@@ -22,9 +22,10 @@ export default function handleLogout({
         request.post('/users/logout/', {}, settings).then(response => {
             if (response.status == 200) {
                 setUser(defaultUser);
-                router.replace('/');
+                router.push('/');
             }
         }).catch(error => toast.error('Não foi possível sair!'));
     }
-    else router.replace('/');
+    else router.push('/');
+    router.refresh();
 }
