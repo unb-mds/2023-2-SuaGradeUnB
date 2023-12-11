@@ -1,9 +1,18 @@
+'use client';
+
 import Link from 'next/link';
 
 import SignInSection from './components/SignInSection';
 import LogoImageHandler from './components/LogoImageHandler';
+import { LoadingScreen } from './components/LoadingScreen';
+
+import useUser from './hooks/useUser';
 
 export default function Welcome() {
+  const { isLoading } = useUser();
+
+  if (isLoading) return <LoadingScreen />;
+
   return (
     <main className='flex flex-col flat:flex-row justify-center items-center gap-8 text-white p-8 h-screen w-screen bg-primary'>
       <LogoImageHandler />
