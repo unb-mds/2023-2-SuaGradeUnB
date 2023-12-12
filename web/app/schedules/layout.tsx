@@ -8,7 +8,6 @@ import Image from 'next/image';
 
 import AsideButton from '../components/AsideButton';
 import Protected from '../components/Protected';
-import { LoadingScreen } from '../components/LoadingScreen';
 import InfoHeader from '../components/InfoHeader';
 
 import homeIcon from '@/public/icons/home.jpg';
@@ -100,9 +99,6 @@ function AsideButtonsJSX() {
 
 function LayoutJSX({ children }: { children: React.ReactNode }) {
     const { breakHeighPoint } = useWindowDimensions();
-    const { isLoading } = useUser();
-
-    if (isLoading) return <LoadingScreen />;
 
     return (
         <>

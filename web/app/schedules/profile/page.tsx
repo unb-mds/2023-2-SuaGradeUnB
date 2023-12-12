@@ -23,7 +23,7 @@ export default function Profile() {
 
     const { setClassesToShow } = useClassesToShow();
     const { setSelectedClasses } = useSelectedClasses();
-    const { localSchedules, setLocalSchedules } = useSchedules();
+    const { localSchedules, setLocalSchedules, setCloudSchedules } = useSchedules();
 
     const userContext = useUser();
     const { user } = userContext;
@@ -33,6 +33,7 @@ export default function Profile() {
         setClassesToShow(new Array());
         setSelectedClasses(new Map());
         setLocalSchedules(new Array(), false);
+        setCloudSchedules(new Array());
         handleLogout({ userContext, router });
     }
 
