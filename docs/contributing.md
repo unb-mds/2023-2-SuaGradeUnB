@@ -11,19 +11,19 @@ Para contribuir com o projeto, basta seguir os passos abaixo:
 
 **Encontrando um problema:**
 
-Se você identificar um problema na aplicação, verifique se já existe um problema relacionado. Se não existir, você pode abrir uma nova issue de **Bug Report** utilizando o [template disponível](https://github.com/unb-mds/2023-2-Squad11/issues/new/choose). Adicione o _label_ de `bug` a issue e siga as instruções contidas no template.
+Se você identificar um problema na aplicação, verifique se já existe um problema relacionado. Se não existir, você pode abrir uma nova issue de **Bug Report** utilizando o [template disponível](https://github.com/unb-mds/2023-2-SuaGradeUnB/issues/new/choose). Adicione o _label_ de `bug` a issue e siga as instruções contidas no template.
 
 **Resolver um problema:**
 
-Dê uma olhada em nossas [issues](https://github.com/unb-mds/2023-2-Squad11/issues) para encontrar uma que lhe interesse. Você pode refinar a pesquisa usando as `labels` como filtros e, se for a sua primeira issue, tente procurar por `good first issue`. Se encontrar um problema disponível para trabalhar, você é bem-vindo para abrir um [Pull Request](#pull-request).
+Dê uma olhada em nossas [issues](https://github.com/unb-mds/2023-2-SuaGradeUnB/issues) para encontrar uma que lhe interesse. Você pode refinar a pesquisa usando as `labels` como filtros e, se for a sua primeira issue, tente procurar por `good first issue`. Se encontrar um problema disponível para trabalhar, você é bem-vindo para abrir um [Pull Request](#pull-request).
 
 **Encontrando erros na documentação**
 
-Caso você encontre algum erro na documentação, você pode abrir uma nova issue de **Docs repair** utilizando o [template disponível](https://github.com/unb-mds/2023-2-Squad11/issues/new/choose). Adicione o _label_ de `docs` a issue e siga as instruções contidas no template.
+Caso você encontre algum erro na documentação, você pode abrir uma nova issue de **Docs repair** utilizando o [template disponível](https://github.com/unb-mds/2023-2-SuaGradeUnB/issues/new/choose). Adicione o _label_ de `docs` a issue e siga as instruções contidas no template.
 
 **Como propor novas funcionalidades**
 
-Para propor uma melhoria ou nova funcionalidade, você pode abrir uma nova issue de **Feature Request** utilizando o [template disponível](https://github.com/unb-mds/2023-2-Squad11/issues/new/choose) e adcionar o _label_ de `feature request` a issue. Sua sugestão será analisada e, se aprovada, será aberta uma _task_ para a implementação desta nova funcionalidade.
+Para propor uma melhoria ou nova funcionalidade, você pode abrir uma nova issue de **Feature Request** utilizando o [template disponível](https://github.com/unb-mds/2023-2-SuaGradeUnB/issues/new/choose) e adcionar o _label_ de `feature request` a issue. Sua sugestão será analisada e, se aprovada, será aberta uma _task_ para a implementação desta nova funcionalidade.
 
 **Como fazer alterações?**
 
@@ -36,7 +36,7 @@ Para fazer alterações você deve, primeiramente, seguir os passos para [execut
 
 Quando terminar as alterações, crie uma pull request (PR).
 
-- Não se esqueça de [vincular o PR a uma issue](https://github.com/unb-mds/2023-2-Squad11/issues) se estiver resolvendo uma.
+- Não se esqueça de [vincular o PR a uma issue](https://github.com/unb-mds/2023-2-SuaGradeUnB/issues) se estiver resolvendo uma.
 - Assim que enviar seu PR, um membro da equipe revisará sua proposta. Podemos fazer perguntas ou solicitar informações adicionais.
 - Podemos solicitar alterações antes que um PR possa ser aceito.
 - Conforme você atualiza seu PR e aplica alterações, marque cada conversa como [resolvida](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/commenting-on-a-pull-request#resolving-conversations).

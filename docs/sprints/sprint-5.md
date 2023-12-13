@@ -22,7 +22,7 @@ Local: Gather Town
 
 **Ata:**
 
-Nessa reunião, o time do _Front-end_ finalizou a apresentação do [protótipo de alta fidelidade](https://www.figma.com/proto/o5Ffh1fWmmQz7KcDGuHrVP/Sua-grade-UNB?type=design&node-id=16-2775&scaling=scale-down&page-id=0%3A1&mode=design&t=vdtHhHY0NWBuOQwZ-1) do projeto, e o time de _Back-end_ apresentou as [rotas](https://unb-mds.github.io/2023-2-Squad11/api/) da API organizadas e definidas para todos os escopos necessários no projeto.
+Nessa reunião, o time do _Front-end_ finalizou a apresentação do [protótipo de alta fidelidade](https://www.figma.com/proto/o5Ffh1fWmmQz7KcDGuHrVP/Sua-grade-UNB?type=design&node-id=16-2775&scaling=scale-down&page-id=0%3A1&mode=design&t=vdtHhHY0NWBuOQwZ-1) do projeto, e o time de _Back-end_ apresentou as [rotas](https://unb-mds.github.io/2023-2-SuaGradeUnB/api/) da API organizadas e definidas para todos os escopos necessários no projeto.
 
 ## Finalização
 

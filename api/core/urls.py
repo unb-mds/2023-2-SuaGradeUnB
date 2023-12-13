@@ -38,7 +38,7 @@ schema_view = get_schema_view(
                 <li>Mateus Vieira Rocha da Silva (<a target='_blank' href='https://github.com/mateusvrs'>@mateusvrs</a>)</li>
             </ul>
             </br>
-            Mais especificações sobre o projeto por completo podem ser encontradas <a href='https://github.com/unb-mds/2023-2-Squad11/'>aqui</a>.
+            Mais especificações sobre o projeto por completo podem ser encontradas <a href='https://github.com/unb-mds/2023-2-SuaGradeUnB/'>aqui</a>.
         </div>
         """,
         contact=openapi.Contact(email="suagradeunb@gmail.com"),

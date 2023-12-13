@@ -1,11 +1,11 @@
 # [Sua Grade UnB](https://suagradeunb.com.br/)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![codecov](https://codecov.io/gh/unb-mds/2023-2-Squad11/branch/main/graph/badge.svg?token=ZQZQZQZQZQ)](https://codecov.io/gh/unb-mds/2023-2-Squad11)
-[![GitHub issues](https://img.shields.io/github/issues/unb-mds/2023-2-Squad11)](https://img.shields.io/github/issues/unb-mds/2023-2-Squad11)
-[![GitHub contributors](https://img.shields.io/github/contributors/unb-mds/2023-2-Squad11)](https://img.shields.io/github/contributors/unb-mds/2023-2-Squad11)
-[![GitHub stars](https://img.shields.io/github/stars/unb-mds/2023-2-Squad11)](https://img.shields.io/github/stars/unb-mds/2023-2-Squad11)
-[![Hit Counter](https://views.whatilearened.today/views/github/unb-mds/2023-2-Squad11.svg)](https://views.whatilearened.today/views/github/unb-mds/2023-2-Squad11.svg)
+[![codecov](https://codecov.io/gh/unb-mds/2023-2-SuaGradeUnB/branch/main/graph/badge.svg?token=ZQZQZQZQZQ)](https://codecov.io/gh/unb-mds/2023-2-SuaGradeUnB)
+[![GitHub issues](https://img.shields.io/github/issues/unb-mds/2023-2-SuaGradeUnB)](https://img.shields.io/github/issues/unb-mds/2023-2-SuaGradeUnB)
+[![GitHub contributors](https://img.shields.io/github/contributors/unb-mds/2023-2-SuaGradeUnB)](https://img.shields.io/github/contributors/unb-mds/2023-2-SuaGradeUnB)
+[![GitHub stars](https://img.shields.io/github/stars/unb-mds/2023-2-SuaGradeUnB)](https://img.shields.io/github/stars/unb-mds/2023-2-SuaGradeUnB)
+[![Hit Counter](https://views.whatilearened.today/views/github/unb-mds/2023-2-SuaGradeUnB.svg)](https://views.whatilearened.today/views/github/unb-mds/2023-2-SuaGradeUnB.svg)
 </br>
 
 [![Python version](https://img.shields.io/badge/python-3.11.6-blue)](https://www.python.org/downloads/release/python-3116/)
@@ -44,21 +44,21 @@ O projeto é software livre e está sob a licença [MIT](./LICENSE).
 
 ## 👥 Equipe
 
-| Nome | GitHub |
-| :--- | :----: |
-| Arthur Ribeiro e Sousa | [@artrsousa1](https://github.com/artrsousa1) |
-| Caio Falcão Habibe Costa | [@CaioHabibe](https://github.com/CaioHabibe) |
-| Caio Felipe Rocha Rodrigues| [@caio-felipee](https://github.com/caio-felipee) |
+| Nome                           |                           GitHub                           |
+| :----------------------------- | :--------------------------------------------------------: |
+| Arthur Ribeiro e Sousa         |        [@artrsousa1](https://github.com/artrsousa1)        |
+| Caio Falcão Habibe Costa       |        [@CaioHabibe](https://github.com/CaioHabibe)        |
+| Caio Felipe Rocha Rodrigues    |      [@caio-felipee](https://github.com/caio-felipee)      |
 | Gabriel Henrique Castelo Costa | [@GabrielCastelo-31](https://github.com/GabrielCastelo-31) |
-| Henrique Camelo Quenino | [@henriquecq](https://github.com/henriquecq) |
-| Mateus Vieira Rocha da Silva | [@mateusvrs](https://github.com/mateusvrs) |
+| Henrique Camelo Quenino        |        [@henriquecq](https://github.com/henriquecq)        |
+| Mateus Vieira Rocha da Silva   |         [@mateusvrs](https://github.com/mateusvrs)         |
 
 ## ✨ Início
 
 Você pode clonar o repositório do projeto com o seguinte comando:
 
 ```bash
-git clone https://github.com/unb-mds/2023-2-Squad11.git
+git clone https://github.com/unb-mds/2023-2-SuaGradeUnB.git
 ```
 
 ### 📋 Pré-requisitos
@@ -150,15 +150,15 @@ A obtenção dos dados das disciplinas é feita através de um _web scraping_ no
 make updatedb-all
 
 # Comando equivalente
-docker exec django-api ./manage.py updatedb -a
+docker exec django-api python3 ./manage.py updatedb -a
 ```
 
 ### 🖱️ Acesso aos serviços
 
-| Serviço | URL |
-| :--- | :----: |
+| Serviço  |                      URL                       |
+| :------- | :--------------------------------------------: |
 | Frontend | [http://localhost:3000](http://localhost:3000) |
-| Backend | [http://localhost:8000](http://localhost:8000) |
+| Backend  | [http://localhost:8000](http://localhost:8000) |
 
 ### 📍 Migrations
 
@@ -176,7 +176,7 @@ make migrate
 
 ## 📚 Documentação
 
-A documentação do projeto pode ser encontrada clicando [aqui](https://unb-mds.github.io/2023-2-Squad11/).
+A documentação do projeto pode ser encontrada clicando [aqui](https://unb-mds.github.io/2023-2-SuaGradeUnB/).
 
 ## 📎 Extra
 
