@@ -24,7 +24,7 @@ function Form(props: FormPropsType) {
         <form className='flex items-center w-11/12 px-2 bg-white shadow-md rounded-xl' onSubmit={handleSearch}>
             <input
                 type="text"
-                placeholder='Nome da matéria...'
+                placeholder='Matéria ou Professor'
                 value={formData.search}
                 onChange={(e) => setFormData({ ...formData, search: e.target.value })}
                 ref={inputRef}
