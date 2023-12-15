@@ -10,7 +10,7 @@ hide:
 Você pode clonar o repositório do projeto com o seguinte comando:
 
 ```bash
-git clone https://github.com/unb-mds/2023-2-Squad11.git
+git clone https://github.com/unb-mds/2023-2-SuaGradeUnB.git
 ```
 
 ### 📋 Pré-requisitos

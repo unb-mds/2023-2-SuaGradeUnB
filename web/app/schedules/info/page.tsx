@@ -66,7 +66,7 @@ function HowToContribute() {
         <>
             <h2 className="text-3xl font-semibold  pt-5 pb-5">Como contribuir?</h2>
             <p className="text-justify">
-                Se você é um programador e deseja contribuir com nosso projeto, basta <Link legacyBehavior href="https://unb-mds.github.io/2023-2-Squad11/contributing/" className=""><a target="_blank" className="text-primary hover:underline">clicar aqui</a></Link> para ter acesso a nossa documentação. Lá você encontrará todos os detalhes de como contribuir com novas funcionalidades e reportar possíveis erros.
+                Se você é um programador e deseja contribuir com nosso projeto, basta <Link legacyBehavior href="https://unb-mds.github.io/2023-2-SuaGradeUnB/contributing/" className=""><a target="_blank" className="text-primary hover:underline">clicar aqui</a></Link> para ter acesso a nossa documentação. Lá você encontrará todos os detalhes de como contribuir com novas funcionalidades e reportar possíveis erros.
             </p>
         </>
     );
