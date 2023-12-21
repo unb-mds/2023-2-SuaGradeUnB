@@ -1,4 +1,5 @@
 from unidecode import unidecode
+from ..models import Class, Discipline
 
 from django.contrib import admin
 from django.db.models.query import QuerySet
@@ -11,9 +12,9 @@ from drf_yasg import openapi
 
 from utils.sessions import get_current_year_and_period, get_next_period
 from utils.schedule_generator import ScheduleGenerator
-from utils import db_handler as dbh
+from utils.db_handler import get_best_similarities_by_name, filter_disciplines_by_teacher, filter_disciplines_by_year_and_period, filter_disciplines_by_code
 
-from api import serializers
+from .. import serializers
 from api.swagger import Errors
 from api.models import Discipline
 from api.views.utils import handle_400_error
@@ -36,11 +37,12 @@ class Search(APIView):
 
     def filter_disciplines(self, request: request.Request, name: str) -> QuerySet[Discipline]:
         unicode_name = unidecode(name).casefold()
-
         model_handler = admin.ModelAdmin(Discipline, admin.site)
-        model_handler.search_fields = ['unicode_name', 'code']
+        model_handler.search_fields = [
+            'unicode_name', 'code']
 
         disciplines = Discipline.objects.all()
+
         disciplines, _ = model_handler.get_search_results(
             request, disciplines, unicode_name)
 
@@ -48,17 +50,42 @@ class Search(APIView):
 
     def retrieve_disciplines_by_similarity(self, request: request.Request, name: str) -> QuerySet[Discipline]:
         disciplines = self.filter_disciplines(request, name)
-        disciplines = dbh.get_best_similarities_by_name(name, disciplines)
+
+        disciplines = get_best_similarities_by_name(name, disciplines)
 
         if not disciplines.count():
-            disciplines = dbh.filter_disciplines_by_code(code=name[0])
+            disciplines = filter_disciplines_by_code(code=name[0])
 
             for term in name[1:]:
-                disciplines &= dbh.filter_disciplines_by_code(code=term)
+                disciplines &= filter_disciplines_by_code(code=term)
 
-            disciplines = dbh.filter_disciplines_by_code(name)
+            disciplines = filter_disciplines_by_code(name)
 
         return disciplines
+
+    def get_disciplines_and_search_flag(self, request, name):
+        disciplines = self.retrieve_disciplines_by_similarity(request, name)
+        search_by_teacher = False
+        if not disciplines.count():
+            disciplines = filter_disciplines_by_teacher(name)
+            search_by_teacher = True
+        return disciplines, search_by_teacher
+
+    def get_serialized_data(self, filter_params: dict, search_by_teacher: bool, name: str) -> list:
+        filtered_disciplines = filter_disciplines_by_year_and_period(**filter_params)
+        if search_by_teacher:
+            data = serializers.DisciplineSerializer(
+                filtered_disciplines, many=True, context={'teacher_name': name}).data
+        else:
+            data = serializers.DisciplineSerializer(
+                filtered_disciplines, many=True).data
+        return data
+
+    def get_request_parameters(self, request):
+        name = self.treat_string(request.GET.get('search', None))
+        year = self.treat_string(request.GET.get('year', None))
+        period = self.treat_string(request.GET.get('period', None))
+        return name, year, period
 
     @swagger_auto_schema(
         operation_description="Busca disciplinas por nome ou código. O ano e período são obrigatórios.",
@@ -77,27 +104,22 @@ class Search(APIView):
         }
     )
     def get(self, request: request.Request, *args, **kwargs) -> response.Response:
-        name = self.treat_string(request.GET.get('search', None))
-        year = self.treat_string(request.GET.get('year', None))
-        period = self.treat_string(request.GET.get('period', None))
+        name, year, period = self.get_request_parameters(request)
 
-        name_verified = name is not None and len(name) > 0
-        year_verified = year is not None and len(year) > 0
-        period_verified = period is not None and len(period) > 0
-
-        if not name_verified or not year_verified or not period_verified:
+        if not all((name, year, period)):
             return handle_400_error(ERROR_MESSAGE)
 
         if len(name) < MINIMUM_SEARCH_LENGTH:
             return handle_400_error(ERROR_MESSAGE_SEARCH_LENGTH)
 
-        disciplines = self.retrieve_disciplines_by_similarity(request, name)
+        disciplines, search_by_teacher = self.get_disciplines_and_search_flag(
+            request, name)
 
-        filtered_disciplines = dbh.filter_disciplines_by_year_and_period(
-            year=year, period=period, disciplines=disciplines)
-        data = serializers.DisciplineSerializer(
-            filtered_disciplines, many=True).data
-
+        data = self.get_serialized_data(
+            filter_params={'year': year, 'period': period,'disciplines': disciplines},
+            search_by_teacher=search_by_teacher,
+            name=name
+        )
         return response.Response(data[:MAXIMUM_RETURNED_DISCIPLINES], status.HTTP_200_OK)
 
 
