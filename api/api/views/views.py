@@ -19,6 +19,7 @@ from api.swagger import Errors
 from api.models import Discipline
 from api.views.utils import handle_400_error
 
+from traceback import print_exception
 
 MAXIMUM_RETURNED_DISCIPLINES = 15
 ERROR_MESSAGE = "no valid argument found for 'search', 'year' or 'period'"
@@ -224,9 +225,17 @@ class GenerateSchedule(APIView):
             schedules = schedule_generator.generate()
         except Exception as error:
             """Retorna um erro caso ocorra algum erro ao criar o gerador de horários"""
+            
+            message_error = "An internal error has occurred."
+            
+            if type(error) is ValueError:
+                message_error = str(error)
+            else: # pragma: no cover
+                print_exception(error)
+                
             return response.Response(
                 {
-                    "errors": str(error)
+                    "errors": message_error
                 }, status.HTTP_400_BAD_REQUEST)
 
         data = []
