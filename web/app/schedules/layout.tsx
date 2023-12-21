@@ -1,21 +1,22 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import useUser from '@/app/hooks/useUser';
 import { useCallback, useState } from 'react';
-import Button from '../components/Button';
-import Image from 'next/image';
+import useUser from '@/app/hooks/useUser';
+import useWindowDimensions from '../hooks/useWindowDimensions';
 
+import Image from 'next/image';
+import Button from '../components/Button';
 import AsideButton from '../components/AsideButton';
 import Protected from '../components/Protected';
 import InfoHeader from '../components/InfoHeader';
+import { LoadingScreen } from '../components/LoadingScreen';
 
 import homeIcon from '@/public/icons/home.jpg';
 import infoIcon from '@/public/icons/info.jpg';
 import googleIcon from '@/public/icons/google.jpg';
 import scheduleIcon from '@/public/icons/schedule.jpg';
 import profileIcon from '@/public/icons/profile.jpg';
-import useWindowDimensions from '../hooks/useWindowDimensions';
 
 function calculatePositionOfBlob(node: any, width: number, footerWidth: number) {
     const infos = node.getBoundingClientRect();
@@ -33,7 +34,7 @@ function LogoReturnButton() {
         user.is_anonymous &&
         <Button onClick={() => router.replace('/')} className="fixed z-[6] top-4 right-6 !shadow-none !p-0 ">
             <div className="bg-white flex justify-center items-center rounded-full w-12 h-12">
-                <Image 
+                <Image
                     width={35} height={35}
                     src={googleIcon} alt='ícone do logotipo google'
                 />
@@ -99,13 +100,17 @@ function AsideButtonsJSX() {
 
 function LayoutJSX({ children }: { children: React.ReactNode }) {
     const { breakHeighPoint } = useWindowDimensions();
+    const { isLoading } = useUser();
 
     return (
         <>
             <InfoHeader />
-            <main className={`${breakHeighPoint ? 'pt-[136px]' : 'pt-16'} pb-36`}>
-                {children}
-            </main>
+            {!isLoading ?
+                <main className={`${breakHeighPoint ? 'pt-[136px]' : 'pt-16'} pb-36`}>
+                    {children}
+                </main> :
+                <LoadingScreen />
+            }
             <LogoReturnButton />
             <AsideButtonsJSX />
         </>
