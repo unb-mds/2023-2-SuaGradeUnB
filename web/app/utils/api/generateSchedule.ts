@@ -1,7 +1,7 @@
 import request from '../request';
 import { settings } from '../settings';
 
-type EachFieldNumber = 1 | 2 | 3;
+export type EachFieldNumber = 1 | 2 | 3;
 type PreferenceType = [EachFieldNumber, EachFieldNumber, EachFieldNumber];
 
 //Promise<AxiosResponse<any, any>>
