@@ -9,6 +9,19 @@ import json
 import os
 
 
+def multiple_replace(text, replacement=None):
+    replacement_dict = replacement
+    if not replacement:
+        replacement_dict = {
+            '\n': '',
+            '\t': '',
+            '\r': '',
+        }
+    
+    pattern = re.compile('|'.join(map(re.escape, replacement_dict.keys())))
+    return pattern.sub(lambda match: replacement_dict[match.group(0)], text)
+
+
 class Command(BaseCommand):
     """Comando para atualizar os arquivos de mock do SIGAA."""
 
@@ -33,7 +46,7 @@ class Command(BaseCommand):
                     department, current_year, current_period)
                 response = discipline_scraper.get_response_from_disciplines_post_request()
 
-                striped_response = self.multiple_replace(
+                striped_response = multiple_replace(
                     self.response_decode(response))
                 mock_file.write(striped_response)
 
@@ -48,15 +61,6 @@ class Command(BaseCommand):
         except Exception as error:
             print('Não foi possível atualizar o mock!')
             print('Error:', error)
-
-    def multiple_replace(self, text):
-        replacement_dict = {
-            '\n': '',
-            '\t': '',
-            '\r': '',
-        }
-        pattern = re.compile('|'.join(map(re.escape, replacement_dict.keys())))
-        return pattern.sub(lambda match: replacement_dict[match.group(0)], text)
 
     def response_decode(self, response: Response) -> str:
         encoding = response.encoding if response.encoding else 'utf-8'
