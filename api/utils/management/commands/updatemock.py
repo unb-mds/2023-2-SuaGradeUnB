@@ -4,22 +4,9 @@ from random import choice
 from utils import sessions as sns, web_scraping as wbp
 from django.core.management.base import BaseCommand
 from pathlib import Path
-import re
+from utils.functions import multiple_replace
 import json
 import os
-
-
-def multiple_replace(text, replacement=None):
-    replacement_dict = replacement
-    if not replacement:
-        replacement_dict = {
-            '\n': '',
-            '\t': '',
-            '\r': '',
-        }
-    
-    pattern = re.compile('|'.join(map(re.escape, replacement_dict.keys())))
-    return pattern.sub(lambda match: replacement_dict[match.group(0)], text)
 
 
 class Command(BaseCommand):

@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from collections import defaultdict
 from typing import List, Optional, Iterator
 from re import findall, finditer
-from utils.management.commands import updatemock
+from utils.functions import multiple_replace
 import requests.utils
 import requests
 import hashlib
@@ -252,7 +252,7 @@ class DisciplineWebScraper:
         if not tables:
             return "not_content"
 
-        treated_tables = updatemock.multiple_replace(tables.get_text(), replacement={
+        treated_tables = multiple_replace(tables.get_text(), replacement={
             '\n': '',
             '\t': '',
             '\r': '',
