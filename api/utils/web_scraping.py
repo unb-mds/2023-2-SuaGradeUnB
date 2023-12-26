@@ -3,8 +3,10 @@ from bs4 import BeautifulSoup
 from collections import defaultdict
 from typing import List, Optional, Iterator
 from re import findall, finditer
+from utils.management.commands import updatemock
 import requests.utils
 import requests
+import hashlib
 
 '''
 Modo de uso:
@@ -46,15 +48,6 @@ def get_list_of_departments(response=get_response(create_request_session())) -> 
     return department_ids
 
 
-def get_department_disciplines(department_id: str, current_year: str, current_period: str, url=URL, session=None, cookie=None) -> defaultdict[str, List[dict]]:
-    """Obtem as disciplinas de um departamento"""
-    discipline_scraper = DisciplineWebScraper(
-        department_id, current_year, current_period, url, session, cookie)
-    disciplines = discipline_scraper.get_disciplines()
-
-    return disciplines
-
-
 class DisciplineWebScraper:
     # Classe que faz o web scraping das disciplinas
     def __init__(self, department: str, year: str, period: str, url=URL, session=None, cookie=None):
@@ -84,16 +77,16 @@ class DisciplineWebScraper:
         else:
             self.cookie = cookie
 
+        self.response = None
+
     def get_response_from_disciplines_post_request(self) -> requests.Response:
         # Faz uma requisição POST para obter a resposta das turmas disponíveis
-        response = self.session.post(
+        self.response = self.session.post(
             self.url,
             headers=HEADERS,
             cookies=self.cookie,
             data=self.data
         )
-
-        return response
 
     def get_teachers(self, data: list) -> list:
         teachers = []
@@ -240,7 +233,7 @@ class DisciplineWebScraper:
                     "days": days
                 })
 
-    def make_web_scraping_of_disciplines(self, response) -> None:
+    def retrieve_classes_tables(self, response):
         # Faz o web scraping das disciplinas
         soup = BeautifulSoup(response.content, "html.parser")
         # Find the <table> tag with class "listagem"
@@ -249,13 +242,39 @@ class DisciplineWebScraper:
         if tables is None:
             return None
 
+        return tables
+
+    def create_page_fingerprint(self):
+        if not self.response:
+            self.get_response_from_disciplines_post_request()
+
+        tables = self.retrieve_classes_tables(self.response)
+        if not tables:
+            return "not_content"
+
+        treated_tables = updatemock.multiple_replace(tables.get_text(), replacement={
+            '\n': '',
+            '\t': '',
+            '\r': '',
+            ' ': ''
+        }).strip()
+
+        return hashlib.sha256(treated_tables.encode('utf-8')).hexdigest()
+
+    def make_web_scraping_of_disciplines(self, response) -> None:
+        tables = self.retrieve_classes_tables(response)
+
+        if not tables:
+            return None
+
         table_rows = tables.find_all("tr")  # Find all <tr> tags
 
         self.make_disciplines(table_rows)
 
     def get_disciplines(self) -> defaultdict[str, List[dict]]:
         # Retorna um dicionário com as disciplinas
-        response = self.get_response_from_disciplines_post_request()
-        self.make_web_scraping_of_disciplines(response)
+        if not self.response:
+            self.get_response_from_disciplines_post_request()
+        self.make_web_scraping_of_disciplines(self.response)
 
         return self.disciplines
