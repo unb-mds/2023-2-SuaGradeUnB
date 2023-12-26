@@ -7,6 +7,10 @@ services:
     env_file:
       - ./api/.env
 
+  redis:
+    image: redis:alpine
+    container_name: rediscache
+
   api:
     restart: unless-stopped
     container_name: django-api
@@ -22,7 +26,8 @@ services:
       - 8000:8000
     depends_on:
       - db
-    
+      - redis
+
   web:
     restart: unless-stopped
     container_name: nextjs-web
