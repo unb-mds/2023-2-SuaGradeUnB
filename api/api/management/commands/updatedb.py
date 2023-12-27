@@ -1,11 +1,14 @@
 from typing import Any
 from argparse import ArgumentParser as CommandParser
 from django.core.management.base import BaseCommand
+from django.db import transaction
 from utils import sessions
 from utils import db_handler as dbh
 from utils.web_scraping import DisciplineWebScraper, get_list_of_departments
 from django.core.cache import cache
-from time import time
+from time import time, sleep
+from collections import deque
+import threading
 
 
 class Command(BaseCommand):
@@ -17,9 +20,9 @@ class Command(BaseCommand):
         """Adiciona os argumentos do comando."""
         parser.add_argument('-a', '--all', action='store_true', dest='all', default=False,
                             help="Atualiza o banco de dados com as disciplinas dos períodos atual e seguinte.")
-        
+
         parser.add_argument('-ds', '--descriptive', action='store_true', default=False,
-                    help="Ativa a opção de uma atualização descritiva com os outputs (print) necessários")
+                            help="Ativa a opção de uma atualização descritiva com os outputs (print) necessários")
 
         parser.add_argument('-p', '--period', action='store', default=None,
                             choices=[".".join(sessions.get_current_year_and_period()), ".".join(
@@ -31,6 +34,7 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any):
         choices = []
+        threads = []
 
         if options["all"]:
             choices.append(sessions.get_current_year_and_period())
@@ -51,7 +55,15 @@ class Command(BaseCommand):
 
         if options["delete"]:
             for year, period in choices:
-                self.delete_period(year=year, period=period)
+                thread = threading.Thread(
+                    target=self.delete_period, args=(year, period,))
+                threads.append(thread)
+                thread.start()
+            
+            for thread in threads:
+                thread.join()
+            threads.clear()
+
             return
 
         departments_ids = get_list_of_departments()
@@ -62,20 +74,39 @@ class Command(BaseCommand):
 
         print("Atualizando o banco de dados...")
 
-        for year, period in choices:
+        def start_update_year_period(year: str, period: str):
             try:
                 start_time = time()
                 print(f"Começando atualização de {year}/{period}")
-                self.update_departments(departments_ids, year, period, options)
+                with transaction.atomic():
+                    self.update_departments(
+                        departments_ids, year, period, options)
+
                 self.display_success_update_message(
                     operation=f"{year}/{period}", start_time=start_time)
             except Exception as exception:
                 print("Houve um erro na atualização do bando de dados.")
                 print(f"Error: {exception}")
 
+        start_tot_time = time()
+        for year, period in choices:
+            thread = threading.Thread(
+                target=start_update_year_period, args=(year, period,))
+            threads.append(thread)
+            thread.start()
+            sleep(0.01)  # little time to start print don't overleap
+
+        print()
+
+        for thread in threads:
+            thread.join()
+        threads.clear()
+
+        print(f"\nTempo total de execução: {(time() - start_tot_time):.1f}s")
+
     def update_departments(self, departments_ids: list, year: str, period: str, options: Any) -> None:
         """Atualiza os departamentos do banco de dados e suas respectivas disciplinas."""
-        for department_id in departments_ids:
+        def execute_update(department_id):
             scraper = DisciplineWebScraper(department_id, year, period)
             fingerprint = scraper.create_page_fingerprint()
 
@@ -85,7 +116,7 @@ class Command(BaseCommand):
                 if cache_value and cache_value == fingerprint:
                     if options['descriptive']:
                         print(f"Departamento ({department_id}) atualizado, operação não necessária")
-                    continue
+                    return
 
                 THIRTY_DAYS = 30 * 86400
                 cache.set(cache_key, fingerprint, timeout=THIRTY_DAYS)
@@ -99,6 +130,7 @@ class Command(BaseCommand):
 
             if options['descriptive']:
                 print(f"Departamento ({department_id}) desatualizado, operação necessária")
+
             # Para cada disciplina do período atual, deleta as turmas previamente cadastradas e cadastra novas turmas no banco de dados
             for discipline_code in disciplines_list:
                 classes_info = disciplines_list[discipline_code]
@@ -114,15 +146,31 @@ class Command(BaseCommand):
                     dbh.create_class(teachers=class_info["teachers"],
                                      classroom=class_info["classroom"], schedule=class_info["schedule"],
                                      days=class_info["days"], _class=class_info["class_code"], discipline=discipline, special_dates=class_info["special_dates"])
-                    
+
             if options['descriptive']:
                 print(f'Operação de atualização finalizada para o departamento ({department_id})')
+
+        threads = deque()
+        for department_id in departments_ids:
+            thread = threading.Thread(
+                target=execute_update, args=(department_id,))
+            threads.append(thread)
+            thread.start()
+
+            if len(threads) == 3:
+                threads[0].join()
+                threads.popleft()
+
+        for thread in threads:
+            thread.join()
+        threads.clear()
 
     def delete_period(self, year: str, period: str) -> None:
         """Deleta um período do banco de dados."""
         start_time = time()
-        dbh.delete_all_departments_using_year_and_period(
-            year=year, period=period)
+        with transaction.atomic():
+            dbh.delete_all_departments_using_year_and_period(
+                year=year, period=period)
         self.display_success_delete_message(
             operation=f"{year}/{period}", start_time=start_time)
 
