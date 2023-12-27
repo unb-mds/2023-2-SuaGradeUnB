@@ -1,6 +1,7 @@
 from api.models import Discipline, Department, Class
 from api.serializers import ClassSerializerSchedule
 from api.models import Schedule
+from api.decorators import handle_cache_before_delete
 
 from users.models import User
 
@@ -30,15 +31,16 @@ def create_class(teachers: list, classroom: str, schedule: str,
     return Class.objects.create(teachers=teachers, classroom=classroom, schedule=schedule,
                                 days=days, _class=_class, special_dates=special_dates, discipline=discipline)
 
-
-def delete_classes_from_discipline(discipline: Discipline) -> None:
+@handle_cache_before_delete
+def delete_classes_from_discipline(discipline: Discipline) -> QuerySet:
     """Deleta todas as turmas de uma disciplina."""
-    Class.objects.filter(discipline=discipline).delete()
+    return Class.objects.filter(discipline=discipline)
 
 
-def delete_all_departments_using_year_and_period(year: str, period: str) -> None:
+@handle_cache_before_delete
+def delete_all_departments_using_year_and_period(year: str, period: str) -> QuerySet:
     """Deleta um departamento de um periodo especifico."""
-    Department.objects.filter(year=year, period=period).delete()
+    return Department.objects.filter(year=year, period=period)
 
 
 def get_best_similarities_by_name(name: str, disciplines: Discipline = Discipline.objects, config="portuguese_unaccent") -> QuerySet:
