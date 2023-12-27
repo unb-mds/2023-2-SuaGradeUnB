@@ -16,7 +16,7 @@ class CustomModel(models.Model):
         try:
             cache.delete(kwargs['cache_key'])
             kwargs.pop('cache_key')
-        except:
+        except: # pragma: no cover
             raise ValueError(cache_error_msg)
         else:
             super(CustomModel, self).delete()

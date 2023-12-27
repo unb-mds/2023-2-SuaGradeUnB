@@ -13,7 +13,7 @@ def handle_cache_before_delete(query_func: callable) -> callable:
             for query in queryset:
                 cache_key = query.get_cache_key()
                 cache.delete(cache_key)
-        except:
+        except: # pragma: no cover
             raise ValueError(cache_error_msg)
         else:
             queryset.delete()

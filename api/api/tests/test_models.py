@@ -1,9 +1,10 @@
 from django.test import TestCase
+from django.core.cache import cache
 from api.models import Department, Discipline, Class
 
 
-class DisciplineModelsTest(TestCase):
-    def setUp(self):
+class ModelsTest(TestCase):
+    def create_data(self):
         self.department = Department.objects.create(
             code='INF',
             year="2023",
@@ -23,6 +24,11 @@ class DisciplineModelsTest(TestCase):
             _class="1",
             discipline=self.discipline
         )
+
+        cache.set("INF/2023.2", "hash_value")
+
+    def setUp(self):
+        self.create_data()
 
     def test_create_discipline(self):
         self.assertEqual(self.discipline.name,
@@ -52,3 +58,31 @@ class DisciplineModelsTest(TestCase):
 
     def test_str_method_of_department(self):
         self.assertEqual(str(self.department), self.department.code)
+
+    def test_delete_department_with_cache_handle(self):
+        self.department.delete()
+
+        empty_model = not len(Department.objects.all())
+        empty_cache = not len(cache.keys('*'))
+
+        self.assertTrue(empty_model)
+        self.assertTrue(empty_cache)
+
+    def test_delete_discipline_with_cache_handle(self):
+        self.discipline.delete()
+
+        empty_model = not len(Discipline.objects.all())
+        empty_cache = not len(cache.keys('*'))
+
+        self.assertTrue(empty_model)
+        self.assertTrue(empty_cache)
+
+    def test_delete_class_with_cache_handle(self):
+        self._class.delete()
+
+        empty_model = not len(Class.objects.all())
+        empty_cache = not len(cache.keys('*'))
+
+        self.assertTrue(empty_model)
+        self.assertTrue(empty_cache)
+    
