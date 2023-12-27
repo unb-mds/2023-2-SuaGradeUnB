@@ -8,6 +8,7 @@ from utils.web_scraping import DisciplineWebScraper, get_list_of_departments
 from django.core.cache import cache
 from time import time, sleep
 from collections import deque
+from core.settings.base import THIRTY_DAYS_IN_SECS
 import threading
 
 
@@ -118,8 +119,7 @@ class Command(BaseCommand):
                         print(f"Departamento ({department_id}) atualizado, operação não necessária")
                     return
 
-                THIRTY_DAYS = 30 * 86400
-                cache.set(cache_key, fingerprint, timeout=THIRTY_DAYS)
+                cache.set(cache_key, fingerprint, timeout=THIRTY_DAYS_IN_SECS)
             except:
                 print("Ocorreu um erro ao tentar acessar o cache")
                 pass
