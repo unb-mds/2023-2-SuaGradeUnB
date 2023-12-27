@@ -111,15 +111,13 @@ class Command(BaseCommand):
             scraper = DisciplineWebScraper(department_id, year, period)
             fingerprint = scraper.create_page_fingerprint()
 
+            cache_key = f"{department_id}/{year}.{period}"
             try:
-                cache_key = f"{department_id}/{year}.{period}"
                 cache_value = cache.get(cache_key)
                 if cache_value and cache_value == fingerprint:
                     if options['descriptive']:
                         print(f"Departamento ({department_id}) atualizado, operação não necessária")
                     return
-
-                cache.set(cache_key, fingerprint, timeout=THIRTY_DAYS_IN_SECS)
             except:
                 print("Ocorreu um erro ao tentar acessar o cache")
                 pass
@@ -147,9 +145,11 @@ class Command(BaseCommand):
                                      classroom=class_info["classroom"], schedule=class_info["schedule"],
                                      days=class_info["days"], _class=class_info["class_code"], discipline=discipline, special_dates=class_info["special_dates"])
 
+            cache.set(cache_key, fingerprint, timeout=THIRTY_DAYS_IN_SECS)
+            
             if options['descriptive']:
                 print(f'Operação de atualização finalizada para o departamento ({department_id})')
-
+            
         threads = deque()
         for department_id in departments_ids:
             thread = threading.Thread(
