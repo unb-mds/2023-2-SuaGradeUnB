@@ -85,7 +85,7 @@ class Command(BaseCommand):
                 self.display_success_update_message(
                     operation=f"{year}/{period}", start_time=start_time)
             except Exception as exception:
-                print("Houve um erro na atualização do bando de dados.")
+                print("Houve um erro na atualização do banco de dados.")
                 print(f"Error: {exception}")
 
         start_tot_time = time()
