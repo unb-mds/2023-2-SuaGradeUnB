@@ -4,10 +4,17 @@ from rest_framework.test import APITestCase
 from utils import web_scraping as wbp
 from django.urls import reverse
 from pathlib import Path
+from django.core.cache import cache
 import random
 import json
 
+
 class WebScrapingTest(APITestCase):
+
+    def setUp(self):
+        # Clean cache
+        for key in cache.keys("*"):
+            cache.delete(key)
 
     def cookie(self):
         cookie = ""
@@ -16,7 +23,7 @@ class WebScrapingTest(APITestCase):
 
         return cookie
 
-    def make_disciplines_request(self, path_name: str):
+    def generate_args(self, path_name: str):
         current_path = Path(__file__).parents[1].absolute()
         infos_path = current_path / f"mock/infos.json"
 
@@ -29,12 +36,27 @@ class WebScrapingTest(APITestCase):
 
         url = reverse(f'utils:sigaa', kwargs={"path": path_name})
         args = [department, year, period, url, self.client, self.cookie()]
-        disciplines = wbp.get_department_disciplines(*args)
+
+        return args
+
+    def make_disciplines_request(self, path_name: str):
+        args = self.generate_args(path_name)
+
+        scraper = wbp.DisciplineWebScraper(*args)
+        disciplines = scraper.get_disciplines()
 
         return disciplines
 
+    def create_fingerprint(self, path_name: str):
+        args = self.generate_args(path_name)
+
+        scraper = wbp.DisciplineWebScraper(*args)
+
+        return scraper.create_page_fingerprint()
+
     def test_get_list_of_departments(self):
-        response = self.client.get(reverse('utils:sigaa', kwargs={"path": "sigaa"}))
+        response = self.client.get(
+            reverse('utils:sigaa', kwargs={"path": "sigaa"}))
 
         departments = wbp.get_list_of_departments(response)
         self.assertEqual(type(list()), type(departments))
@@ -42,7 +64,8 @@ class WebScrapingTest(APITestCase):
             self.assertEqual(type(str()), type(departments[0]))
 
     def test_get_list_of_departments_when_empty(self):
-        response = self.client.get(reverse('utils:sigaa', kwargs={"path": "empty"}))
+        response = self.client.get(
+            reverse('utils:sigaa', kwargs={"path": "empty"}))
 
         departments = wbp.get_list_of_departments(response)
         self.assertIsNone(departments)
@@ -70,4 +93,24 @@ class WebScrapingTest(APITestCase):
         disciplines = self.make_disciplines_request('table')
 
         self.assertFalse(len(disciplines))
-        
+
+    def test_do_not_find_nonexisting_fingerprint(self):
+        cache_value = cache.get('0000/2023.1')
+
+        self.assertEqual(cache_value, None)
+
+    def test_find_existing_fingerprint(self):
+        fingerprint = self.create_fingerprint('sigaa')
+
+        key = '0000/2023.1'
+        cache.set(key, fingerprint)
+
+        self.assertEqual(cache.get(key), fingerprint)
+
+    def test_find_existing_fingerprint_from_empty(self):
+        fingerprint = self.create_fingerprint('empty')
+
+        key = '0001/2023.1'
+        cache.set(key, fingerprint)
+
+        self.assertEqual(cache.get(key), 'not_content')

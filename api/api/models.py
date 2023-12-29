@@ -3,8 +3,27 @@ from unidecode import unidecode
 from django.contrib.postgres.fields import ArrayField
 from users.models import User
 from django.utils import timezone
+from django.core.cache import cache
 
-class Department(models.Model):
+cache_error_msg = "Cache isn't working properly, so database isn't allowed to be modified!"
+
+
+class CustomModel(models.Model):
+    class Meta:
+        abstract = True
+
+    def delete(self, *args, **kwargs):
+        try:
+            cache.delete(kwargs['cache_key'])
+            kwargs.pop('cache_key')
+        except: # pragma: no cover
+            raise ValueError(cache_error_msg)
+        else:
+            super(CustomModel, self).delete()
+            pass
+
+
+class Department(CustomModel):
     """Classe que representa um departamento.
     code:str -> Código do departamento
     year:str -> Ano do departamento
@@ -17,8 +36,19 @@ class Department(models.Model):
     def __str__(self):
         return self.code
 
+    def get_cache_key(self):
+        code = self.code
+        year = self.year
+        period = self.period
 
-class Discipline(models.Model):
+        return f"{code}/{year}.{period}"
+
+    def delete(self, *args, **kwargs):
+        kwargs['cache_key'] = self.get_cache_key()
+        super(Department, self).delete(*args, **kwargs)
+
+
+class Discipline(CustomModel):
     """Classe que representa uma disciplina.
     name:str -> Nome da disciplina
     unicode_name:str -> Nome da disciplina normalizado
@@ -38,8 +68,19 @@ class Discipline(models.Model):
         self.unicode_name = unidecode(self.name).casefold()
         super(Discipline, self).save(*args, **kwargs)
 
+    def get_cache_key(self):
+        code = self.department.code
+        year = self.department.year
+        period = self.department.period
 
-class Class(models.Model):
+        return f"{code}/{year}.{period}"
+
+    def delete(self, *args, **kwargs):
+        kwargs['cache_key'] = self.get_cache_key()
+        super(Discipline, self).delete(*args, **kwargs)
+
+
+class Class(CustomModel):
     """Classe que representa uma turma.
     teachers:list -> Lista de professores da turma
     classroom:str -> Sala da turma
@@ -66,6 +107,17 @@ class Class(models.Model):
 
     def __str__(self):
         return self._class
+
+    def get_cache_key(self):
+        code = self.discipline.department.code
+        year = self.discipline.department.year
+        period = self.discipline.department.period
+
+        return f"{code}/{year}.{period}"
+
+    def delete(self, *args, **kwargs):
+        kwargs['cache_key'] = self.get_cache_key()
+        super(Class, self).delete(*args, **kwargs)
 
 
 class Schedule(models.Model):

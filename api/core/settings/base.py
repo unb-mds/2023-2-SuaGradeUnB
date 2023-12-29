@@ -47,6 +47,30 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist'
 ]
 
+# Time constants
+
+HOUR_IN_SECS = 60 * 60
+HALF_DAY_IN_SECS = 12 * HOUR_IN_SECS
+DAY_IN_SECS = 24 * HOUR_IN_SECS
+THIRTY_DAYS_IN_SECS = 30 * DAY_IN_SECS
+
+# Cache
+# https://docs.djangoproject.com/en/5.0/topics/cache/
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": config("REDIS_CACHE_LOCATION"),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+        "TIMEOUT": HALF_DAY_IN_SECS
+    }
+}
+
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
 # Authentication
 
 AUTH_USER_MODEL = 'users.User'
