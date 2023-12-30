@@ -43,20 +43,16 @@ def get_session_cookie(session: Session) -> cookies.RequestsCookieJar: # pragma:
     return cookie_jar
 
 """Obtem o ano e o período atual e retorna uma lista com esses valores."""
-def get_current_year_and_period(date: datetime | None = None) -> List[str | str]:
-    current_date = datetime.now()
-    if date is not None:
-        current_date = date
+def get_current_year_and_period(date: datetime | None = datetime.now()) -> List[str | str]:
+    if date is None:
+        date = datetime.now()
     
-    current_year = current_date.year
+    current_year = date.year
     period = "1"
 
-    # Se a data atual estiver entre 1 de maio e 30 de dezembro, o período é 2.
-    if datetime(current_year, 5, 1) <= current_date <= datetime(current_year, 12, 30):
+    # Se a data atual estiver entre 2 de maio e 1 de janeiro do próximo ano, o período é 2.
+    if datetime(current_year, 5, 2) <= date <= datetime(current_year + 1, 1, 1):
         period = "2"
-    # elif current_date > datetime(current_year, 10, 30):
-    #     current_year += 1
-    #     period = "1"
 
     return [str(current_year), period]
 
