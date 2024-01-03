@@ -1,3 +1,7 @@
+import Image from 'next/image';
+
+import closeIcon from '@/public/icons/close.jpg';
+
 interface ModalPropsType {
     children: React.ReactNode;
     setActiveModal: (active: boolean) => void;
@@ -12,9 +16,12 @@ export default function Modal({ children, setActiveModal, noExit }: ModalPropsTy
                 {!noExit &&
                     <button
                         onClick={() => setActiveModal(false)}
-                        className='absolute left-2 top-2 material-symbols-rounded'
+                        className='absolute left-2 top-2'
                     >
-                        close
+                        <Image
+                            src={closeIcon}
+                            alt="fechar"
+                        />
                     </button>
                 }
             </div>

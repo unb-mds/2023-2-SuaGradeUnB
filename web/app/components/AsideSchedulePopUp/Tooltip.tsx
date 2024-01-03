@@ -1,11 +1,14 @@
 'use client';
 
 import styles from '@/app/styles/tooltip.module.css';
+
 import Image from 'next/image';
 
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import { useEffect, useState } from 'react';
+
 import questionIcon from '@/public/icons/question.jpg';
+import closeIcon from '@/public/icons/close.jpg';
 
 interface TooltipPropsType {
     children: React.ReactNode,
@@ -35,7 +38,7 @@ export default function Tooltip({ children }: TooltipPropsType) {
         <div className={styles.tooltip}>
             <span
                 onClick={() => setActive(true)}
-                className='flex justify-center items-center material-symbols-rounded text-xs border-black border-solid border-2 rounded-full h-5 w-5 hover:bg-gray-300'>
+                className='flex justify-center items-center text-xs border-black border-solid border-2 rounded-full h-5 w-5 hover:bg-gray-300'>
                 <Image
                     width={15} height={15}
                     src={questionIcon} alt='ícone de interrogação'
@@ -46,9 +49,12 @@ export default function Tooltip({ children }: TooltipPropsType) {
                     {children}
                     <button
                         onClick={() => setActive(false)}
-                        className={`absolute right-2 ${isMobile(width) ? 'bottom-2' : 'top-2'} material-symbols-rounded`}
+                        className={`absolute right-2 ${isMobile(width) ? 'bottom-2' : 'top-2'}`}
                     >
-                        close
+                        <Image
+                            src={closeIcon}
+                            alt='fechar'
+                        />
                     </button>
                 </div>
             </span>
