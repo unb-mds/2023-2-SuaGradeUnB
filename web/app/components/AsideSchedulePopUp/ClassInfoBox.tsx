@@ -6,6 +6,7 @@ import ClassInfo from '../ClassInfo';
 import Image from 'next/image';
 
 import addIcon from '@/public/icons/add.jpg';
+import removeIcon from '@/public/icons/remove.jpg';
 
 interface ClassInfoBoxPropsType extends HTMLProps<HTMLDivElement> {
     currentDiscipline: DisciplineType,
@@ -36,10 +37,16 @@ export default function ClassInfoBox({ currentDiscipline, currentClass, ...props
             <button
                 onClick={props.onClick as MouseEventHandler<HTMLButtonElement> | undefined}
                 className='hover:cursor-pointer col-start-7 flex justify-center items-center'>
-                <Image
-                    width={25} height={25}
-                    src={addIcon} alt='ícone adicionar matéria'
-                />
+                {selected ?
+                    <Image
+                        width={25} height={25}
+                        src={removeIcon} alt='ícone remover matéria'
+                    />
+                    : <Image
+                        width={25} height={25}
+                        src={addIcon} alt='ícone adicionar matéria'
+                    />
+                }
             </button>
         </div>
     );
