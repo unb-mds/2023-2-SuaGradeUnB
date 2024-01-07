@@ -36,24 +36,24 @@ Por favor, inclua um resumo das alterações e a issue relacionada. Também incl
 
 Por favor, exclua as opções que não são relevantes.
 
-* \[ ]   Bug fix (alteração que corrige um problema)
-* \[ ]   New feature (alteração que adiciona funcionalidade)
-* \[ ]   Breaking change (correção ou funcionalidade que altera o comportamento de outras partes do sistema de maneira significativa)
-* \[ ]   Documentation update (alteração na documentação)
+* \[ ]      Bug fix (alteração que corrige um problema)
+* \[ ]      New feature (alteração que adiciona funcionalidade)
+* \[ ]      Breaking change (correção ou funcionalidade que altera o comportamento de outras partes do sistema de maneira significativa)
+* \[ ]      Documentation update (alteração na documentação)
 
 # Como isso foi testado?
 
 Por favor, descreva os testes que você executou para verificar suas alterações. Forneça instruções para que possamos reproduzir. Liste também quaisquer detalhes relevantes para a configuração de seus testes.
 
-* \[ ]   Teste A
-* \[ ]   Teste B
+* \[ ]      Teste A
+* \[ ]      Teste B
 
 # Checklist:
 
-* \[ ]   Meu código segue as diretrizes de contribuição deste projeto
-* \[ ]   Realizei uma revisão pessoal do meu código
-* \[ ]   Comentei meu código, especialmente em áreas de difícil compreensão
-* \[ ]   Fiz alterações correspondentes na documentação *( se necessário)*
-* \[ ]   Minhas alterações não geram novos *warnings* ou erros
-* \[ ]   Adicionei testes que comprovam que minha correção é eficaz ou que minha funcionalidade está funcionando corretamente
-* \[ ]   Testes unitários novos e existentes passam localmente com minhas alterações
+* \[ ]      Meu código segue as diretrizes de contribuição deste projeto
+* \[ ]      Realizei uma revisão pessoal do meu código
+* \[ ]      Comentei meu código, especialmente em áreas de difícil compreensão
+* \[ ]      Fiz alterações correspondentes na documentação *( se necessário)*
+* \[ ]      Minhas alterações não geram novos *warnings* ou erros
+* \[ ]      Adicionei testes que comprovam que minha correção é eficaz ou que minha funcionalidade está funcionando corretamente
+* \[ ]      Testes unitários novos e existentes passam localmente com minhas alterações
