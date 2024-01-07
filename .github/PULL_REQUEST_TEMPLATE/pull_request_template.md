@@ -30,30 +30,34 @@ IMPORTANTE: Por favor, revise a paǵina de "COMO CONTRIBUIR?" (https://unb-mds.g
 <!-- Por favor, inclua um resumo das alterações e a issue relacionada. Também inclua motivação e contexto relevantes. Liste quaisquer dependências necessárias para essa alteração.
 
 Remova o comentário da linha a seguir caso exista uma issue relacionada a seu PR : -->
+
 <!-- **closes #(issue) **-->
 
 ## Tipo de alteração
 
 <!-- Por favor, exclua as opções que não são relevantes. -->
 
-* \[ ]   Bug fix (alteração que corrige um problema)
-* \[ ]   New feature (alteração que adiciona funcionalidade)
-* \[ ]   Breaking change (correção ou funcionalidade que altera o comportamento de outras partes do sistema de maneira significativa)
-* \[ ]   Documentation update (alteração na documentação)
+* \[ ]   **Bug fix** (alteração que corrige um problema)
+* \[ ]   **New feature** (alteração que adiciona funcionalidade)
+* \[ ]   **Breaking change** (correção ou funcionalidade que altera o comportamento de outras partes do sistema de maneira significativa)
+* \[ ]   **Documentation update** (alteração na documentação)
 
 ## Como isso foi testado?
 
-<!-- Por favor, descreva os testes que você executou para verificar suas alterações. Forneça instruções para que possamos reproduzir. Liste também quaisquer detalhes relevantes para a configuração de seus testes. -->
+<!-- Por favor, descreva abaixo os testes que você executou para verificar suas alterações. Forneça instruções para que possamos reproduzir. Liste também quaisquer detalhes relevantes para a configuração de seus testes.
+Para testes de UI(User Interface), você pode usar uma imagem, GIF ou vídeo para mostrar como o sistema se comporta antes e depois de sua alteração. Você pode usar o [LICEcap](https://www.cockos.com/licecap/) para gravar GIFs facilmente no Windows e MAC ou ferramentas nativas do seu sistema operacional. -->
 
 * \[ ]   Teste A
 * \[ ]   Teste B
 
 ## Checklist
 
+<!-- Você deve marcar todas as as opções aplicáveis ao seu PR. -->
+
 * \[ ]   Meu código segue as diretrizes de contribuição deste projeto
 * \[ ]   Realizei uma revisão pessoal do meu código
 * \[ ]   Comentei meu código, especialmente em áreas de difícil compreensão
-* \[ ]   Fiz alterações correspondentes na documentação <!--*( caso necessário)* -->
+* \[ ]   Fiz alterações correspondentes na documentação <!--*( caso aplicável)* -->
 * \[ ]   Minhas alterações não geram novos *warnings* ou erros
-* \[ ]   Adicionei testes que comprovam que minha correção é eficaz ou que minha funcionalidade está funcionando corretamente
-* \[ ]   Testes unitários novos e existentes passam localmente com minhas alterações
+* \[ ]   Adicionei testes que comprovam que minha correção é eficaz ou que minha funcionalidade está funcionando corretamente <!--*( caso aplicável)* -->
+* \[ ]   Todos os testes unitários novos e existentes passam localmente com minhas alterações <!-- Use 'make test' ou 'make testfull' -->
