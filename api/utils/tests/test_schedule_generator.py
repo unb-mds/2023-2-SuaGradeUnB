@@ -164,7 +164,6 @@ class TestSchedule(APITestCase):
 
         generated_data = schedule_generator.generate()
         schedules = generated_data["schedules"]
-        
         self.assertEqual(len(schedules), 4)
 
         schedules = schedule_generator.generate()

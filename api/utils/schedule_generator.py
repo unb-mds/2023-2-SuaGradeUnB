@@ -175,7 +175,7 @@ class ScheduleGenerator:
                 continue
 
             for code in schedule_code:
-                if not code in time_from:
+                if code not in time_from:
                     time_from[code] = _class
                     continue
 

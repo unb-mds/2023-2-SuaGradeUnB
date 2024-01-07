@@ -39,7 +39,6 @@ class TestDeleteSchedules(APITestCase):
 
         self.data = self.client.post(
             reverse('api:generate-schedules'), body, content_type=self.content_type).data
-        
         self.schedules = self.data.get('schedules')
 
         self.schedule_json = json.dumps(self.schedules[0])
