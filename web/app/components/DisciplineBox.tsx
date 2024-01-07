@@ -1,8 +1,12 @@
+import Image from 'next/image';
+
 import { ClassValueType } from '../contexts/SelectedClassesContext/types';
 
 import useSelectedClasses from '../hooks/useSelectedClasses';
 
 import ClassInfo from './ClassInfo';
+
+import deleteIcon from '../../public/icons/delete.jpg';
 
 import _ from 'lodash';
 
@@ -35,8 +39,8 @@ export default function DisciplineBox({ currentClass, discipline }: DisciplineBo
                 </section>
                 <ClassInfo currentClass={currentClass} />
             </div>
-            <button onClick={handleDeleteClass} className='material-symbols-rounded hover:text-red-900'>
-                delete
+            <button onClick={handleDeleteClass}>
+                <Image src={deleteIcon} alt="deletar" />
             </button>
         </span>
     );
