@@ -37,8 +37,10 @@ class TestGetSchedules(APITestCase):
         self.url = reverse('api:schedules')
         self.content_type = 'application/json'
 
-        self.schedules = self.client.post(
+        self.data = self.client.post(
             reverse('api:generate-schedules'), body, content_type=self.content_type).data
+        
+        self.schedules = self.data.get('schedules')
 
         self.schedule_json = json.dumps(self.schedules[0])
 
