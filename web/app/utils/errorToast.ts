@@ -1,9 +1,11 @@
 import toast from 'react-hot-toast';
+import React from 'react';
 
-export const errorToast = (message: string) => {
+export const errorToast = (message: string, centered: boolean = true) => {
     toast.error(message, {
+        duration: 5000,
         style: {
-            textAlign: 'center'
-        }
+            textAlign: centered ? 'center' : 'justify'
+        },
     });
 };
