@@ -160,8 +160,8 @@ class ScheduleGenerator:
         ele pode escolher entre remover alguma das disciplinas conflitantes.
 
         :param schedule: Uma grade horária
-        :param time_from: Dicionário com os horários de cada disciplina já adicionada
-        :param first_time: Indica se é a primeira vez que a função é chamada
+        :param except_class: Uma disciplina em que não queremos verificar a existência de conflitos
+        :return: True se a grade horária for válida, False caso contrário
         """
 
         time_from = dict()
