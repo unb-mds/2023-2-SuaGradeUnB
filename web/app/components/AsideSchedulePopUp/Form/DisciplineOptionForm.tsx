@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import useYearPeriod from '@/app/hooks/useYearPeriod';
 import useSelectedClasses from '@/app/hooks/useSelectedClasses';
 
@@ -44,8 +44,8 @@ function Form(props: FormPropsType) {
 }
 
 function getYearAndPeriod(text: string) {
-    const year = text.split('/')[0] || '';
-    const period = text.split('/')[1] || '';
+    const year = text.split('/')[0] || defaultFormData.year;
+    const period = text.split('/')[1] || defaultFormData.period;
 
     return { year, period };
 }
@@ -54,6 +54,19 @@ export default function DisciplineOptionForm(props: DisciplineOptionFormPropsTyp
     const { selectedClasses, currentYearPeriod, setCurrentYearPeriod } = useSelectedClasses();
     const [disableDefault, setDisableDefault] = useState(false);
     const [formData, setFormData] = useState(defaultFormData);
+
+    useEffect(() => {
+        if (disableDefault || formData != defaultFormData)
+            return;
+        
+        if (selectedClasses.size) {
+            const { year, period } = getYearAndPeriod(currentYearPeriod);
+            setFormData({ ...formData, year: year, period: period });
+            setDisableDefault(true);
+        }
+
+        props.setInfos([]);
+    }, []);
 
     function handleChangeYearAndPeriod(text: string, handleSetYearPeriod: () => void) {
         if (currentYearPeriod && currentYearPeriod != text && selectedClasses.size) {
