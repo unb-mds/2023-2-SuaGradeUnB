@@ -36,7 +36,7 @@ class TestGenerateScheduleAPI(APITestCase):
         response = self.client.post(self.api_url, body, content_type=self.content_type)
         
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(len(response.data) > 0)
+        self.assertTrue(len(response.data["schedules"]) > 0)
     
     def test_with_conflicting_classes(self):
         """
@@ -50,7 +50,7 @@ class TestGenerateScheduleAPI(APITestCase):
         response = self.client.post(self.api_url, body, content_type=self.content_type)
         
         self.assertEqual(response.status_code, 200)
-        self.assertFalse(len(response.data))
+        self.assertFalse(len(response.data["schedules"]))
     
     def test_with_invalid_class(self):
         """
@@ -121,4 +121,4 @@ class TestGenerateScheduleAPI(APITestCase):
         response = self.client.post(self.api_url, body, content_type=self.content_type)
         
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(len(response.data) > 0)
+        self.assertTrue(len(response.data["schedules"]) > 0)

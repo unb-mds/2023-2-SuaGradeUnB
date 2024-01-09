@@ -205,9 +205,10 @@ def retrieve_important_params_from_class(_class: dict) -> dict:
 
 def validate_received_schedule(classes_id: list[int]) -> list[Class]:
     schedule_generator = ScheduleGenerator(classes_id)
-    schedules = schedule_generator.generate()
+    generated_data = schedule_generator.generate()
+    schedules = generated_data.get('schedules', None)
 
-    if len(schedules) != 1:
+    if schedules is None or len(schedules) != 1:
         raise ValueError("the classes are not compatible")
 
     return schedules[0]

@@ -10,7 +10,7 @@ import useUser from '@/app/hooks/useUser';
 import Button from '@/app/components/Button';
 import Modal from '@/app/components/Modal/Modal';
 
-import { ScheduleClassType } from '@/app/contexts/SchedulesContext';
+import { ScheduleAPIType, ScheduleClassType } from '@/app/contexts/SchedulesContext';
 
 import generateSchedule, { EachFieldNumber } from '@/app/utils/api/generateSchedule';
 import { errorToast } from '@/app/utils/errorToast';
@@ -54,10 +54,11 @@ export default function GenerateScheduleButton() {
         setLoading(true);
         generateSchedule(classes_id, [morningPreference, afternoonPreference, nightPreference]).then((response) => {
             if (response.status === 200) {
-                const schedules = response.data as Array<ScheduleClassType>;
+                const data = response.data as ScheduleAPIType;
+                const schedules = data.schedules as Array<ScheduleClassType>;
 
-                if (!schedules.length) {
-                    errorToast('Nenhuma grade conseguiu ser gerada!');
+                if (!schedules.length) {                    
+                    errorToast(data.message, data.message.split('\n').length == 1);
                     setLoading(false);
                 } else {
                     setLocalSchedules(schedules);

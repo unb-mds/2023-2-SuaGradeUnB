@@ -73,7 +73,8 @@ class Search(APIView):
         return disciplines, search_by_teacher
 
     def get_serialized_data(self, filter_params: dict, search_by_teacher: bool, name: str) -> list:
-        filtered_disciplines = filter_disciplines_by_year_and_period(**filter_params)
+        filtered_disciplines = filter_disciplines_by_year_and_period(
+            **filter_params)
         if search_by_teacher:
             data = serializers.DisciplineSerializer(
                 filtered_disciplines, many=True, context={'teacher_name': name}).data
@@ -117,7 +118,8 @@ class Search(APIView):
             request, name)
 
         data = self.get_serialized_data(
-            filter_params={'year': year, 'period': period,'disciplines': disciplines},
+            filter_params={'year': year, 'period': period,
+                           'disciplines': disciplines},
             search_by_teacher=search_by_teacher,
             name=name
         )
@@ -187,7 +189,7 @@ class GenerateSchedule(APIView):
             }
         ),
         responses={
-            200: openapi.Response('OK', serializers.ClassSerializerSchedule(many=True)),
+            200: serializers.GenerateSchedulesSerializer(many=True),
             **Errors([400]).retrieve_erros()
         }
     )
@@ -222,26 +224,31 @@ class GenerateSchedule(APIView):
 
         try:
             schedule_generator = ScheduleGenerator(classes_id, preference)
-            schedules = schedule_generator.generate()
+            generated_data = schedule_generator.generate()
         except Exception as error:
             """Retorna um erro caso ocorra algum erro ao criar o gerador de horários"""
-            
+
             message_error = "An internal error has occurred."
-            
+
             if type(error) is ValueError:
                 message_error = str(error)
-            else: # pragma: no cover
+            else:  # pragma: no cover
                 print_exception(error)
-                
+
             return response.Response(
                 {
                     "errors": message_error
                 }, status.HTTP_400_BAD_REQUEST)
 
+        schedules = generated_data.get("schedules", [])
+        message = generated_data.get("message", "")
         data = []
 
         for schedule in schedules[:MAXIMUM_RETURNED_SCHEDULES]:
             data.append(
                 list(map(lambda x: serializers.ClassSerializerSchedule(x).data, schedule)))
-
-        return response.Response(data, status.HTTP_200_OK)
+        
+        return response.Response({
+            'message': message,
+            'schedules': data
+        }, status.HTTP_200_OK)
