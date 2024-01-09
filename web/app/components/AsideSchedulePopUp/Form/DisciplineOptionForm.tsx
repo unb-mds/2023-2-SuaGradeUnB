@@ -66,7 +66,7 @@ export default function DisciplineOptionForm(props: DisciplineOptionFormPropsTyp
         }
 
         props.setInfos([]);
-    }, []);
+    }, [disableDefault]);
 
     function handleChangeYearAndPeriod(text: string, handleSetYearPeriod: () => void) {
         if (currentYearPeriod && currentYearPeriod != text && selectedClasses.size) {
