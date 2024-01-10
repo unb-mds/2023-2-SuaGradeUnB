@@ -46,3 +46,7 @@ class ScheduleSerializer(ModelSerializer):
     class Meta:
         model = Schedule
         exclude = ['user']
+
+class GenerateSchedulesSerializer(serializers.Serializer):
+    message = serializers.CharField(max_length=200)
+    schedules = ClassSerializerSchedule(many=True)

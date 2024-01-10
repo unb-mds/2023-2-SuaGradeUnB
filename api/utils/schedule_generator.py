@@ -1,5 +1,5 @@
 from itertools import product
-from collections import defaultdict
+from collections import defaultdict, Counter
 from .db_handler import get_class_by_id
 from re import search
 from api.models import Class
@@ -8,9 +8,13 @@ MAXIMUM_CLASSES_FOR_DISCIPLINE = 4
 MINIMUM_PREFERENCE_RANGE = 1
 MAXIMUM_PREFERENCE_RANGE = 3
 MAXIMUM_DISCIPLINES = 11
+MAXIMUM_DISPLAYED_CONFLICTS = 4
 
 LIMIT_ERROR_MESSAGE = f"you can only send {MAXIMUM_DISCIPLINES} disciplines and {MAXIMUM_CLASSES_FOR_DISCIPLINE} classes for each discipline."
 PREFERENCE_RANGE_ERROR = f"preference must be a list of integers with range [{MINIMUM_PREFERENCE_RANGE}, {MAXIMUM_PREFERENCE_RANGE}]"
+NO_SCHEDULES_ERROR = "Não há horários disponíveis para a combinação de disciplinas selecionadas."
+SUCCESS_MESSAGE = "Horários gerados com sucesso."
+FIX_PROBLEM_MESSAGE = "\n\nPara resolver o problema, você pode remover uma das seguintes disciplinas: \n\n"
 
 def check(function):
     """
@@ -31,16 +35,18 @@ class ScheduleGenerator:
 
     def __init__(self, classes_id: list[int], preference: list = None):
         self.schedule_info = defaultdict(lambda: None)
+        self.conflicting_classes = Counter()
         self.preference = preference
         self.generated = False
         self._validate_preference()
         self._get_and_validate_classes(classes_id=set(classes_id))
         self._make_disciplines_list()
         self._validate_parameters_length()
-    
+
     def _validate_preference(self) -> None:
-        self.valid = self.preference is None or all(isinstance(x, int) and MINIMUM_PREFERENCE_RANGE <= x <= MAXIMUM_PREFERENCE_RANGE for x in self.preference)
-        
+        self.valid = self.preference is None or all(isinstance(
+            x, int) and MINIMUM_PREFERENCE_RANGE <= x <= MAXIMUM_PREFERENCE_RANGE for x in self.preference)
+
         if not self.valid:
             raise ValueError(PREFERENCE_RANGE_ERROR)
 
@@ -136,20 +142,56 @@ class ScheduleGenerator:
         for classes in self.disciplines.values():
             self.disciplines_list.append(classes)
 
-    def _is_valid_schedule(self, schedule: tuple) -> bool:
-        codes_counter = 0
-        schedule_codes = set()
+    def _handle_conflict(self, conflicting_class: Class, schedule: tuple) -> None:
+        # Depois, verificamos se há uma grade horária válida sem a disciplina atual
+        schedule_valid = self._valid_schedule(schedule, conflicting_class)
+
+        # Caso haja, adicionaremos a matéria removida na lista "conflicting_classes"
+        if schedule_valid:
+            self.conflicting_classes[conflicting_class.discipline] += 1
+
+    def _valid_schedule(self, schedule: tuple, except_class: Class = None) -> bool:
+        """
+        Verifica se uma grade horária é válida. Caso não seja, verificamos se há a
+        existência de uma grade horária após remoção de uma das disciplinas conflitantes.
+
+        Caso haja, adicionaremos a matéria removida na lista "conflicting_classes" e,
+        se não houver nenhuma grade horária válida, mostraremos para o usuário que
+        ele pode escolher entre remover alguma das disciplinas conflitantes.
+
+        :param schedule: Uma grade horária
+        :param except_class: Uma disciplina em que não queremos verificar a existência de conflitos
+        :return: True se a grade horária for válida, False caso contrário
+        """
+
+        time_from = dict()
 
         for class_id in schedule:
             _class = self.classes[class_id]
-
             schedule_code = self.schedule_info[_class.schedule]["times"]
-            codes_counter += len(schedule_code)
-            schedule_codes = schedule_codes.union(schedule_code)
 
-            if codes_counter > len(schedule_codes):
-                """Caso o contador seja maior do que a união dos produtos cartesianos com o horário pretendido,
-                o horário não é válido, pois há horários que se sobrepõem"""
+            # Verificamos se a disciplina atual é a disciplina que queremos remover
+            if _class == except_class:
+                continue
+
+            for code in schedule_code:
+                if code not in time_from:
+                    time_from[code] = _class
+                    continue
+
+                # Caso haja uma "except_class", significa que estamos na etapa de remoção de uma disciplina
+                # conflitante. Portanto, não faremos nada.
+                if except_class is not None:
+                    return False
+
+                conflicting_class = time_from[code]
+
+                # Verificamos a ausência de conflito removendo a disciplina atual
+                self._handle_conflict(_class, schedule)
+
+                # Verificamos a ausência de conflito removendo a disciplina conflitante
+                self._handle_conflict(conflicting_class, schedule)
+
                 return False
 
         return True
@@ -172,10 +214,25 @@ class ScheduleGenerator:
         possible_schedules = product(*self.disciplines_list)
 
         for schedule in possible_schedules:
-            if self._is_valid_schedule(schedule):
+            if self._valid_schedule(schedule):
                 self._add_schedule(schedule)
 
-        return self.sort_by_priority()
+        extra_message = SUCCESS_MESSAGE
+
+        if not len(self.schedules):
+            extra_message = NO_SCHEDULES_ERROR
+
+        # Caso não haja nenhuma grade horária válida, mostraremos para o usuário que
+        # ele pode escolher entre remover alguma das disciplinas conflitantes.
+        if len(self.conflicting_classes):
+            extra_message += FIX_PROBLEM_MESSAGE
+            extra_message += "\n".join(map(
+                lambda discipline: f"- {discipline[0].code}: {discipline[0].name}", self.conflicting_classes.most_common(MAXIMUM_DISPLAYED_CONFLICTS)))
+
+        return {
+            'message': extra_message,
+            'schedules': self.sort_by_priority()
+        }
 
     def sort_by_priority(self):
         self.schedules.sort(key=lambda priority: sum(map(

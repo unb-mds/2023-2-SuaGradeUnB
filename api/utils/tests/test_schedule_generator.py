@@ -76,6 +76,20 @@ class TestSchedule(APITestCase):
             special_dates=[],
             discipline=self.discipline_2
         )
+        self.discipline_3 = dbh.get_or_create_discipline(
+            name='CÁLCULO 2',
+            code='MAT519',
+            department=self.department
+        )
+        self.class_7 = dbh.create_class(
+            teachers=['LUIZA YOKO'],
+            classroom='S1',
+            schedule='34T23',
+            days=['Segunda-Feira 10:00 às 11:50', 'Quarta-Feira 10:00 às 11:50'],
+            _class="1",
+            special_dates=[],
+            discipline=self.discipline_3
+        )
 
     def test_with_correct_parameters(self):
         """
@@ -85,9 +99,9 @@ class TestSchedule(APITestCase):
 
         schedule_generator = ScheduleGenerator(classes_id=[
                                                self.class_1.id, self.class_2.id, self.class_3.id, self.class_4.id], preference=[3, 2, 1])
-        schedules = schedule_generator.generate()
+        generated_data = schedule_generator.generate()
 
-        self.assertEqual(len(schedules), 4)
+        self.assertEqual(len(generated_data["schedules"]), 4)
 
     def test_with_higher_classes_limit(self):
         """
@@ -106,10 +120,10 @@ class TestSchedule(APITestCase):
         """
 
         schedule_generator = ScheduleGenerator(
-            classes_id=[self.class_4.id, self.class_6.id])
-        schedules = schedule_generator.generate()
+            classes_id=[self.class_4.id, self.class_6.id, self.class_7.id])
+        generated_data = schedule_generator.generate()
 
-        self.assertFalse(len(schedules))
+        self.assertFalse(len(generated_data["schedules"]))
 
     def test_with_empty_classes(self):
         """
@@ -117,9 +131,9 @@ class TestSchedule(APITestCase):
         """
 
         schedule_generator = ScheduleGenerator(classes_id=[])
-        schedules = schedule_generator.generate()
+        generated_data = schedule_generator.generate()
 
-        self.assertIsNone(schedules)
+        self.assertIsNone(generated_data)
 
     def test_with_invalid_class(self):
         """
@@ -148,7 +162,8 @@ class TestSchedule(APITestCase):
         schedule_generator = ScheduleGenerator(classes_id=[
                                                self.class_1.id, self.class_2.id, self.class_3.id, self.class_4.id], preference=[3, 2, 1])
 
-        schedules = schedule_generator.generate()
+        generated_data = schedule_generator.generate()
+        schedules = generated_data["schedules"]
         self.assertEqual(len(schedules), 4)
 
         schedules = schedule_generator.generate()

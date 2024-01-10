@@ -20,6 +20,11 @@ export interface CloudScheduleType {
     classes: Array<ScheduleClassType>;
 };
 
+export interface ScheduleAPIType {
+    schedules: Array<ScheduleClassType>;
+    message: string;
+};
+
 type SchedulesType = Array<Array<ScheduleClassType>>;
 type SchedulesCloudType = Array<CloudScheduleType>;
 
