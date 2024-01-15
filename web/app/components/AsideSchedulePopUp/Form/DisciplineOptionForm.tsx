@@ -68,7 +68,6 @@ export default function DisciplineOptionForm(props: DisciplineOptionFormPropsTyp
             setDisableDefault(true);
         }
     }, [disableDefault, currentYearPeriod, formData, selectedClasses]);
-    
 
     function handleYearAndPeriodChange(event: ChangeEvent<HTMLSelectElement>) {
         const text = event.target.value.trim();
