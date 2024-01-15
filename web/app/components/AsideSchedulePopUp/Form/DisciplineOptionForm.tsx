@@ -64,10 +64,8 @@ export default function DisciplineOptionForm(props: DisciplineOptionFormPropsTyp
             setFormData({ ...formData, year: year, period: period });
             setDisableDefault(true);
         }
-
-        props.setInfos([]);
-    }, [disableDefault]);
-
+    }, [disableDefault, currentYearPeriod, formData, selectedClasses]);
+    
     function handleChangeYearAndPeriod(text: string, handleSetYearPeriod: () => void) {
         if (currentYearPeriod && currentYearPeriod != text && selectedClasses.size) {
             errorToast('Há disciplinas selecionadas de outro período, não pode haver mistura!');
