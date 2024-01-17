@@ -21,6 +21,7 @@ import deleteSchedule from '@/app/utils/api/deleteSchedule';
 import { errorToast } from '@/app/utils/errorToast';
 
 import jsPDF from 'jspdf';
+import toast from 'react-hot-toast';
 
 const commonError = () => errorToast('Houve um erro na atualização das grades!');
 
@@ -97,14 +98,19 @@ function BottomPart(props: {
     const [changeDate, setChangeDate] = useState('');
 
     async function handleUploadToCloud() {
-        const saveResponse = await saveSchedule(props.schedules.localSchedule, user.access);
+        try {
+            const saveResponse = await saveSchedule(props.schedules.localSchedule, user.access);
 
-        if (saveResponse.status == 201) {
-            getSchedules(user.access).then(response => {
-                props.handleDelete();
-                setCloudSchedules(response.data);
-            }).catch(() => commonError());
-        } else errorToast('Não foi possível salvar a grade na nuvem!');
+            if (saveResponse.status == 201) {
+                getSchedules(user.access).then(response => {
+                    props.handleDelete();
+                    setCloudSchedules(response.data);
+                }).catch(() => commonError());
+                toast.success('Grade salva na nuvem!');
+            }
+        } catch (error) {
+            errorToast('Você atingiu o limite de grades na nuvem!')
+        }
     }
 
     useEffect(() => {
