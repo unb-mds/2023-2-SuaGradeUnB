@@ -109,7 +109,7 @@ function BottomPart(props: {
                 toast.success('Grade salva na nuvem!');
             }
         } catch (error) {
-            errorToast('Você atingiu o limite de grades na nuvem!')
+            errorToast('Você atingiu o limite de grades na nuvem!');
         }
     }
 
