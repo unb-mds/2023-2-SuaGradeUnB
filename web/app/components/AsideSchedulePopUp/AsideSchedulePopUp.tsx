@@ -1,4 +1,4 @@
-import { LegacyRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useSelectedClasses from '@/app/hooks/useSelectedClasses';
 import useShowPopUpContent from '@/app/hooks/useShowPopUpContent';
 
@@ -66,6 +66,10 @@ export default function AsideSchedulePopUp(props: AsideSchedulePopUpPropsType) {
     const { showPopUpContent } = useShowPopUpContent();
     const { selectedClasses, setSelectedClasses } = useSelectedClasses();
     const [searchedDisciplineInfos, setSearchedDisciplineInfos] = useState<Array<DisciplineType>>([]);
+
+    useEffect(() => {
+        if (!showPopUpContent) setSearchedDisciplineInfos([]);
+    }, [showPopUpContent, setSearchedDisciplineInfos]);
 
     function handleSelectClass(discipline: DisciplineType, cls: ClassType) {
         const disciplineId = discipline.id;
