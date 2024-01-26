@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 import useYearPeriod from '@/app/hooks/useYearPeriod';
 import useSelectedClasses from '@/app/hooks/useSelectedClasses';
 
@@ -44,10 +44,16 @@ function Form(props: FormPropsType) {
 }
 
 function getYearAndPeriod(text: string) {
-    const year = text.split('/')[0] || '';
-    const period = text.split('/')[1] || '';
-
+    const year = text.split('/')[0] || defaultFormData.year;
+    const period = text.split('/')[1] || defaultFormData.period;
+    
     return { year, period };
+}
+
+function handleChangeYearAndPeriod(text: string, currentYearPeriod: string, selectedClasses: any, handleSetYearPeriod: () => void) {
+    if (currentYearPeriod && selectedClasses && currentYearPeriod != text) {
+        errorToast('Há disciplinas selecionadas de outro período, não pode haver mistura!');
+    } else handleSetYearPeriod();
 }
 
 export default function DisciplineOptionForm(props: DisciplineOptionFormPropsType) {
@@ -55,11 +61,13 @@ export default function DisciplineOptionForm(props: DisciplineOptionFormPropsTyp
     const [disableDefault, setDisableDefault] = useState(false);
     const [formData, setFormData] = useState(defaultFormData);
 
-    function handleChangeYearAndPeriod(text: string, handleSetYearPeriod: () => void) {
-        if (currentYearPeriod && currentYearPeriod != text && selectedClasses.size) {
-            errorToast('Há disciplinas selecionadas de outro período, não pode haver mistura!');
-        } else handleSetYearPeriod();
-    }
+    useEffect(() => {
+        if (!disableDefault && formData == defaultFormData && selectedClasses.size) {
+            const { year, period } = getYearAndPeriod(currentYearPeriod);
+            setFormData({ ...formData, year: year, period: period });
+            setDisableDefault(true);
+        }
+    }, [disableDefault, currentYearPeriod, formData, selectedClasses]);
 
     function handleYearAndPeriodChange(event: ChangeEvent<HTMLSelectElement>) {
         const text = event.target.value.trim();
@@ -72,7 +80,7 @@ export default function DisciplineOptionForm(props: DisciplineOptionFormPropsTyp
                 setCurrentYearPeriod(text);
                 setDisableDefault(true);
             };
-            handleChangeYearAndPeriod(text, handleSetYearPeriod);
+            handleChangeYearAndPeriod(text, currentYearPeriod, selectedClasses.size, handleSetYearPeriod);
         }
     }
 
