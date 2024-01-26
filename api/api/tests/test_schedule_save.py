@@ -3,7 +3,7 @@ from rest_framework.reverse import reverse
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from ..views.save_schedule import SCHEDULES_LIMIT, SCHEDULES_LIMIT_ERROR_MSG
+from ..views.save_schedule import SCHEDULES_LIMIT, SCHEDULES_LIMIT_ERROR_MSG, SCHEDULES_INVALID_SCHEDULES_MSG
 
 from utils import db_handler as dbh
 
@@ -251,7 +251,7 @@ class TestScheduleSaveAPI(APITestCase, ErrorRequestBodyScheduleSave):
 
         response = self.make_post_request(schedule=schedule)
 
-        error_msg = 'error while saving schedule, you may have chosen classes that are not compatible'
+        error_msg = SCHEDULES_INVALID_SCHEDULES_MSG
         self.assertEqual(response.data.get('errors'), error_msg)
         self.assertEqual(response.status_code, 400)
 
