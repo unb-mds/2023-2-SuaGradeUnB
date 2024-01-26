@@ -19,9 +19,11 @@ import getSchedules from '@/app/utils/api/getSchedules';
 import { days, months } from '@/app/utils/dates';
 import deleteSchedule from '@/app/utils/api/deleteSchedule';
 import { errorToast } from '@/app/utils/errorToast';
+import { successToast } from '@/app/utils/successToast';
 
 import jsPDF from 'jspdf';
 import toast from 'react-hot-toast';
+import { Axios, AxiosError } from 'axios';
 
 const commonError = () => errorToast('Houve um erro na atualização das grades!');
 
@@ -97,6 +99,10 @@ function BottomPart(props: {
 
     const [changeDate, setChangeDate] = useState('');
 
+    /**
+    * Tenta salvar a grade na nuvem, se der certo, atualiza as grades locais.
+    * Caso contrário, exibe errotToast com mensagem retornada pela API.
+    */
     async function handleUploadToCloud() {
         try {
             const saveResponse = await saveSchedule(props.schedules.localSchedule, user.access);
@@ -106,10 +112,14 @@ function BottomPart(props: {
                     props.handleDelete();
                     setCloudSchedules(response.data);
                 }).catch(() => commonError());
-                toast.success('Grade salva na nuvem!');
+                successToast('Grade salva com sucesso!');
             }
         } catch (error) {
-            errorToast('Você atingiu o limite de grades na nuvem!');
+            const axiosError = error as AxiosError;
+            if (axiosError.response) {
+                const data = axiosError.response.data as { errors: string };
+                errorToast(data.errors);
+            }
         }
     }
 
