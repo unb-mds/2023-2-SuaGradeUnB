@@ -2,7 +2,7 @@ import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'reac
 import useYearPeriod from '@/app/hooks/useYearPeriod';
 import useSelectedClasses from '@/app/hooks/useSelectedClasses';
 
-import { errorToast } from '@/app/utils/errorToast';
+import { errorToast } from '@/app/utils/toast';
 
 import { DisciplineOptionFormPropsType, FormType, defaultFormData } from '../types/types';
 import { DisciplineType } from '@/app/utils/api/searchDiscipline';

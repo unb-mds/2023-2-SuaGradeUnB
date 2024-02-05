@@ -18,8 +18,7 @@ import saveSchedule from '@/app/utils/api/saveSchedule';
 import getSchedules from '@/app/utils/api/getSchedules';
 import { days, months } from '@/app/utils/dates';
 import deleteSchedule from '@/app/utils/api/deleteSchedule';
-import { errorToast } from '@/app/utils/errorToast';
-import { successToast } from '@/app/utils/successToast';
+import { errorToast, successToast } from '@/app/utils/toast';
 
 import jsPDF from 'jspdf';
 import toast from 'react-hot-toast';
