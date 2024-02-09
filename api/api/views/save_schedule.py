@@ -14,7 +14,7 @@ from api import serializers
 
 SCHEDULES_LIMIT = 10
 SCHEDULES_LIMIT_ERROR_MSG = f"Você atingiu o limite de {SCHEDULES_LIMIT} grades na nuvem."
-SCHEDULES_INVALID_SCHEDULES_MSG = "Erro ao salvar a grade horária. Você pode ter escolhido disciplinas com horários incompatíveis."
+SCHEDULES_INVALID_SCHEDULES_MSG = "Erro ao salvar a grade horária. Você pode ter escolhido matérias com horários incompatíveis."
 SCHEDULES_SAVE_ERROR_MSG = "Ocorreu um erro no servidor ao salvar a grade horária. Tente novamente."
 
 
