@@ -2,7 +2,7 @@
 
 import { createContext, useState } from 'react';
 
-import { errorToast } from '../../utils/errorToast';
+import { errorToast } from '../../utils/toast';
 
 import { ProviderJSXPropsType, SelectedClassesContextProviderPropsType, SelectedClassesContextType, SelectedClassesType } from './types';
 

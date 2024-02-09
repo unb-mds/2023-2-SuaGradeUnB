@@ -13,7 +13,7 @@ import Modal from '@/app/components/Modal/Modal';
 import { ScheduleAPIType, ScheduleClassType } from '@/app/contexts/SchedulesContext';
 
 import generateSchedule, { EachFieldNumber } from '@/app/utils/api/generateSchedule';
-import { errorToast } from '@/app/utils/errorToast';
+import { errorToast } from '@/app/utils/toast';
 
 function PreferenceOrder({ setPreference }: {
     setPreference: (preference: EachFieldNumber) => void
@@ -58,7 +58,7 @@ export default function GenerateScheduleButton() {
                 const schedules = data.schedules as Array<ScheduleClassType>;
 
                 if (!schedules.length) {                    
-                    errorToast(data.message, data.message.split('\n').length == 1);
+                    errorToast(data.message, {centered: data.message.split('\n').length == 1});
                     setLoading(false);
                 } else {
                     setLocalSchedules(schedules);

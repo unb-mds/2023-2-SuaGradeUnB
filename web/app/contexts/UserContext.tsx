@@ -7,7 +7,7 @@ import { UserData } from '../components/SignInSection';
 import { settings } from '../utils/settings';
 import request from '../utils/request';
 import getSchedules from '../utils/api/getSchedules';
-import { errorToast } from '../utils/errorToast';
+import { errorToast } from '../utils/toast';
 import useSchedules from '../hooks/useSchedules';
 
 export interface User {
