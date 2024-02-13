@@ -18,9 +18,10 @@ import saveSchedule from '@/app/utils/api/saveSchedule';
 import getSchedules from '@/app/utils/api/getSchedules';
 import { days, months } from '@/app/utils/dates';
 import deleteSchedule from '@/app/utils/api/deleteSchedule';
-import { errorToast } from '@/app/utils/errorToast';
+import { errorToast, successToast } from '@/app/utils/toast';
 
 import jsPDF from 'jspdf';
+import { AxiosError } from 'axios';
 
 const commonError = () => errorToast('Houve um erro na atualização das grades!');
 
@@ -92,20 +93,8 @@ function BottomPart(props: {
     }
 }) {
     const { user } = useUser();
-    const { setCloudSchedules } = useSchedules();
 
     const [changeDate, setChangeDate] = useState('');
-
-    async function handleUploadToCloud() {
-        const saveResponse = await saveSchedule(props.schedules.localSchedule, user.access);
-
-        if (saveResponse.status == 201) {
-            getSchedules(user.access).then(response => {
-                props.handleDelete();
-                setCloudSchedules(response.data);
-            }).catch(() => commonError());
-        } else errorToast('Não foi possível salvar a grade na nuvem!');
-    }
 
     useEffect(() => {
         if (props.isCloud && props.schedules.cloudSchedule?.created_at) {
@@ -115,18 +104,12 @@ function BottomPart(props: {
 
     return (
         <div className={`flex justify-between items-center w-full ${props.isCloud ? '-bottom-14' : '-bottom-7'}`}>
-            <div
-                className='text-[#000000] opacity-40 text-lg font-bold'
-            >
+            <div className='text-[#000000] opacity-40 text-lg font-bold' >
                 Grade {props.position} <br />
                 {props.isCloud && changeDate && <span className='text-sm font-normal'>{changeDate}</span>}
             </div>
             <div className='flex gap-4 h-[25px] opacity-50'>
-                {!props.isCloud && !user.is_anonymous &&
-                    <button onClick={() => handleUploadToCloud()}>
-                        <Image width={25} src={uploadIcon} alt="ícone de upload" />
-                    </button>
-                }
+                {!props.isCloud && !user.is_anonymous && <UploadToCloudButton schedules={props.schedules} handleDelete={props.handleDelete} />}
                 <button onClick={() => {
                     props.setters.setActiveScheduleModal(true);
                     props.setters.setToDownload(true);
@@ -136,6 +119,47 @@ function BottomPart(props: {
                 <DeleteButton setActiveDeleteModal={props.setters.setActiveDeleteModal} />
             </div>
         </div>
+    );
+}
+
+function UploadToCloudButton({ ...props }: {
+    schedules: {
+        localSchedule?: Array<ScheduleClassType>;
+    };
+    handleDelete: () => void;
+}) {
+    const { user } = useUser();
+    const { setCloudSchedules } = useSchedules();
+
+    function handleSuccessToSave() {
+        getSchedules(user.access).then(response => {
+            props.handleDelete();
+            setCloudSchedules(response.data);
+        }).catch(() => commonError());
+        successToast('Grade salva com sucesso!');
+    }
+
+    function handleErrorToSave(axiosError: AxiosError) {
+        if (axiosError.response) {
+            const data = axiosError.response.data as { errors: string };
+            errorToast(data.errors);
+        }
+    }
+
+    /**
+    * Tenta salvar a grade na nuvem, se der certo, atualiza as grades locais.
+    * Caso contrário, exibe errorToast com mensagem retornada pela API.
+    */
+    async function handleUploadToCloud() {
+        saveSchedule(props.schedules.localSchedule, user.access).then(response => {
+            if (response.status == 201) handleSuccessToSave();
+        }).catch((error: any) => handleErrorToSave(error));
+    }
+
+    return (
+        <button onClick={() => handleUploadToCloud()}>
+            <Image width={25} src={uploadIcon} alt="ícone de upload" />
+        </button>
     );
 }
 

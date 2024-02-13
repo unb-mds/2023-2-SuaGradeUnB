@@ -13,7 +13,9 @@ from api.views.utils import handle_400_error
 from api import serializers
 
 SCHEDULES_LIMIT = 10
-SCHEDULES_LIMIT_ERROR_MSG = f"you have reached the limit of {SCHEDULES_LIMIT} schedules"
+SCHEDULES_LIMIT_ERROR_MSG = f"Você atingiu o limite de {SCHEDULES_LIMIT} grades na nuvem."
+SCHEDULES_INVALID_SCHEDULES_MSG = "Erro ao salvar a grade horária. Você pode ter escolhido matérias com horários incompatíveis."
+SCHEDULES_SAVE_ERROR_MSG = "Ocorreu um erro no servidor ao salvar a grade horária. Tente novamente."
 
 
 class SaveSchedule():
@@ -51,13 +53,13 @@ class SaveSchedule():
         try:
             valid_schedule = validate_received_schedule(current_db_classes_ids)
         except:
-            error_msg = "error while saving schedule, you may have chosen classes that are not compatible"
+            error_msg = SCHEDULES_INVALID_SCHEDULES_MSG
             return handle_400_error(error_msg)
 
         user = request.user
         answer = save_schedule(user, valid_schedule)
 
-        return response.Response(status=status.HTTP_201_CREATED) if answer else handle_400_error("error while saving schedule")
+        return response.Response(status=status.HTTP_201_CREATED) if answer else handle_400_error(SCHEDULES_SAVE_ERROR_MSG)
 
 
 def check_discipline_key_existence(key: str, discipline_key: str, **kwargs):
