@@ -4,12 +4,12 @@ import { createContext, useState } from 'react';
 
 import { ClassValueType } from './SelectedClassesContext/types';
 
-interface ClassesToShowContextType {
+export interface ClassesToShowContextType {
     classesToShow: Array<ClassValueType>,
     setClassesToShow: (value: Array<ClassValueType>) => void;
 }
 
-interface ClassesToShowContextProviderPropsType {
+export interface ClassesToShowContextProviderPropsType {
     children: React.ReactNode
 }
 
