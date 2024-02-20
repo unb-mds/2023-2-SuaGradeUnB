@@ -27,10 +27,15 @@ function DisciplineFragmentJSX({ handleDisciplineToggle, ...props }: {
         <Fragment>
             <button
                 onClick={() => handleDisciplineToggle(index)}
-                className='flex items-center gap-3'
+                className='flex items-center gap-3 relative'
             >
-                <Image src={discipline.expanded ? expand_more : expand_less} alt="expand icon" />
-                <span className='font-semibold'>{discipline.name} - {discipline.code}</span>
+                <Image
+                    className='absolute left-0'
+                    height={24} width={24}
+                    src={discipline.expanded ? expand_more : expand_less} alt="expand icon" />
+                <span className='font-semibold text-left pl-6'>
+                    {discipline.name} - {discipline.code}
+                </span>
             </button>
             {discipline.expanded &&
                 <div className='flex flex-col gap-2'>
