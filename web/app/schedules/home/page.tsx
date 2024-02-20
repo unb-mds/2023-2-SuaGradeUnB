@@ -30,11 +30,10 @@ function DisciplineBlockJSX({ ...props }: {
 
     return (
         <Fragment key={props.index}>
-            {props.index === classAppearance ?
-                <span className='flex justify-center items-center rounded-md font-medium bg-primary bg-opacity-80 w-10/12 h-8'>
+            {props.index === classAppearance &&
+                <span className='flex justify-center items-center text-center rounded-md font-medium bg-primary bg-opacity-80 w-10/12 p-2'>
                     {props.cls.discipline.name}
                 </span>
-                : null
             }
             <DisciplineBox currentClass={props.cls} discipline={props.cls.discipline} />
         </Fragment>
