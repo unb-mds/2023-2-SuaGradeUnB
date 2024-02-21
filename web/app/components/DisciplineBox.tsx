@@ -32,15 +32,15 @@ export default function DisciplineBox({ currentClass, discipline }: DisciplineBo
     }
 
     return (
-        <span className='flex justify-between rounded-lg w-10/12 py-2 px-4 shadow-lg bg-snow-primary'>
+        <span className='relative flex justify-between rounded-lg w-10/12 py-2 pl-4 pr-8 shadow-lg bg-snow-primary'>
             <div>
                 <section>
-                    <span className='font-semibold'>Disciplina: </span> {discipline.name} - {discipline.code}
+                    <span className='font-semibold'>Código: </span> {discipline.code}
                 </section>
                 <ClassInfo currentClass={currentClass} />
             </div>
-            <button onClick={handleDeleteClass}>
-                <Image src={deleteIcon} alt="deletar" />
+            <button onClick={handleDeleteClass} className='absolute right-1 top-0 bottom-0 my-auto'>
+                <Image height={24} width={24} src={deleteIcon} alt="deletar" />
             </button>
         </span>
     );
