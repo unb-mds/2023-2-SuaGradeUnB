@@ -13,6 +13,7 @@ from drf_yasg import openapi
 from utils.sessions import get_current_year_and_period, get_next_period
 from utils.schedule_generator import ScheduleGenerator
 from utils.db_handler import get_best_similarities_by_name, filter_disciplines_by_teacher, filter_disciplines_by_year_and_period, filter_disciplines_by_code
+from utils.search import SearchTool
 
 from .. import serializers
 from api.swagger import Errors
@@ -37,17 +38,16 @@ class Search(APIView):
         return string
 
     def filter_disciplines(self, request: request.Request, name: str) -> QuerySet[Discipline]:
-        unicode_name = unidecode(name).casefold()
-        model_handler = admin.ModelAdmin(Discipline, admin.site)
-        model_handler.search_fields = [
-            'unicode_name', 'code']
+        search_handler = SearchTool(Discipline)
+        search_fields = ['unicode_name', 'code']
+        
+        result = search_handler.filter_by_search_result(
+            request = request,
+            search_str = name,
+            search_fields = search_fields
+        )
 
-        disciplines = Discipline.objects.all()
-
-        disciplines, _ = model_handler.get_search_results(
-            request, disciplines, unicode_name)
-
-        return disciplines
+        return result
 
     def retrieve_disciplines_by_similarity(self, request: request.Request, name: str) -> QuerySet[Discipline]:
         disciplines = self.filter_disciplines(request, name)
