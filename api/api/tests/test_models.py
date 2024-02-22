@@ -6,6 +6,7 @@ from api.models import Department, Discipline, Class
 class ModelsTest(TestCase):
     def create_data(self):
         self.department = Department.objects.create(
+            name='Instituto de Informática',
             code='INF',
             year="2023",
             period="2"
@@ -46,6 +47,7 @@ class ModelsTest(TestCase):
         self.assertEqual(self._class.discipline, self.discipline)
 
     def test_create_department(self):
+        self.assertEqual(self.department.name, 'Instituto de Informática')
         self.assertEqual(self.department.code, 'INF')
         self.assertEqual(self.department.year, '2023')
         self.assertEqual(self.department.period, '2')
@@ -85,4 +87,3 @@ class ModelsTest(TestCase):
 
         self.assertTrue(empty_model)
         self.assertTrue(empty_cache)
-    

@@ -25,7 +25,7 @@ Logo, temos a função get_list_of_departments() que retorna uma lista com os c�
 '''
 
 
-def get_list_of_departments(response=get_response(create_request_session())) -> Optional[List]:
+def get_list_of_departments(response=get_response(create_request_session())) -> Optional[tuple[list[str], list[str]]]:
     """Obtem a lista de departamentos da UnB."""
     soup = BeautifulSoup(
         response.content, "html.parser")  # Create a BeautifulSoup object
@@ -38,14 +38,15 @@ def get_list_of_departments(response=get_response(create_request_session())) -> 
     # Find all <option> tags (It contains all departments)
     options_tag = departments.find_all("option")
     department_ids = []
-
+    departments_names = []
     for option in options_tag:
         value = option["value"]
 
         if (value != "0"):
             department_ids.append(value)
-
-    return department_ids
+            departments_names.append(
+                option.get_text().replace("\n", "").replace("\r", "").replace("\t", "").replace("- BRASÍLIA", ""))
+    return department_ids, departments_names
 
 
 class DisciplineWebScraper:

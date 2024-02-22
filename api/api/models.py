@@ -16,7 +16,7 @@ class CustomModel(models.Model):
         try:
             cache.delete(kwargs['cache_key'])
             kwargs.pop('cache_key')
-        except: # pragma: no cover
+        except:  # pragma: no cover
             raise ValueError(cache_error_msg)
         else:
             super(CustomModel, self).delete()
@@ -29,6 +29,7 @@ class Department(CustomModel):
     year:str -> Ano do departamento
     period:str -> Período do departamento
     """
+    name = models.CharField(max_length=128, default='')
     code = models.CharField(max_length=10)
     year = models.CharField(max_length=4, default='0000')
     period = models.CharField(max_length=1, default='1')
