@@ -1,7 +1,5 @@
-from unidecode import unidecode
-from ..models import Class, Discipline
+from ..models import Discipline
 
-from django.contrib import admin
 from django.db.models.query import QuerySet
 
 from rest_framework.decorators import APIView
