@@ -6,9 +6,9 @@ from utils.json_pretty import json_prettify
 
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):
-    list_display = ['code', 'year', 'period']
-    search_fields = ['code']
-    ordering = ['year', 'period']
+    list_display = ['name', 'code', 'year', 'period']
+    search_fields = ['code', 'name']
+    ordering = ['year', 'period', 'name']
 
 
 @admin.register(Discipline)
