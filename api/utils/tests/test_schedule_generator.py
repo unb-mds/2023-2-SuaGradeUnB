@@ -7,6 +7,7 @@ from random import randint
 class TestSchedule(APITestCase):
     def setUp(self):
         self.department = dbh.get_or_create_department(
+            name='Instituto de Computação',
             code='CIC',
             year='2030',
             period='2'
@@ -85,7 +86,8 @@ class TestSchedule(APITestCase):
             teachers=['LUIZA YOKO'],
             classroom='S1',
             schedule='34T23',
-            days=['Segunda-Feira 10:00 às 11:50', 'Quarta-Feira 10:00 às 11:50'],
+            days=['Segunda-Feira 10:00 às 11:50',
+                  'Quarta-Feira 10:00 às 11:50'],
             _class="1",
             special_dates=[],
             discipline=self.discipline_3

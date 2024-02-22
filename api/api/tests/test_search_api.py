@@ -7,7 +7,7 @@ import json
 class TestSearchAPI(APITestCase):
     def setUp(self) -> None:
         self.department = get_or_create_department(
-            code='518', year='2023', period='2')
+            code='518', name='Departamento de Computação', year='2023', period='2')
         self.discipline_1 = get_or_create_discipline(
             name='CÁLCULO 1', code='MAT518', department=self.department)
         self.discipline_2 = get_or_create_discipline(
