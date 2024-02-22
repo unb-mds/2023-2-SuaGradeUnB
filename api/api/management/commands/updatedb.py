@@ -60,18 +60,20 @@ class Command(BaseCommand):
                     target=self.delete_period, args=(year, period,))
                 threads.append(thread)
                 thread.start()
-            
+
             for thread in threads:
                 thread.join()
             threads.clear()
 
             return
 
-        departments_ids = get_list_of_departments()
-
-        if departments_ids is None:
-            self.display_error_message("department_ids")
+        departments_data = get_list_of_departments()
+        if departments_data is None:
+            self.display_error_message("get_list_of_departments")
             return
+        departments_ids, departments_names = departments_data
+        if departments_ids is None or departments_names is None:
+            self.display_error_message("get_list_of_departments")
 
         print("Atualizando o banco de dados...")
 
@@ -81,7 +83,7 @@ class Command(BaseCommand):
                 print(f"Começando atualização de {year}/{period}")
                 with transaction.atomic():
                     self.update_departments(
-                        departments_ids, year, period, options)
+                        departments_ids=departments_ids, departments_names=departments_names, year=year, period=period, options=options)
 
                 self.display_success_update_message(
                     operation=f"{year}/{period}", start_time=start_time)
@@ -105,9 +107,9 @@ class Command(BaseCommand):
 
         print(f"\nTempo total de execução: {(time() - start_tot_time):.1f}s")
 
-    def update_departments(self, departments_ids: list, year: str, period: str, options: Any) -> None:
+    def update_departments(self, departments_ids: list, departments_names: list, year: str, period: str, options: Any) -> None:
         """Atualiza os departamentos do banco de dados e suas respectivas disciplinas."""
-        def execute_update(department_id):
+        def execute_update(department_id, department_name) -> None:
             scraper = DisciplineWebScraper(department_id, year, period)
             fingerprint = scraper.create_page_fingerprint()
 
@@ -124,7 +126,7 @@ class Command(BaseCommand):
 
             disciplines_list = scraper.get_disciplines()
             department = dbh.get_or_create_department(
-                code=department_id, year=year, period=period)
+                code=department_id, name=department_name, year=year, period=period)
 
             if options['descriptive']:
                 print(f"Departamento ({department_id}) desatualizado, operação necessária")
@@ -146,14 +148,14 @@ class Command(BaseCommand):
                                      days=class_info["days"], _class=class_info["class_code"], discipline=discipline, special_dates=class_info["special_dates"])
 
             cache.set(cache_key, fingerprint, timeout=THIRTY_DAYS_IN_SECS)
-            
+
             if options['descriptive']:
                 print(f'Operação de atualização finalizada para o departamento ({department_id})')
-            
+
         threads = deque()
-        for department_id in departments_ids:
+        for department_id, department_name in zip(departments_ids, departments_names):
             thread = threading.Thread(
-                target=execute_update, args=(department_id,))
+                target=execute_update, args=(department_id, department_name))
             threads.append(thread)
             thread.start()
 
