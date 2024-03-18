@@ -10,10 +10,10 @@ charset-normalizer==3.2.0
 click==8.1.7
 colorama==0.4.6
 coverage==7.3.2
-cryptography==42.0.2
+cryptography==42.0.4
 defusedxml==0.7.1
 dj-database-url==2.1.0
-Django==4.2.10
+Django==4.2.11
 django-cors-headers==4.3.0
 django-redis==5.4.0
 djangorestframework==3.14.0
