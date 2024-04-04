@@ -23,4 +23,3 @@ class SearchTool:
             request, values, unicode_search_str)
 
         return values
-    
