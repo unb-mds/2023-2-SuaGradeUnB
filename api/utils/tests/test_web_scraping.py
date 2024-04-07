@@ -59,9 +59,12 @@ class WebScrapingTest(APITestCase):
             reverse('utils:sigaa', kwargs={"path": "sigaa"}))
 
         departments = wbp.get_list_of_departments(response)
-        self.assertEqual(type(list()), type(departments))
+        self.assertEqual(type(tuple()), type(departments))
         if len(departments):
-            self.assertEqual(type(str()), type(departments[0]))
+            self.assertEqual(type(list()), type(departments[0]))
+            self.assertEqual(type(list()), type(departments[1]))
+            self.assertEqual(type(str()), type(departments[0][0]))
+            self.assertEqual(type(str()), type(departments[1][0]))
 
     def test_get_list_of_departments_when_empty(self):
         response = self.client.get(

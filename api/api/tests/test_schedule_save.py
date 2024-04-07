@@ -21,8 +21,10 @@ class TestScheduleSaveAPI(APITestCase, ErrorRequestBodyScheduleSave):
 
     def setDepartmentInfos(self):
         self.department_infos = [
-            ('518', '2023', '2'), ('673', '2023', '2'),
-            ('518', '2024', '1'), ('673', '2024', '1')
+            ('518', 'Departamento de Matemática e Estatística',
+             '2023', '2'), ('673', 'Departamento de Matemática e Estatística', '2023', '2'),
+            ('518', 'Departamento de Matemática e Estatística', '2024',
+             '1'), ('673', 'Departamento de Matemática e Estatística', '2024', '1')
         ]
 
     def setDisciplineInfos(self):
@@ -98,9 +100,9 @@ class TestScheduleSaveAPI(APITestCase, ErrorRequestBodyScheduleSave):
         self.departments = {}
         self.setDepartmentInfos()
         for i, infos in enumerate(self.department_infos):
-            code, year, period = infos
+            code, name, year, period = infos
             new_department = dbh.get_or_create_department(
-                code=code, year=year, period=period
+                code=code, name=name, year=year, period=period
             )
             self.departments[f'department_{i}_{year}_{period}'] = new_department
 

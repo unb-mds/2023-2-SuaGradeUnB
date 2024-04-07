@@ -15,9 +15,9 @@ import json
 """Este módulo lida com as operações de banco de dados."""
 
 
-def get_or_create_department(code: str, year: str, period: str) -> Department:
+def get_or_create_department(code: str, name: str, year: str, period: str) -> Department:
     """Cria um departamento."""
-    return Department.objects.get_or_create(code=code, year=year, period=period)[0]
+    return Department.objects.get_or_create(code=code, name=name, year=year, period=period)[0]
 
 
 def get_or_create_discipline(name: str, code: str, department: Department) -> Discipline:
