@@ -11,7 +11,8 @@ import json
 
 class TestDeleteSchedules(APITestCase):
     def setUp(self):
-        self.department = dbh.get_or_create_department('518', '2023', '2')
+        self.department = dbh.get_or_create_department(
+            '518', 'Departamento de Matemática e Estatística', '2023', '2')
         self.discipline = dbh.get_or_create_discipline(
             'CÁLCULO 1', 'MAT0025', self.department)
         self._class = dbh.create_class(['EDSON ALVES DA COSTA JUNIOR'], 'FGA - I8', '35T23', [

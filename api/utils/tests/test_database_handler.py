@@ -7,6 +7,7 @@ class DatabaseHandlerTest(APITestCase):
     def test_create_department(self):
         department = dbh.get_or_create_department(
             code='TCC',
+            name='Tecnologia em Ciência da Computação',
             year='2025',
             period='1'
         )
@@ -18,6 +19,7 @@ class DatabaseHandlerTest(APITestCase):
     def test_create_discipline(self):
         department = dbh.get_or_create_department(
             code='SGU',
+            name='Sistemas de Informação',
             year='2023',
             period='2'
         )
@@ -35,6 +37,7 @@ class DatabaseHandlerTest(APITestCase):
     def test_create_class(self):
         department = dbh.get_or_create_department(
             code='SGU',
+            name='Sistemas de Informação',
             year='2023',
             period='2'
         )
@@ -67,6 +70,7 @@ class DatabaseHandlerTest(APITestCase):
     def test_delete_classes_from_discipline(self):
         department = dbh.get_or_create_department(
             code='HCQ',
+            name='Ciência da Computação',
             year='2023',
             period='2'
         )
@@ -96,6 +100,7 @@ class DatabaseHandlerTest(APITestCase):
     def test_delete_all_departments_using_year_and_period(self):
         department = dbh.get_or_create_department(
             code='MDS',
+            name='Departamento de Matemática e Estatística',
             year='2025',
             period='2'
         )
@@ -110,6 +115,7 @@ class DatabaseHandlerTest(APITestCase):
     def test_filter_disciplines_by_code(self):
         department = dbh.get_or_create_department(
             code='FGA',
+            name='Departamento de Engenharia de Software',
             year='2023',
             period='2'
         )
@@ -130,6 +136,7 @@ class DatabaseHandlerTest(APITestCase):
     def test_filter_disciplines_by_year_and_period(self):
         department = dbh.get_or_create_department(
             code='THZ',
+            name='Departamento de Engenharia de Software',
             year='2027',
             period='1'
         )
@@ -151,6 +158,7 @@ class DatabaseHandlerTest(APITestCase):
     def test_get_best_similarities_by_name(self):
         department = dbh.get_or_create_department(
             code='MAT',
+            name='Departamento de Matemática e Estatística',
             year='2027',
             period='1'
         )
@@ -185,6 +193,7 @@ class DatabaseHandlerTest(APITestCase):
     def test_get_class_by_id(self):
         department = dbh.get_or_create_department(
             code='MAT',
+            name='Departamento de Matemática e Estatística',
             year='2027',
             period='1'
         )
