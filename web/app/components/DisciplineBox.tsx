@@ -1,17 +1,8 @@
-import Image from 'next/image';
-
 import { ClassValueType } from '../contexts/SelectedClassesContext/types';
-
 import useSelectedClasses from '../hooks/useSelectedClasses';
-
 import ClassInfo from './ClassInfo';
-
-import deleteIcon from '../../public/icons/delete.jpg';
-
 import { FiTrash2 } from 'react-icons/fi';
-
 import _ from 'lodash';
-
 interface DisciplineBoxPropsType {
   currentClass: ClassValueType;
   discipline: {
@@ -44,12 +35,8 @@ export default function DisciplineBox({
         </section>
         <ClassInfo currentClass={currentClass} />
       </div>
-      <button
-        onClick={handleDeleteClass}
-        // className="absolute right-1 top-0 bottom-0 my-auto"
-      >
+      <button onClick={handleDeleteClass}>
         <FiTrash2 size={24} />
-        {/* <Image height={24} width={24} src={deleteIcon} alt="deletar" /> */}
       </button>
     </span>
   );

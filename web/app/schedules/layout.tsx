@@ -4,25 +4,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import useUser from '@/app/hooks/useUser';
 import useWindowDimensions from '../hooks/useWindowDimensions';
-
 import Image from 'next/image';
 import Button from '../components/Button';
 import AsideButton from '../components/AsideButton';
 import Protected from '../components/Protected';
 import InfoHeader from '../components/InfoHeader';
 import { LoadingScreen } from '../components/LoadingScreen';
-
-import homeIcon from '@/public/icons/home.jpg';
-import infoIcon from '@/public/icons/info.jpg';
 import googleIcon from '@/public/icons/google.jpg';
-import scheduleIcon from '@/public/icons/schedule.jpg';
-import profileIcon from '@/public/icons/profile.jpg';
-import {
-  RiMenuLine,
-  RiCalendarLine,
-  RiUserLine,
-  RiInformation2Line,
-} from 'react-icons/ri';
+import { RiCalendarLine } from 'react-icons/ri';
 import { FiHome, FiInfo, FiUser } from 'react-icons/fi';
 
 function calculatePositionOfBlob(

@@ -4,49 +4,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-:root {
-  --main-green: hsl(149, 80%, 38%);
-  --main-white: hsl(0, 0%, 96%);
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-}
-
-::-webkit-scrollbar-track {
-  height: 4px;
-  background: var(--main-white);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--main-green);
-  border-radius: 5px;
-}
-
-body {
-  scrollbar-width: thin;
-  scrollbar-color: var(--main-green) var(--main-white);
-}
-
-body::-moz-scrollbar-thumb {
-  background-color: var(--main-green);
-  border-radius: 5px;
-}
-
-body::-moz-scrollbar-track {
-  background-color: var(--main-white);
-}
-
-
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -74,6 +31,8 @@ body::-moz-scrollbar-track {
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --main-green: 149, 80%, 38%;
+    --main-white: 0, 0%, 96%;
   }
 
   .dark {
@@ -101,8 +60,54 @@ body::-moz-scrollbar-track {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --main-green: 149, 80%, 38%;
+    --main-white: 0, 0%, 96%;
   }
 }
+
+
+/* 
+:root {
+  --main-green: hsl(149, 80%, 38%);
+  --main-white: hsl(0, 0%, 96%);
+} */
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  height: 4px;
+  background: var(--main-white);
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--main-green));
+  border-radius: 5px;
+}
+
+body {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--main-green)) hsl(var(--main-white));
+}
+
+body::-moz-scrollbar-thumb {
+  background-color: hsl(var(--main-green));
+  border-radius: 5px;
+}
+
+body::-moz-scrollbar-track {
+  background-color: hsl(var(--main-white));
+}
+
+
 
 /* @layer base {
   * {

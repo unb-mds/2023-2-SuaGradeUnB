@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useEffect, useRef } from 'react';
+import { Fragment, useEffect } from 'react';
 import useSelectedClasses from '@/app/hooks/useSelectedClasses';
 import useClassesToShow from '@/app/hooks/useClassesToShow';
 import DisciplineBox from '@/app/components/DisciplineBox';

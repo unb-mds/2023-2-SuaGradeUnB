@@ -22,13 +22,13 @@ const DrawerPortal = DrawerPrimitive.Portal;
 
 const DrawerClose = DrawerPrimitive.Close;
 
-type DialogOverlayProps = {
+type DrawerOverlayProps = {
   showOverlay?: boolean;
 } & React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay>;
 
 const DrawerOverlay = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Overlay>,
-  DialogOverlayProps
+  DrawerOverlayProps
 >(({ className, showOverlay = true, ...props }, ref) => (
   <DrawerPrimitive.Overlay
     ref={ref}
@@ -44,12 +44,13 @@ type DrawerContentProps = React.ComponentPropsWithoutRef<
   typeof DrawerPrimitive.Content
 > & {
   showOverlay?: boolean;
+  hideDragIndicator?: boolean;
 };
 
 const DrawerContent = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Content>,
   DrawerContentProps
->(({ className, children, showOverlay, ...props }, ref) => (
+>(({ className, children, showOverlay, hideDragIndicator, ...props }, ref) => (
   <DrawerPortal>
     <DrawerOverlay showOverlay={showOverlay} />
     <DrawerPrimitive.Content
@@ -60,7 +61,10 @@ const DrawerContent = React.forwardRef<
       )}
       {...props}
     >
-      <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />
+      {!hideDragIndicator && (
+        <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-muted" />
+      )}
+
       {children}
     </DrawerPrimitive.Content>
   </DrawerPortal>

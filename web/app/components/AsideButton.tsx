@@ -23,10 +23,6 @@ export default function AsideButton({
       name={pageName}
     >
       {image}
-      {/* <Image
-                width={25} height={25}
-                src={image} alt={`ícone da página ${pageName}`}
-            /> */}
     </Button>
   );
 }

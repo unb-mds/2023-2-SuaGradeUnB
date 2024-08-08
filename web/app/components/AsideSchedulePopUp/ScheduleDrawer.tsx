@@ -15,8 +15,9 @@ export const ScheduleDrawer = () => {
       </DrawerTrigger>
 
       <DrawerContent
-        className="max-w-2xl bg-snow-primary h-full max-h-[75vh] rounded-t-[2.5rem] sm:mx-auto mx-6 shadow-lg border-0"
+        className="max-w-2xl bg-snow-secondary h-full max-h-[82%] rounded-t-[2.5rem] sm:mx-auto mx-6 shadow-lg border-0"
         showOverlay={false}
+        hideDragIndicator
       >
         <ScheduleDrawerContent />
       </DrawerContent>

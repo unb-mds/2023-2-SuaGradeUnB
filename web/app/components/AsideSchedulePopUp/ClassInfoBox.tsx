@@ -33,7 +33,7 @@ export default function ClassInfoBox({
     <div
       className={twMerge(
         'grid grid-cols-7 hover:bg-opacity-40 hover:cursor-pointer rounded-md py-1 px-2',
-        selected ? 'bg-primary bg-opacity-40' : 'hover:bg-gray-300',
+        selected ? 'bg-primary/40' : 'hover:bg-gray-300',
         props.className
       )}
     >
