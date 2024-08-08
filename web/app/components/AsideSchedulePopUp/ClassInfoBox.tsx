@@ -53,23 +53,7 @@ export default function ClassInfoBox({
         }
         className="hover:cursor-pointer col-start-7 flex justify-center items-center"
       >
-        {selected ? (
-          <FiMinus size={24} />
-        ) : (
-          <FiPlus size={24} />
-          //   <Image
-          //     width={25}
-          //     height={25}
-          //     src={removeIcon}
-          //     alt="ícone remover matéria"
-          //   />
-          //   <Image
-          //     width={25}
-          //     height={25}
-          //     src={addIcon}
-          //     alt="ícone adicionar matéria"
-          //   />
-        )}
+        {selected ? <FiMinus size={24} /> : <FiPlus size={24} />}
       </button>
     </div>
   );

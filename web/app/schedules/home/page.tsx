@@ -3,25 +3,10 @@
 import { Fragment, useEffect, useRef } from 'react';
 import useSelectedClasses from '@/app/hooks/useSelectedClasses';
 import useClassesToShow from '@/app/hooks/useClassesToShow';
-
 import DisciplineBox from '@/app/components/DisciplineBox';
-import AsideSchedulePopUp from '@/app/components/AsideSchedulePopUp/AsideSchedulePopUp';
 import GenerateScheduleButton from './components/GenerateScheduleButton';
-import AddDisciplineButton from './components/AddDisciplineButton';
-
-import ClickOutsideHandler from './handlers/ClickOutsideHandler';
-
-import ShowPopUpContentContextProvider from '@/app/contexts/ShowPopUpContentContext';
-
 import { ClassValueType } from '@/app/contexts/SelectedClassesContext/types';
-import {
-  Drawer,
-  DrawerContent,
-  DrawerOverlay,
-  DrawerTrigger,
-} from '@/app/components/ui/drawer';
 import { ScheduleDrawer } from '@/app/components/AsideSchedulePopUp/ScheduleDrawer';
-import { ScheduleDrawerContent } from '@/app/components/AsideSchedulePopUp/ScheduleDrawerContent';
 
 function DisciplineBlockJSX({
   ...props
@@ -63,9 +48,6 @@ function DisciplineBlockJSX({
 export default function Home() {
   const { classesToShow, setClassesToShow } = useClassesToShow();
   const { classesChange, selectedClasses } = useSelectedClasses();
-
-  const divAddClassRef = useRef(null),
-    buttonAddDisciplineRef = useRef(null);
 
   useEffect(() => {
     const newClasses = new Array();
