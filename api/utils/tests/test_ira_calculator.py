@@ -50,3 +50,36 @@ class IraTestCase(TestCase):
         ]
         self.assertRaises(ValueError, self.ira_calc.get_ira_value, args)
 
+    def test_multiple_disciplines_during_first_semester(self):
+        args: list[Discipline] = [
+            {
+                'mencao': 'MM',
+                'semestre': 1,
+                'qtd_creditos': 4
+            },
+            {
+                'mencao': 'MS',
+                'semestre': 1,
+                'qtd_creditos': 6
+            },
+            {
+                'mencao': 'SS',
+                'semestre': 1,
+                'qtd_creditos': 6
+            },
+            {
+                'mencao': 'SS',
+                'semestre': 1,
+                'qtd_creditos': 4
+            },
+            {
+                'mencao': 'MS',
+                'semestre': 1,
+                'qtd_creditos': 4
+            },
+        ]
+
+        self.assertEqual(self.ira_calc.get_ira_value(args), 4.25)
+
+
+
