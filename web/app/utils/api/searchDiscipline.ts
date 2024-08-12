@@ -36,7 +36,7 @@ export default async function searchDiscipline(search: string, year: string, per
 
         const data: Array<DisciplineType> = response.data;
         if (data.length === 0) {
-            toast.error('Matéria invalida');
+            toast.error('Nenhuma disciplina encontrada');
         }
         return data;
     } catch (error: any) {
@@ -45,4 +45,4 @@ export default async function searchDiscipline(search: string, year: string, per
             toast.error('A busca deve conter pelo menos 4 caracteres');
         }
     }
-} 
+}
