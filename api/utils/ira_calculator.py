@@ -14,6 +14,10 @@ class Discipline(TypedDict):
     semestre: int
 
 class IraCalculator:
+    """
+    Classe que calcula o valor do IRA a partir de um conjunto de disciplinas.
+    """
+
     def __init__(self) -> None:
         self.mencaoMap = {
             'SS': 5,
@@ -40,10 +44,10 @@ class IraCalculator:
         for discipline in disciplines:
 
             if not (self.semester_range['min'] <= discipline['semestre'] <= self.semester_range['max']):
-                raise ValueError
+                raise ValueError("O semestre está fora do intervalo delimitado entre 1 e 6.")
 
             if discipline['mencao'] not in self.mencaoMap.keys():
-                raise ValueError
+                raise ValueError("A menção não existe.")
 
             numerador = self.mencaoMap[discipline['mencao']] * \
                 discipline['qtd_creditos'] * \
