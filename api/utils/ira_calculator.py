@@ -9,26 +9,35 @@ class IraCalculator:
             'SR': 0,
         }
 
-    def get_ira_value(self, mencoes):
+        """
+        Dado o cálculo do IRA, o menor número possível para a variável "semestre" é 1, e o maior é 6.
+        """
+        self.semester_range = {
+            'min': 1,
+            'max': 6,
+        }
+
+    def get_ira_value(self, disciplines) -> float:
         """
         Obter o valor do IRA a partir de um conjunto de menções.
+        :param disciplines: A lista de disciplinas que um aluno pegou. Uma disciplina está no formato {'mencao': string, 'qtdCreditos': int, 'semestre': int}.
 
-        :param mencoes: A lista de menções. Uma menção está no formato {'mencao': string, 'qtdCreditos': int, 'semestre': int}.
+        :returns: Um float com o valor calculado do IRA.
         """
         valor_final = 0
-        for mencao in mencoes:
+        for discipline in disciplines:
 
-            if not (1 <= mencao['semestre'] <= 6):
+            if not (self.semester_range['min'] <= discipline['semestre'] <= self.semester_range['max']):
                 raise ValueError
 
-            if mencao['mencao'] not in self.mencaoMap.keys():
+            if discipline['mencao'] not in self.mencaoMap.keys():
                 raise ValueError
 
-            numerador = self.mencaoMap[mencao['mencao']] * \
-                mencao['qtdCreditos'] * \
-                mencao['semestre']
+            numerador = self.mencaoMap[discipline['mencao']] * \
+                discipline['qtdCreditos'] * \
+                discipline['semestre']
 
-            denominador = mencao['qtdCreditos'] * mencao['semestre']
+            denominador = discipline['qtdCreditos'] * discipline['semestre']
             valor_final += numerador/denominador
 
         return valor_final
