@@ -16,6 +16,16 @@ class Discipline(TypedDict):
 class IraCalculator:
     """
     Classe que calcula o valor do IRA a partir de um conjunto de disciplinas.
+
+    Atualmente, o cálculo está sendo baseado com base no
+     recurso do seguinte link: 'https://deg.unb.br/images/legislacao/resolucao_ceg_0001_2020.pdf'
+
+    Para uma disciplina, nos interessam as seguintes variáveis: 
+    E -> Equivalência da menção de disciplina (isto é, SS=5, MS=4,..., SR=0);
+    C -> Número de créditos daquela disciplina;
+    S -> Semestre em que aquela disciplina foi cursada, sendo 6 o seu valor máximo.
+
+    Realiza-se o somatório de E*C*S para cada disciplina, e depois divide-se pelo somatório de C*S para cada uma delas.
     """
 
     def __init__(self) -> None:
