@@ -1,5 +1,5 @@
 from django.test import TestCase
-from utils.ira_calculator import IraCalculator
+from utils.ira_calculator import IraCalculator, Discipline
 
 
 class IraTestCase(TestCase):
@@ -7,33 +7,33 @@ class IraTestCase(TestCase):
         self.ira_calc = IraCalculator()
 
     def test_one_discipline_with_MM(self):
-        args = [
+        args: list[Discipline] = [
             {
                 'mencao': 'MM',
                 'semestre': 1,
-                'qtdCreditos': 2,
+                'qtd_creditos': 2,
             }
         ]
 
         self.assertEqual(self.ira_calc.get_ira_value(args), 3)
 
     def test_discipline_with_right_out_of_bounds_semester_value(self):
-        args = [
+        args: list[Discipline] = [
             {
                 'mencao': 'MM',
                 'semestre': 7,
-                'qtdCreditos': 2,
+                'qtd_creditos': 2,
             },
         ]
 
         self.assertRaises(ValueError, self.ira_calc.get_ira_value, args)
 
     def test_discipline_with_left_out_of_bounds_semester_value(self):
-        args = [
+        args: list[Discipline] = [
             {
                 'mencao': 'MM',
                 'semestre': 0,
-                'qtdCreditos': 2,
+                'qtd_creditos': 2,
             },
         ]
 
@@ -41,11 +41,11 @@ class IraTestCase(TestCase):
 
 
     def test_inexistent_grade(self):
-        args = [
+        args: list[Discipline] = [
             {
                 'mencao': 'NE',
                 'semestre': 3,
-                'qtdCreditos': 2,
+                'qtd_creditos': 2,
             },
         ]
         self.assertRaises(ValueError, self.ira_calc.get_ira_value, args)

@@ -1,3 +1,18 @@
+from typing import TypedDict
+
+class Discipline(TypedDict):
+    """
+    TypedDict que define uma disciplina.
+    
+    Attributes:
+        mencao: a menção obtida pelo aluno na disciplina.
+        qtd_creditos: a quantidade de créditos que a disciplina tem.
+        semestre: qual o semestre em que o aluno realizou a disciplina. O valor mínimo é 1, e o máximo é 6. 
+    """
+    mencao: str
+    qtd_creditos: int
+    semestre: int
+
 class IraCalculator:
     def __init__(self) -> None:
         self.mencaoMap = {
@@ -9,18 +24,15 @@ class IraCalculator:
             'SR': 0,
         }
 
-        """
-        Dado o cálculo do IRA, o menor número possível para a variável "semestre" é 1, e o maior é 6.
-        """
         self.semester_range = {
             'min': 1,
             'max': 6,
         }
 
-    def get_ira_value(self, disciplines) -> float:
+    def get_ira_value(self, disciplines: list[Discipline]) -> float:
         """
         Obter o valor do IRA a partir de um conjunto de menções.
-        :param disciplines: A lista de disciplinas que um aluno pegou. Uma disciplina está no formato {'mencao': string, 'qtdCreditos': int, 'semestre': int}.
+        :param disciplines: A lista de disciplinas que um aluno pegou. 
 
         :returns: Um float com o valor calculado do IRA.
         """
@@ -34,10 +46,10 @@ class IraCalculator:
                 raise ValueError
 
             numerador = self.mencaoMap[discipline['mencao']] * \
-                discipline['qtdCreditos'] * \
+                discipline['qtd_creditos'] * \
                 discipline['semestre']
 
-            denominador = discipline['qtdCreditos'] * discipline['semestre']
+            denominador = discipline['qtd_creditos'] * discipline['semestre']
             valor_final += numerador/denominador
 
         return valor_final
