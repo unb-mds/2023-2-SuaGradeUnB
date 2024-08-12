@@ -33,6 +33,7 @@ class IraCalculator:
             'max': 6,
         }
 
+
     def get_ira_value(self, disciplines: list[Discipline]) -> float:
         """
         Obter o valor do IRA a partir de um conjunto de menções.
@@ -46,12 +47,21 @@ class IraCalculator:
 
         for discipline in disciplines:
 
-            if not (self.semester_range['min'] <= discipline['semestre'] <= self.semester_range['max']):
-                raise ValueError("O semestre está fora do intervalo delimitado entre 1 e 6.")
+            ## validação da entrada
+            try:
+                if discipline['qtd_creditos'] <= 0:
+                    raise ValueError("O número de créditos da disciplina é menor ou igual a 0.")
 
-            if discipline['mencao'] not in self.mencaoMap.keys():
-                raise ValueError("A menção não existe.")
+                if not (self.semester_range['min'] <= discipline['semestre'] <= self.semester_range['max']):
+                    raise ValueError("O semestre está fora do intervalo delimitado entre 1 e 6.")
 
+                if discipline['mencao'] not in self.mencaoMap.keys():
+                    raise ValueError("A menção não existe.")
+
+            except TypeError:
+                raise TypeError("O tipo de dado passado como parâmetro está incorreto.")
+
+            ## cálculo do IRA
             numerador += self.mencaoMap[discipline['mencao']] * \
                 discipline['qtd_creditos'] * \
                 discipline['semestre']

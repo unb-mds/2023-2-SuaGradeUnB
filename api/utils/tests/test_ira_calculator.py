@@ -81,5 +81,32 @@ class IraTestCase(TestCase):
 
         self.assertEqual(self.ira_calc.get_ira_value(args), 4.25)
 
+    def test_negative_number_of_credits(self):
+        args: list[Discipline] = [
+            {
+                'mencao': 'MM',
+                'semestre': 3,
+                'qtd_creditos': -1,
+            },
+        ]
+        self.assertRaises(ValueError, self.ira_calc.get_ira_value, args)
 
+    def test_null_number_of_credits(self):
+        args: list[Discipline] = [
+            {
+                'mencao': 'MM',
+                'semestre': 3,
+                'qtd_creditos': -1,
+            },
+        ]
+        self.assertRaises(ValueError, self.ira_calc.get_ira_value, args)
 
+    def test_none_number_of_credits(self):
+        args: list[Discipline] = [
+            {
+                'mencao': 'MM',
+                'semestre': 2,
+                'qtd_creditos': None,
+            },
+        ]
+        self.assertRaises(TypeError, self.ira_calc.get_ira_value, args)
