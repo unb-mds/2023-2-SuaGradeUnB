@@ -41,8 +41,8 @@ class IraCalculator:
         :returns: Um float com o valor calculado do IRA.
         """
 
-        numerador: float = 0
-        denominador: float = 0
+        numerador: int = 0
+        denominador: int = 0
 
         for discipline in disciplines:
 
@@ -58,7 +58,7 @@ class IraCalculator:
 
             denominador += discipline['qtd_creditos'] * discipline['semestre']
 
-        return numerador / denominador
+        return float(numerador)/float(denominador)
             
 
 
