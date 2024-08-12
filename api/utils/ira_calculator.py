@@ -40,7 +40,10 @@ class IraCalculator:
 
         :returns: Um float com o valor calculado do IRA.
         """
-        valor_final = 0
+
+        numerador: float = 0
+        denominador: float = 0
+
         for discipline in disciplines:
 
             if not (self.semester_range['min'] <= discipline['semestre'] <= self.semester_range['max']):
@@ -49,14 +52,13 @@ class IraCalculator:
             if discipline['mencao'] not in self.mencaoMap.keys():
                 raise ValueError("A menção não existe.")
 
-            numerador = self.mencaoMap[discipline['mencao']] * \
+            numerador += self.mencaoMap[discipline['mencao']] * \
                 discipline['qtd_creditos'] * \
                 discipline['semestre']
 
-            denominador = discipline['qtd_creditos'] * discipline['semestre']
-            valor_final += numerador/denominador
+            denominador += discipline['qtd_creditos'] * discipline['semestre']
 
-        return valor_final
+        return numerador / denominador
             
 
 
