@@ -16,7 +16,7 @@ dj-database-url==2.1.0
 Django==4.2.11
 django-cors-headers==4.3.0
 django-redis==5.4.0
-djangorestframework==3.14.0
+djangorestframework==3.15.2
 djangorestframework-simplejwt==5.3.1
 drf-yasg==1.21.7
 ghp-import==2.1.0
