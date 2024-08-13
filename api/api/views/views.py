@@ -1,4 +1,4 @@
-from ..models import Discipline
+from ..models import Discipline, Class
 
 from django.db.models.query import QuerySet
 
@@ -10,7 +10,7 @@ from drf_yasg import openapi
 
 from utils.sessions import get_current_year_and_period, get_next_period
 from utils.schedule_generator import ScheduleGenerator
-from utils.db_handler import get_best_similarities_by_name, filter_disciplines_by_teacher, filter_disciplines_by_year_and_period, filter_disciplines_by_code
+from utils.db_handler import get_best_similarities_by_name, filter_disciplines_by_teacher, filter_disciplines_by_year_and_period, filter_disciplines_by_code, filter_disciplines_by_schedule
 from utils.search import SearchTool
 
 from .. import serializers
@@ -21,7 +21,7 @@ from api.views.utils import handle_400_error
 from traceback import print_exception
 
 MAXIMUM_RETURNED_DISCIPLINES = 15
-ERROR_MESSAGE = "no valid argument found for 'search', 'year' or 'period'"
+ERROR_MESSAGE = "Bad search parameters or missing parameters"
 MINIMUM_SEARCH_LENGTH = 4
 ERROR_MESSAGE_SEARCH_LENGTH = f"search must have at least {MINIMUM_SEARCH_LENGTH} characters"
 MAXIMUM_RETURNED_SCHEDULES = 5
@@ -38,11 +38,11 @@ class Search(APIView):
     def filter_disciplines(self, request: request.Request, name: str) -> QuerySet[Discipline]:
         search_handler = SearchTool(Discipline)
         search_fields = ['unicode_name', 'code']
-        
+
         result = search_handler.filter_by_search_result(
-            request = request,
-            search_str = name,
-            search_fields = search_fields
+            request=request,
+            search_str=name,
+            search_fields=search_fields
         )
 
         return result
@@ -51,10 +51,8 @@ class Search(APIView):
         disciplines = self.filter_disciplines(request, name)
 
         disciplines = get_best_similarities_by_name(name, disciplines)
-
         if not disciplines.count():
             disciplines = filter_disciplines_by_code(code=name[0])
-
             for term in name[1:]:
                 disciplines &= filter_disciplines_by_code(code=term)
 
@@ -70,12 +68,15 @@ class Search(APIView):
             search_by_teacher = True
         return disciplines, search_by_teacher
 
-    def get_serialized_data(self, filter_params: dict, search_by_teacher: bool, name: str) -> list:
+    def get_serialized_data(self, filter_params: dict, search_by_teacher: bool, name: str, schedule=None, search_by_schedule_only=False) -> list:
         filtered_disciplines = filter_disciplines_by_year_and_period(
             **filter_params)
         if search_by_teacher:
             data = serializers.DisciplineSerializer(
                 filtered_disciplines, many=True, context={'teacher_name': name}).data
+        elif search_by_schedule_only:
+            data = serializers.DisciplineSerializer(
+                filtered_disciplines, many=True, context={'schedule': schedule}).data
         else:
             data = serializers.DisciplineSerializer(
                 filtered_disciplines, many=True).data
@@ -85,9 +86,12 @@ class Search(APIView):
         name = self.treat_string(request.GET.get('search', None))
         year = self.treat_string(request.GET.get('year', None))
         period = self.treat_string(request.GET.get('period', None))
-        return name, year, period
+        department_code = self.treat_string(
+            request.GET.get('department_code', None))
+        schedule = self.treat_string(request.GET.get('schedule', None))
+        return name, year, period, schedule, department_code
 
-    @swagger_auto_schema(
+    @ swagger_auto_schema(
         operation_description="Busca disciplinas por nome ou código. O ano e período são obrigatórios.",
         security=[],
         manual_parameters=[
@@ -104,29 +108,43 @@ class Search(APIView):
         }
     )
     def get(self, request: request.Request, *args, **kwargs) -> response.Response:
-        name, year, period = self.get_request_parameters(request)
-
-        if not all((name, year, period)):
+        name, year, period, schedule, department_code = self.get_request_parameters(
+            request)
+        if not all((year, period)):
             return handle_400_error(ERROR_MESSAGE)
-
-        if len(name) < MINIMUM_SEARCH_LENGTH:
-            return handle_400_error(ERROR_MESSAGE_SEARCH_LENGTH)
-
-        disciplines, search_by_teacher = self.get_disciplines_and_search_flag(
-            request, name)
+        disciplines, search_by_teacher, search_by_schedule_only = None, False, False
+        if name:
+            if len(name) < MINIMUM_SEARCH_LENGTH:
+                return handle_400_error(ERROR_MESSAGE_SEARCH_LENGTH)
+            disciplines, search_by_teacher = self.get_disciplines_and_search_flag(
+                request, name)
+        # results = filter_disciplines_by_schedule(name, "327")
+        # for result in results:
+        #     classes = result.classes.all()
+        #     for class_ in classes:
+        #         print(result, class_, Class.objects.get(
+        #             id=class_.id).teachers, Class.objects.get(id=class_.id).schedule)
+        elif schedule and department_code:
+            disciplines = filter_disciplines_by_schedule(
+                schedule=schedule, department_code=department_code)
+            search_by_schedule_only = True
+        else:
+            return handle_400_error(ERROR_MESSAGE)
 
         data = self.get_serialized_data(
             filter_params={'year': year, 'period': period,
                            'disciplines': disciplines},
             search_by_teacher=search_by_teacher,
-            name=name
+            search_by_schedule_only=search_by_schedule_only,
+            name=name,
+            schedule=schedule
         )
         return response.Response(data[:MAXIMUM_RETURNED_DISCIPLINES], status.HTTP_200_OK)
 
 
 class YearPeriod(APIView):
 
-    @swagger_auto_schema(
+    @ swagger_auto_schema(
         operation_description="Retorna o ano e período atual, e o próximo ano e período letivos válidos para pesquisa.",
         security=[],
         responses={
@@ -159,7 +177,7 @@ class YearPeriod(APIView):
 
 
 class GenerateSchedule(APIView):
-    @swagger_auto_schema(
+    @ swagger_auto_schema(
         operation_description="Gera possíveis horários de acordo com as aulas escolhidas com preferência de turno",
         security=[],
         request_body=openapi.Schema(
@@ -245,7 +263,7 @@ class GenerateSchedule(APIView):
         for schedule in schedules[:MAXIMUM_RETURNED_SCHEDULES]:
             data.append(
                 list(map(lambda x: serializers.ClassSerializerSchedule(x).data, schedule)))
-        
+
         return response.Response({
             'message': message,
             'schedules': data
