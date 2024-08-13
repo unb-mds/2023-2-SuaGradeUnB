@@ -245,6 +245,6 @@ class ScheduleGenerator:
             for key_hours, values_hours in hours.items():
                 for key_ch, values_ch in choice_disciplines.items():
                     if discipline == values and values == key_hours and values_hours == key_ch:
-                            return values_ch
+                            return values_ch 
                          
             
