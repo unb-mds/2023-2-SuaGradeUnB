@@ -45,7 +45,10 @@ export const ScheduleDrawerContent = () => {
     <div className="flex justify-center mt-6 px-2">
       <section className="flex flex-col items-center gap-5 w-full h-full text-gray-700">
         <DisciplineOptionForm setInfos={setSearchedDisciplines} />
-        <div className="flex flex-col gap-2 w-10/12 overflow-auto h-full">
+        <div
+          className="flex flex-col gap-2 w-10/12 overflow-auto h-full max-h-[50vh]"
+          data-vaul-no-drag
+        >
           {searchedDisciplines.map((discipline, index) => (
             <DisciplineFragment
               key={index}

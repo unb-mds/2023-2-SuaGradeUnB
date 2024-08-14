@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useCallback, useLayoutEffect, useState } from 'react';
 import useUser from '@/app/hooks/useUser';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import Image from 'next/image';
@@ -95,6 +95,7 @@ function AsideButtonsJSX() {
     x: 0,
     width: 0,
   });
+  const isUserAnonymous = !user.is_anonymous;
   const onRefChange = useCallback(
     (node: any) => {
       const props = {
@@ -106,7 +107,7 @@ function AsideButtonsJSX() {
       };
       asideRefCallback(props);
     },
-    [path, width, footerWidth]
+    [path, width, footerWidth, isUserAnonymous]
   );
 
   return (

@@ -1,10 +1,5 @@
 import AddDisciplineButton from '@/app/schedules/home/components/AddDisciplineButton';
-import {
-  Drawer,
-  DrawerContent,
-  DrawerTitle,
-  DrawerTrigger,
-} from '../ui/drawer';
+import { Drawer, DrawerContent, DrawerTrigger } from '../ui/drawer';
 import { ScheduleDrawerContent } from './ScheduleDrawerContent';
 
 export const ScheduleDrawer = () => {
