@@ -96,11 +96,15 @@ class Search(APIView):
         security=[],
         manual_parameters=[
             openapi.Parameter('search', openapi.IN_QUERY,
-                              description="Termo de pesquisa (Nome/Código)", type=openapi.TYPE_STRING),
+                              description="Termo de pesquisa (Nome/Código/Professor)", type=openapi.TYPE_STRING),
             openapi.Parameter('year', openapi.IN_QUERY,
                               description="Ano", type=openapi.TYPE_INTEGER),
             openapi.Parameter('period', openapi.IN_QUERY,
                               description="Período  ", type=openapi.TYPE_INTEGER),
+            openapi.Parameter('department_code', openapi.IN_QUERY,
+                              description="Código do departamento", type=openapi.TYPE_STRING),
+            openapi.Parameter('schedule', openapi.IN_QUERY,
+                              description="Horário no formato 46M34", type=openapi.TYPE_STRING)
         ],
         responses={
             200: openapi.Response('OK', serializers.DisciplineSerializer),
@@ -135,7 +139,7 @@ class Search(APIView):
             name=name,
             schedule=schedule
         )
-        
+
         data_aux = []
         for i in range(len(data)):
             if data[i]['classes'] == []:
