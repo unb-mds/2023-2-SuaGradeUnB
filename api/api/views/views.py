@@ -10,7 +10,7 @@ from drf_yasg import openapi
 
 from utils.sessions import get_current_year_and_period, get_next_period
 from utils.schedule_generator import ScheduleGenerator
-from utils.db_handler import get_best_similarities_by_name, filter_disciplines_by_teacher, filter_disciplines_by_year_and_period, filter_disciplines_by_code, filter_disciplines_by_schedule
+from utils.db_handler import get_best_similarities_by_name, filter_disciplines_by_teacher, filter_disciplines_by_year_and_period, filter_disciplines_by_code, filter_disciplines_by_schedule_and_department_code
 from utils.search import SearchTool
 
 from .. import serializers
@@ -68,13 +68,13 @@ class Search(APIView):
             search_by_teacher = True
         return disciplines, search_by_teacher
 
-    def get_serialized_data(self, filter_params: dict, search_by_teacher: bool, name: str, schedule=None, search_by_schedule_only=False) -> list:
+    def get_serialized_data(self, filter_params: dict, search_by_teacher: bool, name: str, schedule=None, search_by_schedule=False) -> list:
         filtered_disciplines = filter_disciplines_by_year_and_period(
             **filter_params)
         if search_by_teacher:
             data = serializers.DisciplineSerializer(
                 filtered_disciplines, many=True, context={'teacher_name': name}).data
-        elif search_by_schedule_only:
+        elif search_by_schedule:
             data = serializers.DisciplineSerializer(
                 filtered_disciplines, many=True, context={'schedule': schedule}).data
         else:
@@ -112,22 +112,18 @@ class Search(APIView):
             request)
         if not all((year, period)):
             return handle_400_error(ERROR_MESSAGE)
-        disciplines, search_by_teacher, search_by_schedule_only = None, False, False
+        disciplines, search_by_teacher, search_by_schedule = None, False, False
         if name:
             if len(name) < MINIMUM_SEARCH_LENGTH:
                 return handle_400_error(ERROR_MESSAGE_SEARCH_LENGTH)
             disciplines, search_by_teacher = self.get_disciplines_and_search_flag(
                 request, name)
-        # results = filter_disciplines_by_schedule(name, "327")
-        # for result in results:
-        #     classes = result.classes.all()
-        #     for class_ in classes:
-        #         print(result, class_, Class.objects.get(
-        #             id=class_.id).teachers, Class.objects.get(id=class_.id).schedule)
+            if schedule:
+                search_by_schedule = True
         elif schedule and department_code:
-            disciplines = filter_disciplines_by_schedule(
+            disciplines = filter_disciplines_by_schedule_and_department_code(
                 schedule=schedule, department_code=department_code)
-            search_by_schedule_only = True
+            search_by_schedule = True
         else:
             return handle_400_error(ERROR_MESSAGE)
 
@@ -135,10 +131,17 @@ class Search(APIView):
             filter_params={'year': year, 'period': period,
                            'disciplines': disciplines},
             search_by_teacher=search_by_teacher,
-            search_by_schedule_only=search_by_schedule_only,
+            search_by_schedule=search_by_schedule,
             name=name,
             schedule=schedule
         )
+        
+        data_aux = []
+        for i in range(len(data)):
+            if data[i]['classes'] == []:
+                data_aux.append(data[i])
+        for i in data_aux:
+            data.remove(i)
         return response.Response(data[:MAXIMUM_RETURNED_DISCIPLINES], status.HTTP_200_OK)
 
 
