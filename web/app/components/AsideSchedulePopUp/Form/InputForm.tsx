@@ -24,14 +24,14 @@ function Form(props: FormPropsType) {
         <form className='flex items-center w-11/12 px-2 bg-white shadow-md rounded-xl' onSubmit={handleSearch}>
             <input
                 type="text"
-                placeholder='Nome da matéria...'
+                placeholder='Matéria ou Professor...'
                 value={formData.search}
                 onChange={(e) => setFormData({ ...formData, search: e.target.value })}
                 ref={inputRef}
                 className='h-14 p-2 w-full rounded-xl focus:outline-none'
             />
             <button type='submit' >
-                <Image 
+                <Image
                     width={30} height={30}
                     src={searchIcon} alt='ícone de pesquisa'
                 />
