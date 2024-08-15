@@ -71,10 +71,8 @@ def filter_disciplines_by_teacher(name: str) -> QuerySet:
     return search_disciplines
 
 
-def filter_disciplines_by_schedule(schedule: str, department_code: str) -> QuerySet:
+def filter_disciplines_by_schedule_and_department_code(schedule: str, department_code: str) -> QuerySet:
     """Filtra as disciplinas pelo horário."""
-   # department_code = "327"
-    Q()
     return Discipline.objects.filter(Q(classes__schedule__icontains=schedule) & Q(department__code=department_code)).distinct("id")
 
 
