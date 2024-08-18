@@ -26,6 +26,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/app/components/ui/dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/app/components/ui/select';
 
 function PreferenceOrder({
   setPreference,
@@ -33,17 +40,23 @@ function PreferenceOrder({
   setPreference: (preference: EachFieldNumber) => void;
 }) {
   return (
-    <select
-      className="bg-white shadow-md h-14 p-2 rounded-xl"
-      onChange={(event) => {
-        const preference = parseInt(event.target.value) as EachFieldNumber;
+    <Select
+      onValueChange={(value) => {
+        const preference = parseInt(value) as EachFieldNumber;
         setPreference(preference);
       }}
+      defaultValue="1"
     >
-      <option value="1">Mínima</option>
-      <option value="2">Média</option>
-      <option value="3">Máxima</option>
-    </select>
+      <SelectTrigger className="bg-white shadow-md h-14 p-2 rounded-xl">
+        <SelectValue></SelectValue>
+      </SelectTrigger>
+
+      <SelectContent>
+        <SelectItem value="1">Mínima</SelectItem>
+        <SelectItem value="2">Média</SelectItem>
+        <SelectItem value="3">Máxima</SelectItem>
+      </SelectContent>
+    </Select>
   );
 }
 
@@ -103,7 +116,7 @@ export default function GenerateScheduleButton() {
   return (
     <>
       <Dialog>
-        <DialogTrigger>
+        <DialogTrigger asChild>
           <div className="flex justify-center w-[100vw]">
             <Button
               disabled={!classesToShow.length}
