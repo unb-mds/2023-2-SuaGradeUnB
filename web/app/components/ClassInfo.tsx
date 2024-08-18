@@ -3,7 +3,6 @@ import { Fragment } from 'react';
 import { ClassValueType } from '../contexts/SelectedClassesContext/types';
 import { FiInfo } from 'react-icons/fi';
 
-import Tooltip from './AsideSchedulePopUp/Tooltip';
 import {
   Dialog,
   DialogContent,
@@ -53,7 +52,7 @@ export default function ClassInfo({ currentClass }: ClassInfoPropsType) {
         <span className="font-semibold">Horários:</span>{' '}
         {currentClass.class.schedule}
         <Dialog>
-          <DialogTrigger>
+          <DialogTrigger aria-label="Informações">
             <FiInfo size={20} />
           </DialogTrigger>
           <DialogContent>

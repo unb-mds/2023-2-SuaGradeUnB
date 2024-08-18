@@ -1,5 +1,3 @@
-import Image, { StaticImageData } from 'next/image';
-
 import Button from './Button';
 
 interface AsideButtonPropsType {
@@ -21,6 +19,7 @@ export default function AsideButton({
       onClick={onClick}
       className="z-10 flex-col w-full !gap-1 !pb-2 !shadow-none !text-black"
       name={pageName}
+      aria-label={`Ir para página ${pageName}`}
     >
       {image}
     </Button>

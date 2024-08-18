@@ -35,7 +35,7 @@ export default function DisciplineBox({
         </section>
         <ClassInfo currentClass={currentClass} />
       </div>
-      <button onClick={handleDeleteClass}>
+      <button onClick={handleDeleteClass} aria-label='Deletar'>
         <FiTrash2 size={24} />
       </button>
     </span>

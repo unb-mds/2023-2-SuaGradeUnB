@@ -1,11 +1,6 @@
 import { Fragment } from 'react';
-import Image from 'next/image';
 import ClassInfoBox from './ClassInfoBox';
-
 import { ClassType, DisciplineType } from '@/app/utils/api/searchDiscipline';
-
-import expand_more from '@/public/icons/expand_more.png';
-import expand_less from '@/public/icons/expand_less.png';
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 
 interface DisciplineFragmentPropsType {
@@ -33,6 +28,7 @@ function DisciplineFragmentJSX({
     <Fragment>
       <button
         onClick={() => handleDisciplineToggle(index)}
+        aria-label="Expandir/Recolher disciplina"
         className="flex items-center gap-2 relative"
       >
         {discipline.expanded ? (

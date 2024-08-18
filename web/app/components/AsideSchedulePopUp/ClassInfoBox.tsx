@@ -1,12 +1,7 @@
 import { ClassType, DisciplineType } from '@/app/utils/api/searchDiscipline';
 import { HTMLProps, MouseEventHandler, useEffect, useState } from 'react';
-
 import useSelectedClasses from '@/app/hooks/useSelectedClasses';
 import ClassInfo from '../ClassInfo';
-import Image from 'next/image';
-
-import addIcon from '@/public/icons/add.jpg';
-import removeIcon from '@/public/icons/remove.jpg';
 import { twMerge } from 'tailwind-merge';
 import { FiPlus, FiMinus } from 'react-icons/fi';
 
@@ -51,6 +46,7 @@ export default function ClassInfoBox({
         onClick={
           props.onClick as MouseEventHandler<HTMLButtonElement> | undefined
         }
+        aria-label="Selecionar/Desselecionar aula"
         className="hover:cursor-pointer col-start-7 flex justify-center items-center"
       >
         {selected ? <FiMinus size={24} /> : <FiPlus size={24} />}

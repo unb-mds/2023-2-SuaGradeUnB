@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { useCallback, useLayoutEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import useUser from '@/app/hooks/useUser';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import Image from 'next/image';
@@ -107,6 +107,7 @@ function AsideButtonsJSX() {
       };
       asideRefCallback(props);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [path, width, footerWidth, isUserAnonymous]
   );
 

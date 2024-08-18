@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import DisciplineOptionForm from './Form/DisciplineOptionForm';
 import { ClassType, DisciplineType } from '@/app/utils/api/searchDiscipline';
 import useSelectedClasses from '@/app/hooks/useSelectedClasses';
