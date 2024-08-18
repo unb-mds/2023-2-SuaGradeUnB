@@ -127,7 +127,7 @@ export default function GenerateScheduleButton() {
           </div>
         </DialogTrigger>
 
-        <DialogContent className="max-w-lg bg-snow-secondary">
+        <DialogContent className="max-w-[90vw] sm:max-w-lg bg-snow-secondary">
           <DialogTitle>Período de preferência</DialogTitle>
 
           <div className="flex flex-col justify-center items-center gap-10 p-3 h-full">
