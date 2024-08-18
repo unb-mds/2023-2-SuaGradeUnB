@@ -1,10 +1,4 @@
-import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import useYearPeriod from '@/app/hooks/useYearPeriod';
 import useSelectedClasses from '@/app/hooks/useSelectedClasses';
 
@@ -21,7 +15,6 @@ import InputForm from './InputForm';
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -29,14 +22,13 @@ import {
 
 interface FormPropsType {
   form: FormType;
-  disableDefault: boolean;
   setInfos: Dispatch<SetStateAction<Array<DisciplineType>>>;
-  handleYearAndPeriodChange: (event: ChangeEvent<HTMLSelectElement>) => void;
+  handleYearAndPeriodChange: (value: string) => void;
 }
 
 function Form(props: FormPropsType) {
   const { formData, setFormData } = props.form;
-  const { disableDefault, handleYearAndPeriodChange } = props;
+  const { handleYearAndPeriodChange } = props;
 
   const { periods } = useYearPeriod();
 
@@ -44,20 +36,23 @@ function Form(props: FormPropsType) {
     <>
       <div className="flex flex-col items-center gap-1 w-full max-w-md">
         <span className="text-xl font-semibold">Ano/Período</span>
-        <select
-          className="bg-white shadow-md h-14 w-11/12 p-2 rounded-xl"
-          value={`${formData.year}/${formData.period}`}
-          onChange={(event) => handleYearAndPeriodChange(event)}
+
+        <Select
+          onValueChange={(value) => {
+            handleYearAndPeriodChange(value);
+          }}
         >
-          <option disabled={disableDefault} value="">
-            Selecione uma opção
-          </option>
-          {periods['year/period'].map((item, index) => (
-            <option key={index} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
+          <SelectTrigger className="bg-white shadow-md h-14 w-11/12 p-2 rounded-xl">
+            <SelectValue placeholder="Selecione uma opção" />
+          </SelectTrigger>
+          <SelectContent>
+            {periods['year/period'].map((item, index) => (
+              <SelectItem key={index} value={item}>
+                {item}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
       <div className="flex flex-col items-center gap-1 w-full max-w-md">
         <span className="text-xl font-semibold">Matéria</span>
@@ -92,23 +87,17 @@ export default function DisciplineOptionForm(
 ) {
   const { selectedClasses, currentYearPeriod, setCurrentYearPeriod } =
     useSelectedClasses();
-  const [disableDefault, setDisableDefault] = useState(false);
   const [formData, setFormData] = useState(defaultFormData);
 
   useEffect(() => {
-    if (
-      !disableDefault &&
-      formData == defaultFormData &&
-      selectedClasses.size
-    ) {
+    if (formData == defaultFormData && selectedClasses.size) {
       const { year, period } = getYearAndPeriod(currentYearPeriod);
       setFormData({ ...formData, year: year, period: period });
-      setDisableDefault(true);
     }
-  }, [disableDefault, currentYearPeriod, formData, selectedClasses]);
+  }, [currentYearPeriod, formData, selectedClasses]);
 
-  function handleYearAndPeriodChange(event: ChangeEvent<HTMLSelectElement>) {
-    const text = event.target.value.trim();
+  function handleYearAndPeriodChange(value: string) {
+    const text = value.trim();
     const { year, period } = getYearAndPeriod(text);
 
     if (year && period) {
@@ -116,7 +105,6 @@ export default function DisciplineOptionForm(
         setFormData({ ...formData, year: year, period: period });
         props.setInfos([]);
         setCurrentYearPeriod(text);
-        setDisableDefault(true);
       };
       handleChangeYearAndPeriod(
         text,
@@ -130,7 +118,6 @@ export default function DisciplineOptionForm(
   return (
     <Form
       form={{ formData, setFormData }}
-      disableDefault={disableDefault}
       handleYearAndPeriodChange={handleYearAndPeriodChange}
       setInfos={props.setInfos}
     />

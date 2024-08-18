@@ -6,7 +6,6 @@ import useUser from '@/app/hooks/useUser';
 
 import { ScheduleClassType } from '@/app/contexts/SchedulesContext';
 
-import Modal from '../Modal/Modal';
 import Schedule from '../Schedule/Schedule';
 import Button from '../Button';
 
@@ -94,7 +93,10 @@ export default function SchedulePreview({
               <Schedule schedules={schedule.classes} preview />
             </div>
           </DialogTrigger>
-          <DialogContent className="overflow-auto max-w-screen-xl ">
+          <DialogContent
+            className="overflow-auto max-w-[90%]"
+            closeBtnPosition="left"
+          >
             <Schedule schedules={schedule.classes} />
           </DialogContent>
         </Dialog>
@@ -151,6 +153,7 @@ function ActionButtons({
               onClick={() => {
                 handleDownloadPDF(isCloud, position);
               }}
+              aria-label="Baixar grade"
             >
               <FiDownload size={24} className="opacity-50" />
             </button>
@@ -162,10 +165,8 @@ function ActionButtons({
         <Dialog>
           <DialogTrigger>
             <Tooltip>
-              <TooltipTrigger asChild>
-                <button>
-                  <FiTrash2 size={24} className="opacity-50" />
-                </button>
+              <TooltipTrigger asChild aria-label="Apagar grade">
+                <FiTrash2 size={24} className="opacity-50" />
               </TooltipTrigger>
               <TooltipContent sideOffset={5} align="center">
                 Deletar
@@ -243,7 +244,10 @@ function UploadToCloudButton({
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <button onClick={() => handleUploadToCloud()}>
+        <button
+          onClick={() => handleUploadToCloud()}
+          aria-label="Salvar na nuvem"
+        >
           <FiUploadCloud size={24} className="opacity-50" />
         </button>
       </TooltipTrigger>
