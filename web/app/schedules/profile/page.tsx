@@ -68,7 +68,7 @@ export default function Profile() {
           Trocar de conta
         </Button>
 
-        {localSchedules.length ? (
+        {localSchedules.length > 0 ? (
           <Dialog>
             <DialogTrigger asChild>
               <Button className="!shadow-none text-white">Sair</Button>

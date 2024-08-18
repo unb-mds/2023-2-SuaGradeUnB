@@ -94,7 +94,7 @@ export default function SchedulePreview({
             </div>
           </DialogTrigger>
           <DialogContent
-            className="overflow-auto max-w-[90%]"
+            className="overflow-auto sm:max-w-[90%]"
             closeBtnPosition="left"
           >
             <Schedule schedules={schedule.classes} />
@@ -180,7 +180,7 @@ function ActionButtons({
                 A grade será deletada para sempre, tem certeza?
               </h1>
               <DialogFooter>
-                <div className="flex  w-full gap-2 items-center">
+                <div className="flex w-full gap-2 items-center">
                   <DialogClose asChild>
                     <Button className="bg-gray-400 flex-1">Não</Button>
                   </DialogClose>
