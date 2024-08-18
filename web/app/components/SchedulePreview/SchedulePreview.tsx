@@ -262,7 +262,6 @@ function handleDownloadPDF(isCloud: boolean, index: number) {
   const doc = document.getElementById(
     `download-content-${index}-${isCloud ? 'cloud' : 'local'}`
   );
-  console.log(doc, `download-content-${index}-${isCloud ? 'cloud' : 'local'}`);
 
   if (!doc) return;
 
