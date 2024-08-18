@@ -1,7 +1,6 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
 
 import useUser from '@/app/hooks/useUser';
 import useClassesToShow from '@/app/hooks/useClassesToShow';
@@ -12,15 +11,19 @@ import defaultProfile from '@/public/profile.svg';
 
 import Image from 'next/image';
 import Button from '@/app/components/Button';
-import Modal from '@/app/components/Modal/Modal';
 
 import signInWithGoogle from '@/app/utils/signInWithGoogle';
 import handleLogout from '@/app/utils/api/logout';
 import useSchedules from '@/app/hooks/useSchedules';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from '@/app/components/ui/dialog';
 
 export default function Profile() {
-  const [activeModal, setActiveModal] = useState(false);
-
   const { setClassesToShow } = useClassesToShow();
   const { setSelectedClasses } = useSelectedClasses();
   const { localSchedules, setLocalSchedules, setCloudSchedules } =
@@ -40,34 +43,6 @@ export default function Profile() {
 
   return (
     <>
-      {activeModal && (
-        <Modal setActiveModal={setActiveModal} noExit>
-          <div className="flex flex-col items-center justify-center h-full gap-16">
-            <h1 className="font-semibold text-center">
-              Você tem grades não salvas na nuvem e vai perdê-las!
-            </h1>
-            <div>
-              <h2 className="font-semibold text-center">
-                Tem certeza que quer sair?
-              </h2>
-              <div className="flex gap-16 justify-center mt-4">
-                <Button
-                  onClick={() => setActiveModal(false)}
-                  className="bg-red-500"
-                >
-                  Não
-                </Button>
-                <Button
-                  onClick={() => handleLogoutAndRedirect()}
-                  className="bg-primary"
-                >
-                  Sim, eu quero!
-                </Button>
-              </div>
-            </div>
-          </div>
-        </Modal>
-      )}
       <Image
         className="opacity-60 absolute inset-x-1/2 top-0 mt-[300px] ml-[-150px]"
         src={LogoImage}
@@ -92,15 +67,48 @@ export default function Profile() {
         >
           Trocar de conta
         </Button>
-        <Button
-          onClick={() => {
-            if (localSchedules.length) setActiveModal(true);
-            else handleLogoutAndRedirect();
-          }}
-          className="!shadow-none text-white"
-        >
-          Sair
-        </Button>
+
+        {localSchedules.length ? (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="!shadow-none text-white">Sair</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogTitle>Tem certeza que quer sair?</DialogTitle>
+              <div className="flex flex-col items-center justify-center gap-4 w-full">
+                <h1 className="font-semibold text-center">
+                  Você tem grades não salvas na nuvem e vai perdê-las!
+                </h1>
+
+                <div>
+                  <div className="flex items-center gap-4 justify-between w-full">
+                    <DialogClose>
+                      <Button className="bg-red-500" aria-label="Cancelar">
+                        Cancelar
+                      </Button>
+                    </DialogClose>
+                    <DialogClose>
+                      <Button
+                        onClick={() => handleLogoutAndRedirect()}
+                        className="bg-primary"
+                        aria-label="Sair mesmo assim"
+                      >
+                        Sair mesmo assim
+                      </Button>
+                    </DialogClose>
+                  </div>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        ) : (
+          <Button
+            onClick={() => handleLogoutAndRedirect()}
+            className="!shadow-none text-white"
+          >
+            Sair
+          </Button>
+        )}
       </div>
     </>
   );
