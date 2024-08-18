@@ -26,7 +26,7 @@ function Form(props: FormPropsType) {
     >
       <input
         type="text"
-        placeholder="Nome da matéria..."
+        placeholder="Matéria ou Professor..."
         value={formData.search}
         onChange={(e) => setFormData({ ...formData, search: e.target.value })}
         ref={inputRef}
@@ -79,7 +79,11 @@ export default function InputForm(props: InputFormPropsType) {
     await handleDisciplineSearch(formData, props.setInfos);
   }
 
+<<<<<<< HEAD
   return (
     <Form form={props.form} handleSearch={handleSearch} inputRef={inputRef} />
   );
+=======
+    return <Form form={props.form} handleSearch={handleSearch} inputRef={inputRef} />;
+>>>>>>> origin/main
 }
