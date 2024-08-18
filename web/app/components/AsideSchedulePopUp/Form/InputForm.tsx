@@ -79,11 +79,7 @@ export default function InputForm(props: InputFormPropsType) {
     await handleDisciplineSearch(formData, props.setInfos);
   }
 
-<<<<<<< HEAD
   return (
     <Form form={props.form} handleSearch={handleSearch} inputRef={inputRef} />
   );
-=======
-    return <Form form={props.form} handleSearch={handleSearch} inputRef={inputRef} />;
->>>>>>> origin/main
 }
