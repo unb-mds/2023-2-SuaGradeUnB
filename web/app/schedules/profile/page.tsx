@@ -83,14 +83,14 @@ export default function Profile() {
                 <div>
                   <div className="flex items-center gap-4 justify-between w-full">
                     <DialogClose>
-                      <Button className="bg-red-500" aria-label="Cancelar">
+                      <Button className="bg-red-500 text-sm" aria-label="Cancelar">
                         Cancelar
                       </Button>
                     </DialogClose>
                     <DialogClose>
                       <Button
                         onClick={() => handleLogoutAndRedirect()}
-                        className="bg-primary"
+                        className="bg-primary text-sm"
                         aria-label="Sair mesmo assim"
                       >
                         Sair mesmo assim
