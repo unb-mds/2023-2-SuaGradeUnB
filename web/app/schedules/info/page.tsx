@@ -60,7 +60,7 @@ function About() {
       <h2 className="text-3xl font-semibold pb-5">Sobre</h2>
       <p className="text-justify">
         O Sua Grade UnB é um projeto em desenvolvimento da matéria de{' '}
-        <b>Métodos de Desenv`olvimento de Software</b>. Seu propósito é
+        <b>Métodos de Desenvolvimento de Software</b>. Seu propósito é
         proporcionar aos estudantes da Universidade de Brasília uma experiência
         simplificada e intuitiva na elaboração de suas grades horárias. O
         projeto visa facilitar o processo de organização acadêmica, oferecendo
