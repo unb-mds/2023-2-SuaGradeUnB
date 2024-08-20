@@ -17,17 +17,6 @@ class IraTestCase(TestCase):
 
         self.assertEqual(self.ira_calc.get_ira_value(args), 3)
 
-    def test_discipline_with_right_out_of_bounds_semester_value(self):
-        args: list[Discipline] = [
-            {
-                'grade': 'MM',
-                'semester': 7,
-                'number_of_credits': 2,
-            },
-        ]
-
-        self.assertRaises(ValueError, self.ira_calc.get_ira_value, args)
-
     def test_discipline_with_left_out_of_bounds_semester_value(self):
         args: list[Discipline] = [
             {
@@ -38,6 +27,17 @@ class IraTestCase(TestCase):
         ]
 
         self.assertRaises(ValueError, self.ira_calc.get_ira_value, args)
+
+    def test_discipline_with_incorrect_semester_type(self):
+        args: list[Discipline] = [
+            {
+                'grade': 'MM',
+                'semester': '0',
+                'number_of_credits': 2,
+            },
+        ]
+
+        self.assertRaises(TypeError, self.ira_calc.get_ira_value, args)
 
 
     def test_inexistent_grade(self):
@@ -110,3 +110,14 @@ class IraTestCase(TestCase):
             },
         ]
         self.assertRaises(TypeError, self.ira_calc.get_ira_value, args)
+
+    def tests_discipline_with_lowercase_grade_value(self):
+        args: list[Discipline] = [
+            {
+                'grade': 'mm',
+                'semester': 1,
+                'number_of_credits': 2,
+            }
+        ]
+
+        self.assertEqual(self.ira_calc.get_ira_value(args), 3)

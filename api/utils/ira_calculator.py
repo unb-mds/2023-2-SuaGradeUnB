@@ -55,6 +55,10 @@ class IraCalculator:
         numerator: int = 0
         denominator: int = 0
 
+        # para o cálculo do IRA, o maior valor possível para semestre é 6, mesmo
+        # que o estudante esteja num semestre maior que esse
+        MAX_SEMESTER_NUMBER: int = self.semester_range['max'] 
+
         for discipline in disciplines:
 
             ## validação da entrada
@@ -62,21 +66,24 @@ class IraCalculator:
                 if discipline['number_of_credits'] <= 0:
                     raise ValueError("O número de créditos da disciplina é menor ou igual a 0.")
 
-                if not (self.semester_range['min'] <= discipline['semester'] <= self.semester_range['max']):
-                    raise ValueError("O semestre está fora do intervalo delimitado entre 1 e 6.")
+                discipline['semester'] = min(discipline['semester'], MAX_SEMESTER_NUMBER)
 
-                if discipline['grade'] not in self.grade_map.keys():
-                    raise ValueError("A menção não existe.")
+                if not (self.semester_range['min'] <= discipline['semester'] <= self.semester_range['max']):
+                    raise ValueError(
+                        f"O semestre está fora do intervalo delimitado entre {self.semester_range['min']} e {self.semester_range['max']}."
+                    )
+
+                if discipline['grade'].upper() not in self.grade_map.keys():
+                    raise ValueError(f"A menção {discipline['grade']} não existe.")
 
             except TypeError:
                 raise TypeError("O tipo de dado passado como parâmetro está incorreto.")
 
 
             ## cálculo do IRA
-            numerator += self.grade_map[discipline['grade']] * \
+            numerator += self.grade_map[discipline['grade'].upper()] * \
                 discipline['number_of_credits'] * \
                 discipline['semester']
-
 
             denominator += discipline['number_of_credits'] * discipline['semester']
 
