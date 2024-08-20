@@ -5,13 +5,13 @@ class Discipline(TypedDict):
     TypedDict que define uma disciplina.
     
     Attributes:
-        mencao: a menção obtida pelo aluno na disciplina.
-        qtd_creditos: a quantidade de créditos que a disciplina tem.
-        semestre: qual o semestre em que o aluno realizou a disciplina. O valor mínimo é 1, e o máximo é 6. 
+        grade: a menção obtida pelo aluno na disciplina.
+        number_of_credits: a quantidade de créditos que a disciplina tem.
+        semester: qual o semestre em que o aluno realizou a disciplina. O valor mínimo é 1, e o máximo é 6. 
     """
-    mencao: str
-    qtd_creditos: int
-    semestre: int
+    grade: str
+    number_of_credits: int
+    semester: int
 
 class IraCalculator:
     """
@@ -29,7 +29,7 @@ class IraCalculator:
     """
 
     def __init__(self) -> None:
-        self.mencaoMap = {
+        self.grade_map = {
             'SS': 5,
             'MS': 4,
             'MM': 3,
@@ -52,33 +52,35 @@ class IraCalculator:
         :returns: Um float com o valor calculado do IRA.
         """
 
-        numerador: int = 0
-        denominador: int = 0
+        numerator: int = 0
+        denominator: int = 0
 
         for discipline in disciplines:
 
             ## validação da entrada
             try:
-                if discipline['qtd_creditos'] <= 0:
+                if discipline['number_of_credits'] <= 0:
                     raise ValueError("O número de créditos da disciplina é menor ou igual a 0.")
 
-                if not (self.semester_range['min'] <= discipline['semestre'] <= self.semester_range['max']):
+                if not (self.semester_range['min'] <= discipline['semester'] <= self.semester_range['max']):
                     raise ValueError("O semestre está fora do intervalo delimitado entre 1 e 6.")
 
-                if discipline['mencao'] not in self.mencaoMap.keys():
+                if discipline['grade'] not in self.grade_map.keys():
                     raise ValueError("A menção não existe.")
 
             except TypeError:
                 raise TypeError("O tipo de dado passado como parâmetro está incorreto.")
 
+
             ## cálculo do IRA
-            numerador += self.mencaoMap[discipline['mencao']] * \
-                discipline['qtd_creditos'] * \
-                discipline['semestre']
+            numerator += self.grade_map[discipline['grade']] * \
+                discipline['number_of_credits'] * \
+                discipline['semester']
 
-            denominador += discipline['qtd_creditos'] * discipline['semestre']
 
-        return float(numerador)/float(denominador)
+            denominator += discipline['number_of_credits'] * discipline['semester']
+
+        return float(numerator / denominator)
             
 
 

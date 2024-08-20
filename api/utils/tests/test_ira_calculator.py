@@ -9,9 +9,9 @@ class IraTestCase(TestCase):
     def test_one_discipline_with_MM(self):
         args: list[Discipline] = [
             {
-                'mencao': 'MM',
-                'semestre': 1,
-                'qtd_creditos': 2,
+                'grade': 'MM',
+                'semester': 1,
+                'number_of_credits': 2,
             }
         ]
 
@@ -20,9 +20,9 @@ class IraTestCase(TestCase):
     def test_discipline_with_right_out_of_bounds_semester_value(self):
         args: list[Discipline] = [
             {
-                'mencao': 'MM',
-                'semestre': 7,
-                'qtd_creditos': 2,
+                'grade': 'MM',
+                'semester': 7,
+                'number_of_credits': 2,
             },
         ]
 
@@ -31,9 +31,9 @@ class IraTestCase(TestCase):
     def test_discipline_with_left_out_of_bounds_semester_value(self):
         args: list[Discipline] = [
             {
-                'mencao': 'MM',
-                'semestre': 0,
-                'qtd_creditos': 2,
+                'grade': 'MM',
+                'semester': 0,
+                'number_of_credits': 2,
             },
         ]
 
@@ -43,9 +43,9 @@ class IraTestCase(TestCase):
     def test_inexistent_grade(self):
         args: list[Discipline] = [
             {
-                'mencao': 'NE',
-                'semestre': 3,
-                'qtd_creditos': 2,
+                'grade': 'NE',
+                'semester': 3,
+                'number_of_credits': 2,
             },
         ]
         self.assertRaises(ValueError, self.ira_calc.get_ira_value, args)
@@ -53,29 +53,29 @@ class IraTestCase(TestCase):
     def test_multiple_disciplines_during_first_semester(self):
         args: list[Discipline] = [
             {
-                'mencao': 'MM',
-                'semestre': 1,
-                'qtd_creditos': 4
+                'grade': 'MM',
+                'semester': 1,
+                'number_of_credits': 4
             },
             {
-                'mencao': 'MS',
-                'semestre': 1,
-                'qtd_creditos': 6
+                'grade': 'MS',
+                'semester': 1,
+                'number_of_credits': 6
             },
             {
-                'mencao': 'SS',
-                'semestre': 1,
-                'qtd_creditos': 6
+                'grade': 'SS',
+                'semester': 1,
+                'number_of_credits': 6
             },
             {
-                'mencao': 'SS',
-                'semestre': 1,
-                'qtd_creditos': 4
+                'grade': 'SS',
+                'semester': 1,
+                'number_of_credits': 4
             },
             {
-                'mencao': 'MS',
-                'semestre': 1,
-                'qtd_creditos': 4
+                'grade': 'MS',
+                'semester': 1,
+                'number_of_credits': 4
             },
         ]
 
@@ -84,9 +84,9 @@ class IraTestCase(TestCase):
     def test_negative_number_of_credits(self):
         args: list[Discipline] = [
             {
-                'mencao': 'MM',
-                'semestre': 3,
-                'qtd_creditos': -1,
+                'grade': 'MM',
+                'semester': 3,
+                'number_of_credits': -1,
             },
         ]
         self.assertRaises(ValueError, self.ira_calc.get_ira_value, args)
@@ -94,9 +94,9 @@ class IraTestCase(TestCase):
     def test_null_number_of_credits(self):
         args: list[Discipline] = [
             {
-                'mencao': 'MM',
-                'semestre': 3,
-                'qtd_creditos': -1,
+                'grade': 'MM',
+                'semester': 3,
+                'number_of_credits': -1,
             },
         ]
         self.assertRaises(ValueError, self.ira_calc.get_ira_value, args)
@@ -104,9 +104,9 @@ class IraTestCase(TestCase):
     def test_none_number_of_credits(self):
         args: list[Discipline] = [
             {
-                'mencao': 'MM',
-                'semestre': 2,
-                'qtd_creditos': None,
+                'grade': 'MM',
+                'semester': 2,
+                'number_of_credits': None,
             },
         ]
         self.assertRaises(TypeError, self.ira_calc.get_ira_value, args)
