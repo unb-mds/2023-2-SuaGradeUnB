@@ -38,6 +38,7 @@ function Form(props: FormPropsType) {
         <span className="text-xl font-semibold">Ano/Período</span>
 
         <Select
+          value={formData.year && formData.period ? `${formData.year}/${formData.period}` : undefined}
           onValueChange={(value) => {
             handleYearAndPeriodChange(value);
           }}
