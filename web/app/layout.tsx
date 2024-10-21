@@ -10,6 +10,7 @@ import SelectedClassesContextProvider from './contexts/SelectedClassesContext/Se
 import SchedulesContextProvider from './contexts/SchedulesContext';
 
 import { Toaster } from 'react-hot-toast';
+import { TooltipProvider } from './components/ui/tooltip';
 
 export const poppins = Poppins({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
@@ -33,18 +34,20 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} ${chivoMono.variable} max-h-screen font-sans bg-white`}>
+      <body
+        className={`${poppins.variable} ${chivoMono.variable} max-h-screen font-sans bg-white overflow-x-hidden`}
+      >
         <Toaster />
         <SchedulesContextProvider>
           <UserContextProvider>
             <YearPeriodContextProvider>
               <ClassesToShowContextProvider>
                 <SelectedClassesContextProvider>
-                  {children}
+                  <TooltipProvider>{children}</TooltipProvider>
                 </SelectedClassesContextProvider>
               </ClassesToShowContextProvider>
             </YearPeriodContextProvider>

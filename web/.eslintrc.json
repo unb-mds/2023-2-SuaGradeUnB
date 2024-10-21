@@ -1,5 +1,6 @@
 {
-  "extends": "next/core-web-vitals",
+  "extends": ["next/core-web-vitals", "plugin:jsx-a11y/recommended"],
+  "plugins": ["eslint-plugin-unused-imports", "eslint-plugin-jsx-a11y"],
   "rules": {
     "semi": [
       "error",
@@ -8,6 +9,9 @@
     "quotes": [
       "error",
       "single"
-    ]
+    ],
+    "unused-imports/no-unused-imports": "error",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "jsx-a11y/click-events-have-key-events": "off"
   }
 }
