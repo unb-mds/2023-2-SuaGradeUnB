@@ -29,12 +29,15 @@ class DisciplineSerializer(DisciplineSerializerSchedule):
 
     def get_classes(self, discipline: Discipline):
         teacher_name = self.context.get('teacher_name')
+        schedule = self.context.get('schedule')
         classes = discipline.classes.all() if hasattr(
             discipline, 'classes') else Class.objects.none()
         if teacher_name:
             classes = dbh.filter_classes_by_teacher(
                 name=teacher_name, classes=classes)
-
+        if schedule:
+            classes = dbh.filter_classes_by_schedule(
+                schedule=schedule, classes=classes)
         return ClassSerializer(classes, many=True).data
 
 
@@ -46,6 +49,7 @@ class ScheduleSerializer(ModelSerializer):
     class Meta:
         model = Schedule
         exclude = ['user']
+
 
 class GenerateSchedulesSerializer(serializers.Serializer):
     message = serializers.CharField(max_length=200)
