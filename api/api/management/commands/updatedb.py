@@ -112,6 +112,9 @@ class Command(BaseCommand):
             for index in range(0, len(years_and_periods), options["threads"]):
                 threads = []
                 for year, period in years_and_periods[index : index + options["threads"]]:
+                    if options["delete_others"] and (year, period) in choices:
+                        continue
+                    
                     thread = threading.Thread(
                         target=self.delete_period,
                         args=(
