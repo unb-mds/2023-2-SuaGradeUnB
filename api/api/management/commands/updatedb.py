@@ -46,7 +46,7 @@ class Command(BaseCommand):
             "--period",
             action="store",
             default=None,
-            choices=[sessions.get_year_and_period_in_range()],
+            choices=sessions.get_year_and_period_in_range(),
             dest="period",
             help="Atualiza o banco de dados com as disciplinas do período especificado.",
         )
@@ -65,7 +65,7 @@ class Command(BaseCommand):
             "--delete-others",
             action="store_true",
             dest="delete_others",
-            default=False,
+            default=True,
             help="Deleta todos os períodos exceto o período especificado do banco de dados.",
         )
 
@@ -107,14 +107,14 @@ class Command(BaseCommand):
 
         # Deleta o período especificado do banco de dados
         if options["delete"] or options["delete_others"]:
-            years_and_periods = dbh.get_all_years_and_periods(use_cache=False) if options["delete_others"] else choices
+            years_and_periods = (
+                list(filter(lambda x: not x in choices, dbh.get_all_years_and_periods(use_cache=False)))
+                if options["delete_others"] else choices
+            )
             
             for index in range(0, len(years_and_periods), options["threads"]):
                 threads = []
                 for year, period in years_and_periods[index : index + options["threads"]]:
-                    if options["delete_others"] and (year, period) in choices:
-                        continue
-                    
                     thread = threading.Thread(
                         target=self.delete_period,
                         args=(
@@ -131,7 +131,9 @@ class Command(BaseCommand):
                 threads.clear()
 
             cache.delete("years_and_periods")
-            return
+
+            if options["delete"]:
+                return
 
         departments_ids = get_list_of_departments()
 
