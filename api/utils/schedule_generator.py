@@ -141,7 +141,7 @@ class ScheduleGenerator:
 
         for classes in self.disciplines.values():
             self.disciplines_list.append(classes)
-
+            
     def _handle_conflict(self, conflicting_class: Class, schedule: tuple) -> None:
         # Depois, verificamos se há uma grade horária válida sem a disciplina atual
         schedule_valid = self._valid_schedule(schedule, conflicting_class)
@@ -239,3 +239,12 @@ class ScheduleGenerator:
             lambda _class: self.schedule_info[_class.schedule]["priority"], priority)), reverse=True)
 
         return self.schedules
+    
+    def test_discipline_hour(self, discipline: str, hours: dict[str], departaments: dict[str], choice_disciplines: dict[str]):
+        for key, values in departaments.items():
+            for key_hours, values_hours in hours.items():
+                for key_ch, values_ch in choice_disciplines.items():
+                    if discipline == values and values == key_hours and values_hours == key_ch:
+                            return values_ch 
+                         
+            
