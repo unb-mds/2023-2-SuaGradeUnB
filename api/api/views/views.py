@@ -8,9 +8,8 @@ from rest_framework import status, request, response
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from utils.sessions import get_current_year_and_period, get_next_period
 from utils.schedule_generator import ScheduleGenerator
-from utils.db_handler import get_best_similarities_by_name, filter_disciplines_by_teacher, filter_disciplines_by_year_and_period, filter_disciplines_by_code
+from utils.db_handler import get_best_similarities_by_name, filter_disciplines_by_teacher, filter_disciplines_by_year_and_period, filter_disciplines_by_code, get_all_years_and_periods
 from utils.search import SearchTool
 
 from .. import serializers
@@ -127,7 +126,7 @@ class Search(APIView):
 class YearPeriod(APIView):
 
     @swagger_auto_schema(
-        operation_description="Retorna o ano e período atual, e o próximo ano e período letivos válidos para pesquisa.",
+        operation_description="Retorna os períodos letivos válidos para pesquisa.",
         security=[],
         responses={
             200: openapi.Response('OK', openapi.Schema(
@@ -148,11 +147,8 @@ class YearPeriod(APIView):
         }
     )
     def get(self, request: request.Request, *args, **kwargs) -> response.Response:
-        year, period = get_current_year_and_period()
-        next_year, next_period = get_next_period()
-
         data = {
-            'year/period': [f'{year}/{period}', f'{next_year}/{next_period}'],
+            'year/period': ["/".join(year_period) for year_period in get_all_years_and_periods()]
         }
 
         return response.Response(data, status.HTTP_200_OK)
