@@ -1,4 +1,5 @@
 from string import ascii_letters as letters, digits
+from bs4 import BeautifulSoup
 from collections import defaultdict
 from rest_framework.test import APITestCase
 from utils import web_scraping as wbp
@@ -114,3 +115,114 @@ class WebScrapingTest(APITestCase):
         cache.set(key, fingerprint)
 
         self.assertEqual(cache.get(key), 'not_content')
+    
+    def test_make_disciplines_rows_is_None(self):
+        self.scraper = wbp.DisciplineWebScraper('0000','2024','2')
+        self.scraper.make_disciplines(None)
+        self.assertTrue(len(self.scraper.disciplines) == 0)
+    
+    def test_make_disciplines_rows_is_empty(self):
+        self.scraper = wbp.DisciplineWebScraper('0000','2024','2')
+        self.scraper.make_disciplines('')
+        self.assertTrue(len(self.scraper.disciplines) == 0)
+    
+    def test_make_disciplines_linhaPar(self):
+        test_html = """
+        <html>
+            <body>
+                <table class="listagem">
+                    <tr>
+                        <td>
+                            <span class="tituloDisciplina">ABC0000 - NOME DA MATERIA</span>
+                        </td>
+                    </tr>
+                    <tr class="linhaPar">
+                        <td align="center" class="turma"> 01</td>
+                        <td align="center" class="anoPeriodo">2023.2</td>
+                        <td class="nome"> Professor (20h) </td>
+                        <td> 4M1234 </td>
+                        <td> </td>
+                        <td style="text-align: center;">42</td>
+                        <td style="text-align: center;">0</td>
+                        <td align="center" nowrap="nowrap"> TES - Módulo X sala Y</td>
+                        <td style="text-align: center;">0</td>
+                        <td style="text-align: center;">0</td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+        """
+        self.scraper = wbp.DisciplineWebScraper('650','2023','2')
+        soup = BeautifulSoup(test_html, 'html.parser')
+        rows = soup.find_all('tr')
+        self.scraper.make_disciplines(rows)
+        disciplines = self.scraper.get_disciplines()
+        self.assertIn("ABC0000",disciplines)
+        self.assertTrue(len(disciplines["ABC0000"]) == 1)
+
+    def test_make_disciplines_linhaImpar(self):
+        test_html = """
+        <html>
+            <body>
+                <table class="listagem">
+                    <tr>
+                        <td>
+                            <span class="tituloDisciplina">ABC0000 - NOME DA MATERIA</span>
+                        </td>
+                    </tr>
+                    <tr class="linhaImpar">
+                        <td align="center" class="turma"> 01</td>
+                        <td align="center" class="anoPeriodo">2023.2</td>
+                        <td class="nome"> Professor (20h) </td>
+                        <td> 4M1234 </td>
+                        <td> </td>
+                        <td style="text-align: center;">42</td>
+                        <td style="text-align: center;">0</td>
+                        <td align="center" nowrap="nowrap"> TES - Módulo X sala Y</td>
+                        <td style="text-align: center;">0</td>
+                        <td style="text-align: center;">0</td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+        """
+        self.scraper = wbp.DisciplineWebScraper('650','2023','2')
+        soup = BeautifulSoup(test_html, 'html.parser')
+        rows = soup.find_all('tr')
+        self.scraper.make_disciplines(rows)
+        disciplines = self.scraper.get_disciplines()
+        self.assertIn("ABC0000",disciplines)
+        self.assertTrue(len(disciplines["ABC0000"]) == 1)
+    
+    def test_make_disciplines_without_class_linha(self):
+        test_html = """
+        <html>
+            <body>
+                <table class="listagem">
+                    <tr>
+                        <td>
+                            <span class="tituloDisciplina">ABC0000 - NOME DA MATERIA</span>
+                        </td>
+                    </tr>
+                    <tr class="invalida">
+                        <td align="center" class="turma"> 01</td>
+                        <td align="center" class="anoPeriodo">2023.2</td>
+                        <td class="nome"> Professor (20h) </td>
+                        <td> 4M1234 </td>
+                        <td> </td>
+                        <td style="text-align: center;">42</td>
+                        <td style="text-align: center;">0</td>
+                        <td align="center" nowrap="nowrap"> TES - Módulo X sala Y</td>
+                        <td style="text-align: center;">0</td>
+                        <td style="text-align: center;">0</td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+        """
+        self.scraper = wbp.DisciplineWebScraper('650','2023','2')
+        soup = BeautifulSoup(test_html, 'html.parser')
+        rows = soup.find_all('tr')
+        self.scraper.make_disciplines(rows)
+        disciplines = self.scraper.get_disciplines()
+        self.assertTrue(len(disciplines) == 0)
