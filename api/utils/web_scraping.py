@@ -25,24 +25,23 @@ Logo, temos a função get_list_of_departments() que retorna uma lista com os c�
 '''
 
 
-def get_list_of_departments(response=get_response(create_request_session())) -> Optional[List]:
+def get_list_of_departments(response=None) -> Optional[List]:
     """Obtem a lista de departamentos da UnB."""
-    soup = BeautifulSoup(
-        response.content, "html.parser")  # Create a BeautifulSoup object
-    # Find the <select> tag with id "formTurma:inputDepto"
+    if response is None:
+        response = get_response(create_request_session())
+
+    soup = BeautifulSoup(response.content, "html.parser") 
     departments = soup.find("select", attrs={"id": "formTurma:inputDepto"})
 
     if departments is None:
         return None
 
-    # Find all <option> tags (It contains all departments)
     options_tag = departments.find_all("option")
     department_ids = []
 
     for option in options_tag:
         value = option["value"]
-
-        if (value != "0"):
+        if value != "0":
             department_ids.append(value)
 
     return department_ids
@@ -51,42 +50,58 @@ def get_list_of_departments(response=get_response(create_request_session())) -> 
 class DisciplineWebScraper:
     # Classe que faz o web scraping das disciplinas
     def __init__(self, department: str, year: str, period: str, url=URL, session=None, cookie=None):
-        self.disciplines: defaultdict[str, List[dict]] = defaultdict(
-            list)  # A dictionary with the disciplines
-        self.department = department  # The department code
-        self.period = period  # 1 for first semester and 2 for second semester
+        self.disciplines: defaultdict[str, List[dict]] = defaultdict(list)
+        self.department = department
+        self.period = period
         self.year = year
-        self.url = url  # The url of the web page
-        self.data = {  # This data is necessary to make the post request
-            "formTurma": "formTurma",
-            "formTurma:inputNivel":	"",
-            "formTurma:inputDepto":	self.department,
-            "formTurma:inputAno": self.year,
-            "formTurma:inputPeriodo": self.period,
-            "formTurma:j_id_jsp_1370969402_11":	"Buscar",
-            "javax.faces.ViewState": "j_id1"
-        }
+        self.url = url 
 
-        if session is None:  # pragma: no cover
-            self.session = create_request_session()  # Create a request session
+        if session is None: 
+            self.session = create_request_session()
         else:
             self.session = session
 
-        if cookie is None:  # pragma: no cover
+        if cookie is None: 
             self.cookie = get_session_cookie(self.session)
         else:
             self.cookie = cookie
 
         self.response = None
+        self.data = {} # Inicializado vazio, será montado dinamicamente
 
     def get_response_from_disciplines_post_request(self) -> requests.Response:
-        # Faz uma requisição POST para obter a resposta das turmas disponíveis
+        # Passo 1: Fazer um GET inicial para capturar o estado da página e o DOM momentâneo
+        initial_response = self.session.get(self.url, headers=HEADERS, cookies=self.cookie)
+        soup = BeautifulSoup(initial_response.content, "html.parser")
+
+        # Passo 2: Extrair o ViewState dinâmico
+        view_state_tag = soup.find("input", {"name": "javax.faces.ViewState"})
+        view_state = view_state_tag["value"] if view_state_tag else "j_id1"
+
+        # Passo 3: Extrair o ID dinâmico gerado pelo servidor para o botão de "Buscar"
+        submit_button_tag = soup.find("input", {"value": "Buscar"})
+        submit_button_name = submit_button_tag["name"] if submit_button_tag else "formTurma:j_id_jsp_1370969402_11"
+
+        # Passo 4: Montar o payload intrinsecamente ligado ao estado atual do servidor
+        self.data = {
+            "formTurma": "formTurma",
+            "formTurma:inputNivel":    "",
+            "formTurma:inputDepto":    self.department,
+            "formTurma:inputAno": self.year,
+            "formTurma:inputPeriodo": self.period,
+            submit_button_name: "Buscar",
+            "javax.faces.ViewState": view_state
+        }
+
+        # Passo 5: Fazer a requisição POST validada
         self.response = self.session.post(
             self.url,
             headers=HEADERS,
             cookies=self.cookie,
             data=self.data
         )
+        
+        return self.response
 
     def get_teachers(self, data: list) -> list:
         teachers = []
