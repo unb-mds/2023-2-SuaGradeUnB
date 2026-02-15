@@ -9,6 +9,9 @@ from django.db.models.query import QuerySet
 from django.contrib.postgres.search import SearchVector, SearchQuery, TrigramStrictWordSimilarity
 from django.db.models.manager import BaseManager
 from django.db.models import Q
+from django.core.cache import cache
+
+from core.settings.base import THIRTY_DAYS_IN_SECS
 
 import json
 
@@ -138,3 +141,18 @@ def filter_classes_by_teacher(name: str, classes: QuerySet) -> QuerySet:
     for word in search_words:
         query &= Q(teachers__icontains=word)
     return classes.filter(query)
+
+def get_all_years_and_periods(use_cache: bool = True) -> list[tuple[str, str]]:
+    """Obtém todos os anos e períodos presentes na database."""
+
+    if use_cache:
+        cache_value = cache.get("years_and_periods", None)
+
+        if cache_value is not None:
+            return cache_value
+
+    years_and_periods = sorted(
+        [(value["year"], value["period"]) for value in Department.objects.all().values("year", "period").distinct()]
+    )
+    cache.set("years_and_periods", years_and_periods, timeout=THIRTY_DAYS_IN_SECS)
+    return years_and_periods

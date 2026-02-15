@@ -4,7 +4,7 @@ from urllib3.util.retry import Retry
 from datetime import datetime
 from typing import List
 
-"""Este módulo contém funções necessárias para realizar uma requsição ao SIGAA
+"""Este módulo contém funções necessárias para realizar uma requisição ao SIGAA
 corretamente.
 """
 
@@ -41,6 +41,17 @@ def get_session_cookie(session: Session) -> cookies.RequestsCookieJar: # pragma:
     cookie_jar.update(cookie) # Update the cookie jar with the cookie
 
     return cookie_jar
+
+"""Obtém o ano e o períodos no intervalo de ano especificado e retorna uma lista com esses valores."""
+def get_year_and_period_in_range(boundaries_length: int = 1, year: int = datetime.now().year) -> List[str]:
+    years = [str(year) for year in range(year - boundaries_length, year + boundaries_length + 1)]
+    periods = ["1", "2", "3", "4"]
+
+    return [f"{year}/{period}" for year in years for period in periods]
+
+"""Retorna o ano e o período especificado."""
+def get_year_and_period(year_period: str) -> tuple[str, str]:
+    return tuple(year_period.split("/"))
 
 """Obtem o ano e o período atual e retorna uma lista com esses valores."""
 def get_current_year_and_period(date: datetime | None = datetime.now()) -> List[str | str]:
