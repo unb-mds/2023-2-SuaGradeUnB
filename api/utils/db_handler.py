@@ -31,6 +31,7 @@ def create_class(teachers: list, classroom: str, schedule: str,
     return Class.objects.create(teachers=teachers, classroom=classroom, schedule=schedule,
                                 days=days, _class=_class, special_dates=special_dates, discipline=discipline)
 
+
 @handle_cache_before_delete
 def delete_classes_from_discipline(discipline: Discipline) -> QuerySet:
     """Deleta todas as turmas de uma disciplina."""
@@ -70,9 +71,19 @@ def filter_disciplines_by_teacher(name: str) -> QuerySet:
     return search_disciplines
 
 
+def filter_disciplines_by_schedule_and_department_code(schedule: str, department_code: str) -> QuerySet:
+    """Filtra as disciplinas pelo horário."""
+    return Discipline.objects.filter(Q(classes__schedule__icontains=schedule) & Q(department__code=department_code)).distinct("id")
+
+
 def filter_disciplines_by_code(code: str, disciplines: Discipline = Discipline.objects) -> QuerySet:
     """Filtra as disciplinas pelo código."""
     return disciplines.filter(code__icontains=code)
+
+
+def filter_classes_by_schedule(schedule: str, classes: BaseManager[Class] = Class.objects) -> QuerySet:
+    """Filtra as turmas pelo horário."""
+    return classes.filter(schedule__icontains=schedule)
 
 
 def filter_disciplines_by_year_and_period(year: str, period: str, disciplines: Discipline = Discipline.objects) -> QuerySet:
