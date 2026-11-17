@@ -1,0 +1,6 @@
+{
+  "name": "verificacao-melhoria-r04",
+  "private": true,
+  "scripts": { "test": "node verificar.cjs" },
+  "devDependencies": { "playwright": "1.62.1" }
+}

@@ -1,15 +1,15 @@
 'use client';
 
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useRef, useState } from 'react';
+import useYearPeriod from '../../hooks/useYearPeriod';
 
 import { errorToast } from '../../utils/toast';
 
 import { ProviderJSXPropsType, SelectedClassesContextProviderPropsType, SelectedClassesContextType, SelectedClassesType } from './types';
+import { clearDraft, MAX_CLASSES, MAX_DISCIPLINES, readDraft, restoreDraft, saveDraft, Selection } from './draft';
 
 
 let hasError = false;
-const MAX_CLASSES = 4;
-const MAX_DISCIPLINES = 11;
 
 export const SelectedClassesContext = createContext({} as SelectedClassesContextType);
 
@@ -41,15 +41,58 @@ function ProviderJSX({ children, ...props }: ProviderJSXPropsType) {
 }
 
 export default function SelectedClassesContextProvider({ children }: SelectedClassesContextProviderPropsType) {
-    const [selectedClasses, setSelectedClassesDefault] = useState<SelectedClassesType>(new Map());
+    const [selection, setSelection] = useState<Selection>({ selectedClasses: new Map(), currentYearPeriod: '' });
+    const selectionRef = useRef(selection);
+    const interacted = useRef(false);
     const [classesChange, setClassesChange] = useState(false);
-    const [currentYearPeriod, setCurrentYearPeriod] = useState('');
+    const { periods } = useYearPeriod();
+    const { selectedClasses, currentYearPeriod } = selection;
+
+    useEffect(() => {
+        // Wait until the offered periods arrive; the initial empty state must never be saved.
+        if (!periods['year/period'].length || interacted.current) return;
+        const draft = readDraft();
+        if (!draft) return;
+        if (!periods['year/period'].includes(draft.yearPeriod)) {
+            clearDraft();
+            return;
+        }
+        let active = true;
+        restoreDraft(draft).then(restored => {
+            if (!active || interacted.current) return;
+            selectionRef.current = restored;
+            setSelection(restored);
+            setClassesChange(value => !value);
+            saveDraft(restored);
+        }).catch(() => {
+            if (active && !interacted.current) {
+                errorToast('Não foi possível recuperar a seleção. Recarregue para tentar novamente.');
+            }
+            // Keep the draft on network failure so another reload can retry.
+        });
+        return () => { active = false; };
+    }, [periods]);
+
+    function updateSelection(value: Selection) {
+        // A user action wins over a pending restore, including clearing the selection.
+        interacted.current = true;
+        selectionRef.current = value;
+        setSelection(value);
+        setClassesChange(previous => !previous);
+        saveDraft(value);
+    }
 
     function handleNoError(value: SelectedClassesType) {
-        if (!value.size) setCurrentYearPeriod('');
-        setSelectedClassesDefault(value);
-        setClassesChange(!classesChange);
+        updateSelection({ selectedClasses: value, currentYearPeriod: value.size ? selectionRef.current.currentYearPeriod : '' });
     }
+
+    const setCurrentYearPeriod = (value: string) => {
+        const current = selectionRef.current;
+        updateSelection({
+            currentYearPeriod: value,
+            selectedClasses: value === current.currentYearPeriod ? current.selectedClasses : new Map()
+        });
+    };
 
     const setSelectedClasses = (value: SelectedClassesType) => {
         hasError = false;

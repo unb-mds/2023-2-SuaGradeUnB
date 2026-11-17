@@ -1,0 +1,12 @@
+{
+  "periods": ["2026/2", "2026/1"],
+  "disciplines": [{
+    "id": 107,
+    "code": "MAT0107",
+    "name": "ÁLGEBRA 3 (MASSA SINTÉTICA R04)",
+    "classes": [
+      { "id": 10701, "_class": "01", "classroom": "Sala R04-A", "days": ["Segunda-feira"], "schedule": "2M12", "special_dates": [], "teachers": ["Docente de teste A"] },
+      { "id": 10702, "_class": "02", "classroom": "Sala R04-B", "days": ["Terça-feira"], "schedule": "3M12", "special_dates": [], "teachers": ["Docente de teste B"] }
+    ]
+  }]
+}
